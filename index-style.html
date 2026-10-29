@@ -521,6 +521,18 @@ const STYLE = window.YYSLS_STYLE || {meta:{},colors:[],outfits:[]};
 const SYN = window.YYSLS_SYNONYMS || {};
 const outfits = STYLE.outfits || [];
 const MINE = window.YYSLS_MINE || {records:{}};
+// 缩略图管线：卡片用 assets/_thumbs/ 的 480px webp；缺缩略图回退原图
+function thumbOf(p){
+  const m=/^(assets\/)(.+)(\.(png|jpe?g))$/i.exec(p||'');
+  return m?m[1]+'_thumbs/'+m[2]+'.webp':p;
+}
+function upgradeMain(el){
+  const full=el.getAttribute('data-full');
+  if(!full)return;
+  const i=new Image();
+  i.onload=()=>{el.src=full;el.removeAttribute('data-full');};
+  i.src=full;
+}
 // 三组筛选状态：组间 AND 叠加（筛完全满足的），组内互斥单选（再点取消）
 let activeColor = '';      // 色系组选中的桶名（红橙黄绿青蓝紫黑白）
 let activeScene = '';      // 场景组选中的词（词尾带 · = 章前缀筛选）
@@ -872,7 +884,7 @@ function cardHtml(o){
   // 码只进详情页（lightbox），卡片不展示；备注只留图上半透明条；图片固定比例保证卡片大小一致
   return `<div class="card" onclick="onCardClick('${o.id}')">
     <div class="thumb">
-      <img src="${o.image}" loading="lazy" alt="${esc(o.name)}">
+      <img src="${thumbOf(o.image)}" loading="lazy" alt="${esc(o.name)}" onerror="this.onerror=function(){this.style.display='none'};this.src='${o.image}'">
       <span class="cover">${esc(o.note||'').slice(0,20)}</span>
       <div class="thumbsw">${paletteHtml(o.palette)}</div>
     </div>
@@ -964,7 +976,8 @@ function setColor(c){
 function openLb(id){
   const o = outfits.find(x => x.id === id);
   if (!o) return;
-  document.getElementById('lb-img').src = o.image;
+  const _lb=document.getElementById('lb-img');
+  _lb.src=thumbOf(o.image);_lb.setAttribute('data-full',o.image);upgradeMain(_lb);
   const codes = (o.dyeCode ? `<span class="pill code" onclick="copyCode('${esc(o.dyeCode)}','染色码')">🎨 ${esc(o.dyeCode)}</span>` : '')
     + (o.outfitCode ? `<span class="pill code" onclick="copyCode('${esc(o.outfitCode)}','搭配码')">📋 ${esc(o.outfitCode)}</span>` : '');
   document.getElementById('lb-name').innerHTML = `${esc(o.name)}` + codes;

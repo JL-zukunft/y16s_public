@@ -606,6 +606,18 @@ if(NO_MINE){
   const _gw=document.getElementById('grp-wardrobe');if(_gw)_gw.style.display='none';
   const _gu=document.getElementById('grp-usage');if(_gu)_gu.style.display='none';
 }
+// 缩略图管线：卡片/条带用 assets/_thumbs/ 的 480px webp；详情主图渐进加载原图；缺缩略图自动回退
+function thumbOf(p){
+  const m=/^(assets\/)(.+)(\.(png|jpe?g))$/i.exec(p||'');
+  return m?m[1]+'_thumbs/'+m[2]+'.webp':p;
+}
+function upgradeMain(el){
+  const full=el.getAttribute('data-full');
+  if(!full)return;
+  const i=new Image();
+  i.onload=()=>{el.src=full;el.removeAttribute('data-full');};
+  i.src=full;
+}
 function toast(msg,err){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(err?' err':'');t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',5000);}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeEdit();}});
 
@@ -1077,7 +1089,7 @@ function cardHtml(it,i){
   const img0=it.images&&it.images[0];
   const meta=img0?(DB.imageMeta&&DB.imageMeta[img0]):null;
   const orient=meta?(meta.w>meta.h?'wide':'tall'):'tall';
-  const img=img0?`<img src="${img0}" loading="lazy" onload="fixOrient(this)" onerror="this.style.display='none'">`:'';
+  const img=img0?`<img src="${thumbOf(img0)}" loading="lazy" onload="fixOrient(this)" onerror="this.onerror=function(){this.style.display='none'};this.src='${img0}'">`:'';
   const freeLabel=(o==='聆音'||o==='转盘')?'抽卡获得':(o==='和鸣玉池'?'玉池免费抽':(o==='其它'?'免费获得':'免费'));
   const price=eff?`${eff.amount}${curName(eff.currency)}`:(payMode(it)==='free'?freeLabel:'非直售');
   const disc=discountActive(it)?`<s>${it.regularPrice?it.regularPrice.amount+'珠':''}</s><span class="badge b-disc">${it.discount.kind}</span>`:(it.discount&&it.regularPrice?`<s>${it.regularPrice.amount}珠</s>`:'');
@@ -1236,7 +1248,7 @@ function renderValueView(){
       const costTxt=r.it.price.currency==='rmb'?`${r.it.price.amount}元（折${r.zhu}珠）`:`${r.zhu}珠`;
       return `<div class="v-row" onclick="openModal('${r.it.id}')">
         <span class="v-rank ${i<3?'r'+(i+1):''}">${i+1}</span>
-        ${img?`<img src="${img}" loading="lazy" onerror="this.style.display='none'">`:''}
+        ${img?`<img src="${thumbOf(img)}" loading="lazy" onerror="this.onerror=function(){this.style.display='none'};this.src='${img}'">`:''}
         <div class="v-info">
           <div class="v-name" title="${esc(r.it.name)}">${r.it.name}</div>
           <div class="v-sub">${costTxt} · 利用率 ${r.s} 分 · 入镜 ${r.w} 次</div>
@@ -1262,7 +1274,7 @@ function renderWardrobe(){
     const cost=eff?`<b>${eff.amount}</b>${curName(eff.currency)}`:(payMode(it)==='free'?'免费':'非直售');
     return `<div class="w-card" onclick="openModal('${it.id}')">
       <div class="w-thumb">
-        ${img?`<img src="${img}" loading="lazy" onerror="this.style.display='none'">`:''}
+        ${img?`<img src="${thumbOf(img)}" loading="lazy" onerror="this.onerror=function(){this.style.display='none'};this.src='${img}'">`:''}
         <span class="w-cost-badge">${cost}</span>
       </div>
       <div class="w-cinfo">
@@ -1322,7 +1334,7 @@ function openModal(id){
   const main=imgs[0]||'';
   const m0=main?(DB.imageMeta&&DB.imageMeta[main]):null;
   const ar=m0&&m0.w&&m0.h?+(m0.w/m0.h).toFixed(4):0.5625;
-  const strip=imgs.length>1?`<div class="m-strip">${imgs.map((u,i)=>`<img src="${u}" class="${i===0?'sel':''}" onclick="document.getElementById('m-main').src='${u}';this.parentElement.querySelectorAll('img').forEach(x=>x.classList.remove('sel'));this.classList.add('sel')">`).join('')}</div>`:'';
+  const strip=imgs.length>1?`<div class="m-strip">${imgs.map((u,i)=>`<img src="${thumbOf(u)}" class="${i===0?'sel':''}" onerror="this.onerror=null;this.src='${u}'" onclick="const _m=document.getElementById('m-main');_m.src='${thumbOf(u)}';_m.setAttribute('data-full','${u}');this.parentElement.querySelectorAll('img').forEach(x=>x.classList.remove('sel'));this.classList.add('sel')">`).join('')}</div>`:'';
   const src=srcLink(it);
   const o=originOf(it);
   const freeLabel=(o==='聆音'||o==='转盘')?'抽卡获得':(o==='和鸣玉池'?'玉池免费抽':(o==='其它'?'免费获得':'免费'));
@@ -1378,7 +1390,7 @@ function openModal(id){
   const nameHtml=`<div class="m-name">${it.name}<span class="ctype" style="font-size:11px">${it.type}</span>${it.confidence==='L1'?'<span class="badge b-l1">待核</span>':''}</div>`;
   const poemHtml=it.poem?`<div class="m-poem">「${it.poem}」</div>`:'';
   const leftHtml=`<div class="m-left">
-    ${main?`<div class="m-imgwrap" style="--m-ar:${ar}"><img id="m-main" src="${main}" onerror="this.parentElement.style.display='none'"></div>`:''}
+    ${main?`<div class="m-imgwrap" style="--m-ar:${ar}"><img id="m-main" src="${thumbOf(main)}" data-full="${main}" onload="upgradeMain(this)" onerror="this.parentElement.style.display='none'"></div>`:''}
     ${strip}
   </div>`;
   const wide=!!(m0&&m0.w>m0.h);   // 横图（16:9 等）改上下构图

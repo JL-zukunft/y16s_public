@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一把子划算计划 · 燕云十六声</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#8B5E3C',accent:'#C4883C',gold:'#D4A746',red:'#CC4444',bg:'#F5F2ED',card:'#FFFFFF',muted:'#9A9A9A',dark:'#3A3028'}}}}</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap');
+  *{box-sizing:border-box;}
+  body{background:#F5F2ED;color:#3A3028;font-family:'Noto Sans SC',sans-serif;font-size:14px;margin:0;padding:8px;}
+  h1,h2,h3,.title-font{font-family:'Noto Serif SC',serif;}
+  .card{background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:10px;box-shadow:0 1px 8px rgba(0,0,0,0.05);}
+  .card-title{color:#8B5E3C;font-size:13px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .input-field{background:#F9F7F4;border:1.5px solid #E8E2DA;border-radius:8px;padding:7px 10px;color:#3A3028;width:100%;font-size:13px;}
+  .input-field:focus{border-color:#C4883C;outline:none;}
+  .btn-primary{background:linear-gradient(135deg,#C4883C,#D4A746);color:#fff;font-weight:600;border-radius:10px;padding:12px 28px;cursor:pointer;border:none;font-size:15px;box-shadow:0 3px 12px rgba(196,136,60,0.3);width:100%;}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(196,136,60,0.4);}
+  .checkbox-grid{display:flex;flex-wrap:wrap;gap:6px;}
+  .checkbox-item{display:flex;align-items:center;gap:4px;padding:5px 10px;background:#F9F7F4;border:1.5px solid #E8E2DA;border-radius:8px;cursor:pointer;font-size:12px;}
+  .checkbox-item:has(input:checked){border-color:#C4883C;background:#FFF8F0;}
+  .checkbox-item input{accent-color:#C4883C;width:14px;height:14px;}
+  .cart-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #F0EBE4;}
+  .cart-row:last-child{border-bottom:none;}
+  .cart-row .cat-name{font-size:14px;font-weight:600;color:#8B5E3C;min-width:65px;}
+  .tier-group{display:flex;flex-wrap:wrap;gap:8px;flex:1;}
+  .tier-item{display:inline-flex;align-items:center;gap:5px;background:#F9F7F4;border:1px solid #E8E2DA;border-radius:8px;padding:5px 10px;font-size:14px;}
+  .tier-item button{width:24px;height:24px;border-radius:6px;background:#E8E2DA;border:none;color:#8B5E3C;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:600;}
+  .tier-item button:hover{background:#D4CFC6;}
+  .tier-item .cnt{min-width:18px;text-align:center;font-weight:600;font-size:14px;}
+  .result-section{background:#fff;border:2px solid #D4A746;border-radius:14px;padding:20px;margin-top:14px;box-shadow:0 4px 20px rgba(212,167,70,0.1);}
+  .highlight{color:#C4883C;font-weight:600;}
+  .save-tag{color:#3B9B8F;font-weight:600;}
+  .plan-col{background:#FAFAFA;border-radius:10px;padding:14px;border:1px solid #E8E2DA;}
+  .plan-col-header{text-align:center;padding:6px;border-radius:6px;font-weight:600;font-size:13px;margin-bottom:10px;}
+  .plan-a-header{background:#FFF3E0;color:#C4883C;}
+  .plan-b-header{background:#E8F5E9;color:#2E7D32;}
+  .consume-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .consume-table th{background:#F9F7F4;padding:6px 8px;text-align:left;font-weight:500;color:#8B5E3C;border-bottom:2px solid #E8E2DA;}
+  .consume-table td{padding:6px 8px;border-bottom:1px solid #F0EBE4;vertical-align:top;}
+  .consume-table .discount-cell{font-weight:700;font-size:13px;}
+  .resource-bar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;}
+  .resource-item{flex:1;min-width:100px;background:linear-gradient(135deg,#FFF8F0,#FFFDF8);border:1.5px solid #F0E0C8;border-radius:10px;padding:12px;text-align:center;}
+  .resource-item .val{font-size:22px;font-weight:700;color:#C4883C;}
+  .resource-item .lbl{font-size:11px;color:#9A9A9A;margin-top:2px;}
+  .explain-box{margin-top:8px;padding:8px 10px;border-radius:8px;background:#FFF9F0;border:1px solid #F0E6D4;font-size:11px;color:#886633;line-height:1.6;}
+  .rules-btn{background:none;border:1.5px solid #E8E2DA;border-radius:8px;padding:5px 12px;color:#9A9A9A;font-size:11px;cursor:pointer;}
+  .rules-btn:hover{border-color:#C4883C;color:#C4883C;}
+  .modal-bg{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:999;align-items:center;justify-content:center;padding:16px;}
+  .modal-bg.show{display:flex;}
+  .modal-content{background:#fff;border-radius:14px;padding:24px;max-width:560px;width:100%;max-height:80vh;overflow-y:auto;}
+  .toggle-btn{background:none;border:1.5px solid #C4883C;border-radius:8px;padding:6px 16px;color:#C4883C;font-size:12px;cursor:pointer;font-weight:500;}
+  .toggle-btn:hover{background:#FFF8F0;}
+  .toggle-btn.active{background:#FFF3E0;font-weight:600;}
+  .padding-notice{background:#F3E8FF;border:1px solid #D8B4FE;border-radius:8px;padding:8px 12px;font-size:12px;color:#6B21A8;margin-bottom:10px;}
+  .warning-box{background:#FFF8E1;border:1px solid #FFD54F;border-radius:8px;padding:8px 12px;font-size:12px;color:#F57F17;margin-bottom:8px;}
+  /* Tab 导航 */
+  .tab-nav{display:flex;justify-content:center;gap:6px;margin-top:8px;}
+  .tab-btn{background:#fff;border:1.5px solid #E8E2DA;border-radius:999px;padding:6px 18px;font-size:13px;cursor:pointer;color:#8B5E3C;font-weight:500;font-family:'Noto Sans SC',sans-serif;}
+  .tab-btn:hover{border-color:#C4883C;}
+  .tab-btn.active{background:linear-gradient(135deg,#C4883C,#D4A746);color:#fff;border-color:transparent;font-weight:600;}
+  /* 满减方案库 */
+  .combo-row{cursor:pointer;}
+  .combo-row:hover{background:#FFF8F0;}
+  .combo-row td{transition:background .15s;}
+  .combo-card{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#FBF9F5;border:1px solid #EFE9DF;border-radius:10px;padding:8px 10px;margin-bottom:6px;cursor:pointer;transition:all .15s;flex-wrap:wrap;}
+  .combo-card:hover{border-color:#C4883C;background:#FFF8F0;transform:translateY(-1px);}
+  .combo-chips{display:flex;flex-wrap:wrap;gap:4px;}
+  .tier-chip{display:inline-flex;align-items:baseline;gap:2px;border-radius:6px;padding:3px 7px;font-weight:600;font-size:13px;line-height:1;font-variant-numeric:tabular-nums;}
+  .tier-chip .x{font-weight:400;opacity:.75;font-size:11px;}
+  .tier-258{background:#FFF3E0;color:#C4883C;border:1px solid #F0D9B0;}
+  .tier-128{background:#FFF9F0;color:#8B5E3C;border:1px solid #E8DCC8;}
+  .tier-98{background:#E8F5F0;color:#3B9B8F;border:1px solid #C4E4DA;}
+  .tier-68{background:#EAF2FB;color:#4A90D9;border:1px solid #C9DEF5;}
+  .tier-30{background:#F0EBE4;color:#9A9A9A;border:1px solid #E0D8CC;}
+  .tier-6{background:#FDECEC;color:#CC4444;border:1px solid #F5C6C6;}
+  .combo-side{font-size:12px;color:#9A9A9A;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .combo-side b{color:#3A3028;font-weight:600;}
+  .combo-side .sv{color:#3B9B8F;font-size:10px;}
+  @media(max-width:768px){body{padding:4px;}.card{padding:10px 12px;}}
+</style>
+</head>
+<body>
+<div class="max-w-5xl mx-auto">
+  <div class="text-center mb-3">
+    <h1 class="text-xl md:text-2xl font-bold title-font" style="color:#8B5E3C">🎯 一把子划算计划</h1>
+    <p class="text-xs" style="color:#9A9A9A">燕云十六声 · 大促最优充值&消费方案 · v3.9 · <a href="index-pedia.html" style="color:#C4883C;text-decoration:underline">📖 外观图鉴</a></p>
+    <div class="tab-nav">
+      <button class="tab-btn active" id="tabbtn-home" onclick="switchTab('home')">🧮 计算器</button>
+      <button class="tab-btn" id="tabbtn-combos" onclick="switchTab('combos')">🎟️ 满减方案库</button>
+    </div>
+  </div>
+
+  <div id="tab-home">
+  <div class="grid grid-cols-1 md:grid-cols-5 gap-2" style="align-items:stretch">
+    <div class="card md:col-span-3" style="display:flex;flex-direction:column">
+      <div class="card-title" style="justify-content:space-between">
+        <span>🛒 购物车</span>
+        <button class="rules-btn" onclick="clearAll()">🗑️ 清空</button>
+      </div>
+      <div id="cart-section" style="flex:1"></div>
+    </div>
+    <div class="md:col-span-2 flex flex-col gap-2">
+      <div class="card" style="flex:1;display:flex;flex-direction:column">
+        <div class="card-title">📊 当前状态</div>
+        <div class="grid grid-cols-2 gap-3" style="flex:1;align-content:start">
+          <div><label class="text-xs" style="color:#9A9A9A">持有珠</label><input type="number" id="current-zhu" class="input-field" value="0" min="0"></div>
+          <div><label class="text-xs" style="color:#9A9A9A">持有玉</label><input type="number" id="current-yu" class="input-field" value="0" min="0"></div>
+          <div><label class="text-xs" style="color:#9A9A9A">累充(元)</label><input type="number" id="current-cumul" class="input-field" value="0" min="0"></div>
+          <div><label class="text-xs" style="color:#9A9A9A">扶摇录(元)</label><input type="number" id="current-fuyao" class="input-field" value="0" min="0"></div>
+          <div><label class="text-xs" style="color:#9A9A9A">折音券</label><input type="number" id="zheyin-count" class="input-field" value="0" min="0"></div>
+          <div><label class="text-xs" style="color:#9A9A9A">销音券</label><input type="number" id="xiaoyin-count" class="input-field" value="0" min="0"></div>
+          <div><label class="text-xs" style="color:#9A9A9A">活动余周(0=不限)</label><input type="number" id="weeks-left" class="input-field" value="0" min="0"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎁 首充已领（勾选=已领）</div>
+        <div class="checkbox-grid" id="first-charge-grid"></div>
+      </div>
+    </div>
+  </div>
+  <div class="my-3">
+    <button class="btn-primary" style="width:100%;padding:16px;font-size:18px;border-radius:12px" onclick="calculate()">⚡ 算一下最划算方案</button>
+  </div>
+
+  <div id="result-area"></div>
+  <div class="text-center mt-4 mb-8"><button class="rules-btn" onclick="showRules()">📖 计算规则说明</button></div>
+  </div>
+
+  <div id="tab-combos" class="hidden">
+    <div class="card">
+      <div class="card-title">🎟️ 满减方案库 <span style="font-weight:normal;color:#9A9A9A;font-size:11px">惠音券 · 单券方案 · 实付 5 折以内 · 全部展示</span></div>
+      <div class="text-xs" style="color:#9A9A9A;line-height:1.6">档位 = 6/30/68/98/128/258 元（×10 珠）。单方案最多 10 件、单档位 4~6 件、原总价 ≤10500 珠。仅单券方案，按券类型按钮切换，组内折扣升序全部展示。不含折音/销音券。点击任意方案：自动按默认类别（衣服为主，30 元档因商城特价改填坐骑、98 元档填奇术特效）累加进购物车并立即计算充值方案。</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0">
+        <button class="tab-btn active" id="combo-tab-6480" onclick="switchComboKind('6480')">满6480减3880</button>
+        <button class="tab-btn" id="combo-tab-3280" onclick="switchComboKind('3280')">满3280减1680</button>
+        <button class="tab-btn" id="combo-tab-60" onclick="switchComboKind('60')">满60减40</button>
+      </div>
+      <div id="combo-fold-tabs" style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0"></div>
+      <div id="combo-area"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Rules Modal -->
+<div class="modal-bg" id="rules-modal" onclick="hideRules()">
+<div class="modal-content" onclick="event.stopPropagation()">
+  <h3 class="title-font text-base font-bold mb-3" style="color:#8B5E3C">📖 计算规则说明</h3>
+  <div class="text-xs leading-relaxed" style="color:#555">
+    <p class="font-semibold mb-1">🎯 决策原则</p>
+    <ol class="list-decimal pl-4 mb-3 space-y-0.5">
+      <li><b>充值金额最小化</b>：覆盖购物车前提下花最少的钱</li>
+      <li><b>同金额下资源最大化</b>：珠优先，玉次之</li>
+      <li><b>优惠优先级</b>：惠音券(满减) > 折音券5折 > 销音券膨胀 > 惠音券60减40 > 原价</li>
+    </ol>
+    <p class="font-semibold mb-1">🛍️ 消费原则</p>
+    <ul class="list-disc pl-4 mb-3 space-y-0.5">
+      <li>惠音券批次刚过门槛最优（实付率&lt;50%才塞入）</li>
+      <li>折音券5张=1次，对单件5折；默认放开用（可多次，总花费更低），另有「省着用」方案对比——不舍得在低档位花折音时可选销音路线；如该商品可用销音券且销音净省(约240珠)更高，折音券转用于下一件</li>
+      <li>销音券默认使用：已持有的无条件用，不够则自动购买(6元/张，膨胀抵300珠，净省≈24元/张)——<b>仅当整体总花费更省时才购买</b></li>
+      <li>30元衣服属于商城特价，不参与满减/折音等任何优惠</li>
+    </ul>
+    <p class="font-semibold mb-1">💡 凑单逻辑</p>
+    <ul class="list-disc pl-4 mb-3 space-y-0.5">
+      <li>当商品总价（或批次分配后剩余）距满减门槛≤180珠时，自动计算添加1-3件6元皮肤的凑单方案</li>
+      <li>凑单方案仅在整体更省钱时展示，可通过按钮切换对比</li>
+    </ul>
+    <p class="font-semibold mb-1">💰 充值原则</p>
+    <ul class="list-disc pl-4 mb-3 space-y-0.5">
+      <li>DFS搜索所有充值档位组合 + branch-and-bound剪枝</li>
+      <li>优先有首充的档位（珠/元更高）</li>
+      <li>累充阶梯实时计入搜索</li>
+      <li>月卡可叠加但需连续签到N×30天；周卡每周限购1张（填写「活动余周」后按剩余周数约束周卡张数）</li>
+    </ul>
+  </div>
+  <div class="text-center mt-4"><button class="btn-primary" style="padding:8px 16px;font-size:13px;width:auto" onclick="hideRules()">知道了</button></div>
+</div>
+</div>
+
+<script>
+function showRules(){document.getElementById('rules-modal').classList.add('show');}
+function hideRules(){document.getElementById('rules-modal').classList.remove('show');}
+
+// ============ 错误可视化（诊断用：任何脚本错误弹红条，避免静默失败） ============
+function showErr(msg){
+  try{console.error('[一把子划算]',msg);}catch(e){}
+  let el=document.getElementById('err-toast');
+  if(!el){el=document.createElement('div');el.id='err-toast';document.body.appendChild(el);}
+  el.textContent='⚠️ '+msg;
+  el.style.cssText='position:fixed;top:10px;left:50%;transform:translateX(-50%);background:#CC4444;color:#fff;padding:8px 16px;border-radius:8px;z-index:99999;font-size:12px;max-width:90%;box-shadow:0 4px 16px rgba(0,0,0,.3);display:block;';
+  clearTimeout(el._t);el._t=setTimeout(()=>{el.style.display='none';},8000);
+}
+window.addEventListener('error',e=>{showErr('脚本错误: '+(e.message||'未知')+(e.filename?' @'+e.filename.split('/').pop():''));});
+window.addEventListener('unhandledrejection',e=>{showErr('异步错误: '+((e.reason&&e.reason.message)||e.reason));});
+
+// ============ DATA ============
+const SHOP=[
+  {id:'clothes',name:'衣服',tiers:[6,30,68,128,258]},
+  {id:'mount',name:'坐骑',tiers:[6,30,68,128]},
+  {id:'weapon',name:'武器皮肤',tiers:[6,68,128]},
+  {id:'martial',name:'武学特效',tiers:[128]},
+  {id:'magic',name:'奇术特效',tiers:[6,30,98]},
+  {id:'accessory',name:'配饰',tiers:[6,68]},
+  {id:'limited',name:'限时',tiers:[6,30,68,128,258]},
+];
+const RTIERS=[
+  {id:'direct_6',name:'直充6',cost:6,bz:60,fz:0,fy:60,maxC:10},
+  {id:'direct_15',name:'直充15',cost:15,bz:150,fz:0,fy:150,maxC:5},
+  {id:'direct_30',name:'直充30',cost:30,bz:300,fz:30,fy:300,maxC:5},
+  {id:'direct_60',name:'直充60',cost:60,bz:600,fz:68,fy:600,maxC:5},
+  {id:'direct_100',name:'直充100',cost:100,bz:1000,fz:128,fy:1000,maxC:5},
+  {id:'direct_180',name:'直充180',cost:180,bz:1800,fz:268,fy:1800,maxC:3},
+  {id:'direct_300',name:'直充300',cost:300,bz:3000,fz:458,fy:3000,maxC:3},
+  {id:'direct_600',name:'直充600',cost:600,bz:6000,fz:1200,fy:6000,maxC:2},
+  {id:'direct_1200',name:'大神1200',cost:1200,bz:12000,fz:2400,fy:0,maxC:2},
+  {id:'monthly',name:'月卡',cost:30,bz:300,fz:0,fy:0,my:3000,maxC:6},
+  {id:'weekly',name:'连音周礼包',cost:6,bz:66,fz:0,fy:0,maxC:5},
+];
+const CUMUL=[{t:30,z:8},{t:68,z:8},{t:98,z:10},{t:128,z:10},{t:198,z:20},{t:268,z:20},{t:328,z:20},{t:648,z:100},{t:1288,z:200},{t:1988,z:220}];
+const FUYAO=[{t:60,i:'1×袅袅之音绑'},{t:288,i:'1×袅袅之音绑'},{t:1200,i:'2×袅袅之音绑'},{t:3000,i:'2×袅袅之音绑+10×青丝染膏'},{t:5000,i:'2×袅袅之音绑+10×青丝染膏'},{t:10000,i:'2×袅袅之音绑+5×云霞染粉'}];
+const FC_TIERS=[{id:'direct_6',l:'6'},{id:'direct_15',l:'15'},{id:'direct_30',l:'30'},{id:'direct_60',l:'60'},{id:'direct_100',l:'100'},{id:'direct_180',l:'180'},{id:'direct_300',l:'300'},{id:'direct_600',l:'600'},{id:'direct_1200',l:'1200'}];
+
+// ============ 状态持久化（v3 新增） ============
+const STORE_KEY='y16s_deal_calc_v3';
+function readNum(id){
+  const el=document.getElementById(id);
+  const v=parseFloat(el?el.value:'');
+  return isFinite(v)?Math.max(0,v):0;   // v3: 负输入防护
+}
+function saveState(){
+  try{
+    const st={cart:cc_data,inputs:{},fc:{}};
+    ['current-zhu','current-yu','current-cumul','current-fuyao','zheyin-count','xiaoyin-count','weeks-left'].forEach(id=>{const el=document.getElementById(id);if(el)st.inputs[id]=el.value;});
+    FC_TIERS.forEach(t=>{const el=document.getElementById('fc_'+t.id);if(el)st.fc[t.id]=el.checked;});
+    localStorage.setItem(STORE_KEY,JSON.stringify(st));
+  }catch(e){}
+}
+function loadState(){
+  try{
+    const raw=localStorage.getItem(STORE_KEY);if(!raw)return;
+    const st=JSON.parse(raw);
+    if(st&&st.cart)Object.keys(st.cart).forEach(k=>{if(k in cc_data)cc_data[k]=Math.max(0,st.cart[k]|0);});
+    if(st&&st.inputs)Object.keys(st.inputs).forEach(id=>{const el=document.getElementById(id);if(el)el.value=st.inputs[id];});
+    if(st&&st.fc)Object.keys(st.fc).forEach(k=>{const el=document.getElementById('fc_'+k);if(el)el.checked=!!st.fc[k];});
+  }catch(e){}
+}
+function clearAll(){
+  Object.keys(cc_data).forEach(k=>{cc_data[k]=0;const el=document.getElementById('c_'+k);if(el)el.textContent='0';});
+  ['current-zhu','current-yu','current-cumul','current-fuyao','zheyin-count','xiaoyin-count','weeks-left'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='0';});
+  FC_TIERS.forEach(t=>{const el=document.getElementById('fc_'+t.id);if(el)el.checked=false;});
+  document.getElementById('result-area').innerHTML='';
+  lastResult=null;
+  try{localStorage.removeItem(STORE_KEY);}catch(e){}
+}
+
+// ============ UI ============
+const cc_data={};
+let lastResult=null;
+
+function initUI(){
+  let h='';
+  SHOP.forEach(cat=>{
+    h+=`<div class="cart-row"><span class="cat-name">${cat.name}${cat.id==='limited'?'<br><i style="font-size:10px;font-weight:normal;color:#999">不计优惠</i>':''}</span><div class="tier-group">`;
+    cat.tiers.forEach(tier=>{const k=`${cat.id}_${tier}`;cc_data[k]=0;h+=`<div class="tier-item"><span style="color:#999;font-size:11px">${tier}</span><button onclick="cc('${k}',-1)">-</button><span class="cnt" id="c_${k}">0</span><button onclick="cc('${k}',1)">+</button></div>`;});
+    h+='</div></div>';
+  });
+  document.getElementById('cart-section').innerHTML=h;
+  let fc='';FC_TIERS.forEach(t=>{fc+=`<label class="checkbox-item"><input type="checkbox" id="fc_${t.id}"><span>${t.l}元</span></label>`;});
+  document.getElementById('first-charge-grid').innerHTML=fc;
+
+  // v3: 恢复上次状态 + 同步计数显示
+  loadState();
+  Object.keys(cc_data).forEach(k=>{const el=document.getElementById('c_'+k);if(el)el.textContent=cc_data[k];});
+  // v3: 输入变化自动保存
+  ['current-zhu','current-yu','current-cumul','current-fuyao','zheyin-count','xiaoyin-count','weeks-left'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',saveState);});
+  FC_TIERS.forEach(t=>{const el=document.getElementById('fc_'+t.id);if(el)el.addEventListener('change',saveState);});
+}
+function cc(k,d){cc_data[k]=Math.max(0,(cc_data[k]||0)+d);document.getElementById(`c_${k}`).textContent=cc_data[k];saveState();}
+
+// ============ Tab 切换 ============
+let activeTab='home';
+function switchTab(name){
+  try{
+    activeTab=name;
+    ['home','combos'].forEach(t=>{
+      document.getElementById('tab-'+t).classList.toggle('hidden',t!==name);
+      document.getElementById('tabbtn-'+t).classList.toggle('active',t===name);
+    });
+    if(name==='combos')renderComboPage();
+  }catch(e){showErr('切换失败: '+(e.message||e));}
+}
+
+// ============ 满减方案库 ============
+let comboCache=null;
+const COMBO_TIERS=[6,30,68,98,128,258];           // 元（×10=珠）
+const COMBO_CAPS={6:6,30:4,68:4,98:4,128:4,258:4}; // 单档位件数上限
+const COMBO_MAX_PIECES=10;                          // 单方案件数上限
+const COMBO_MAX_TOTAL=10500;                        // 原总价上限（珠）
+const COMBO_TIER_CAT={6:'clothes',30:'mount',68:'clothes',98:'magic',128:'clothes',258:'clothes'}; // 回填默认类别（30元档衣服为特价不参与满减→坐骑）
+function buildComboList(){
+  const out=[];const q=new Array(6).fill(0);
+  (function dfs(i,total,pieces){
+    if(total>COMBO_MAX_TOTAL||pieces>COMBO_MAX_PIECES)return;
+    if(i===6){
+      if(pieces===0)return;
+      const items=[];
+      for(let j=0;j<6;j++)for(let k=0;k<q[j];k++)items.push({price:COMBO_TIERS[j]*10,noDisc:false,noHui:false,canXiao:false,canZheyin:false});
+      const cp=optConsume(items,0,0);   // 纯满减（无折音/销音），与计算器同一条代码路径
+      const hasB6=cp.batches.some(b=>b.lbl==='满6480减3880');
+      const hasB3=cp.batches.some(b=>b.lbl==='满3280减1680');
+      const hasB60=cp.batches.some(b=>b.lbl==='满60减40');
+      // 严格单券：该组合恰好只用了这一张满减券（剩余零头被 60减40 收走的算混券，不归此类）
+      const kind=hasB6&&!hasB3&&!hasB60?'6480':!hasB6&&hasB3&&!hasB60?'3280':!hasB6&&!hasB3&&hasB60?'60':'none';
+      const fold=cp.totCost/total;
+      if(fold<=0.5&&kind!=='none')out.push({q:[...q],orig:total,pay:cp.totCost,save:total-cp.totCost,fold,pieces,kind});
+      return;
+    }
+    for(let c=0;c<=COMBO_CAPS[COMBO_TIERS[i]];c++){q[i]=c;dfs(i+1,total+COMBO_TIERS[i]*10*c,pieces+c);}
+    q[i]=0;
+  })(0,0,0);
+  out.sort((a,b)=>a.fold-b.fold||a.orig-b.orig||a.pieces-b.pieces);  // 折扣升序（最优惠在前）→ 原总价 → 件数
+  return out;
+}
+const COMBO_SECTIONS=[
+  {k:'6480',t:'🎟️ 满6480减3880',d:'单券方案 · 原总价 6480~7760 珠区间'},
+  {k:'3280',t:'🎟️ 满3280减1680',d:'单券方案 · 原总价 3280~3360 珠区间'},
+  {k:'60',t:'🎟️ 满60减40',d:'单券方案'},
+];
+let comboKind='6480';
+let comboFold=null;
+const foldKey=c=>(c.fold*10).toFixed(1);   // 折扣档：4.0 / 4.1 / ...
+function switchComboKind(k){
+  try{
+    comboKind=k;
+    comboFold=null;
+    ['6480','3280','60'].forEach(x=>{const b=document.getElementById('combo-tab-'+x);if(b)b.classList.toggle('active',x===k);});
+    updateFoldTabs();
+    fillComboList();
+  }catch(e){showErr('切换券类型失败: '+(e.message||e));}
+}
+function switchComboFold(f){
+  try{
+    comboFold=f;
+    updateFoldTabs();
+    fillComboList();
+  }catch(e){showErr('切换折扣档失败: '+(e.message||e));}
+}
+function updateFoldTabs(){
+  const box=document.getElementById('combo-fold-tabs');if(!box||!comboCache)return;
+  const folds=[...new Set(comboCache.filter(c=>c.kind===comboKind).map(foldKey))].sort();
+  if(!folds.length){box.innerHTML='';return;}
+  if(!comboFold||!folds.includes(comboFold))comboFold=folds[0];
+  box.innerHTML=folds.map(f=>{
+    const n=comboCache.filter(c=>c.kind===comboKind&&foldKey(c)===f).length;
+    return `<button class="tab-btn${f===comboFold?' active':''}" onclick="switchComboFold('${f}')">${f}折 (${n})</button>`;
+  }).join('');
+}
+function tierChips(q){
+  const parts=[];
+  for(let j=5;j>=0;j--)if(q[j])parts.push(`<span class="tier-chip tier-${COMBO_TIERS[j]}">${COMBO_TIERS[j]}<span class="x">×${q[j]}</span></span>`);
+  return parts.join('');
+}
+function fillComboList(){
+  const area=document.getElementById('combo-area');if(!area)return;
+  if(!comboCache||!comboCache.length){area.innerHTML='<div style="font-size:11px;color:#B8B0A4;padding:6px 0">没有 5 折以内的单券组合</div>';return;}
+  const rows=comboCache.filter(c=>c.kind===comboKind&&foldKey(c)===comboFold);
+  if(!rows.length){area.innerHTML='<div style="font-size:11px;color:#B8B0A4;padding:6px 0">该折扣档没有方案</div>';return;}
+  let h=`<div class="text-xs" style="color:#9A9A9A;margin:0 0 6px">「${comboFold}折」· ${rows.length} 个方案 · 点击任意方案自动填充购物车并计算充值方案</div>`;
+  rows.forEach(c=>{
+    const idx=comboCache.indexOf(c);
+    h+=`<div class="combo-card" onclick="applyCombo(${idx})" title="点击：按默认类别填充购物车并计算">
+      <div class="combo-chips">${tierChips(c.q)}</div>
+      <div class="combo-side">${c.orig}珠 → <b>${c.pay}珠</b><span class="sv">省 ${c.save}珠</span></div>
+    </div>`;
+  });
+  area.innerHTML=h;
+}
+function updateComboTabLabels(){
+  ['6480','3280','60'].forEach(k=>{
+    const b=document.getElementById('combo-tab-'+k);
+    if(b&&comboCache){const n=comboCache.filter(c=>c.kind===k).length;b.textContent=`${COMBO_SECTIONS.find(s=>s.k===k).t.replace('🎟️ ','')} (${n})`;}
+  });
+}
+function renderComboPage(){
+  const area=document.getElementById('combo-area');if(!area)return;
+  if(comboCache){updateComboTabLabels();updateFoldTabs();fillComboList();return;}
+  area.innerHTML='<div style="padding:20px;text-align:center;color:#9A9A9A">⏳ 正在枚举组合并计算折扣…（约 1 秒）</div>';
+  setTimeout(()=>{comboCache=buildComboList();updateComboTabLabels();updateFoldTabs();fillComboList();},30);
+}
+function applyCombo(idx){
+  const c=comboCache?comboCache[idx]:null;
+  if(!c){showErr('方案不存在，请重试');return;}
+  switchTab('home');   // 先跳转：跳转本身不可能失败，填充/计算失败也不影响
+  try{
+    COMBO_TIERS.forEach((t,j)=>{
+      const qty=c.q[j]||0;if(!qty)return;
+      const k=`${COMBO_TIER_CAT[t]}_${t}`;
+      cc_data[k]=(cc_data[k]||0)+qty;
+      const el=document.getElementById(`c_${k}`);if(el)el.textContent=cc_data[k];
+    });
+    saveState();
+    calculate();
+    setTimeout(()=>{window.scrollTo(0,0);},0);
+  }catch(e){showErr('填充购物车失败: '+(e.message||e));}
+}
+
+// ============ ALGORITHM ============
+
+function calculate(){
+  const cZhu=readNum('current-zhu');
+  const cYu=readNum('current-yu');
+  const cCumul=readNum('current-cumul');
+  const cFuyao=readNum('current-fuyao');
+  const zyC=readNum('zheyin-count');
+  const xyC=readNum('xiaoyin-count');
+  const weeksLeft=readNum('weeks-left');
+  const fcC={};FC_TIERS.forEach(t=>{fcC[t.id]=document.getElementById(`fc_${t.id}`).checked;});
+  window._fcC=fcC;
+
+  const items=[];
+  SHOP.forEach(cat=>{cat.tiers.forEach(tier=>{const k=`${cat.id}_${tier}`;for(let i=0;i<(cc_data[k]||0);i++)items.push({cat:cat.id,catN:cat.name,tier,price:tier*10,noDisc:(cat.id === 'limited' || cat.id==='clothes'&&tier===30),noHui:(cat.id === 'limited' || cat.id==='clothes'&&tier===30),canXiao: cat.id !== 'limited' && (((cat.id === 'clothes' || cat.id === 'weapon' || cat.id === 'accessory' || cat.id === 'mount') && tier === 68) || (cat.id === 'magic' && tier === 98)),
+  canZheyin:!(cat.id === 'limited' || (cat.id === 'clothes' && tier === 30))});});});
+  if(!items.length){document.getElementById('result-area').innerHTML='<div class="result-section text-center" style="color:#9A9A9A">请先往购物车里加商品~</div>';return;}
+
+  // Normal plan
+  const normalPlan=computeFull(items,[],zyC,xyC,cZhu,cYu,cCumul,cFuyao,fcC,weeksLeft);
+  // Padding plan (凑单)
+  const padItems=tryPadding(items,zyC,xyC);
+  let padPlan=null;
+  if(padItems.length>0){
+    padPlan=computeFull([...items,...padItems],padItems,zyC,xyC,cZhu,cYu,cCumul,cFuyao,fcC,weeksLeft);
+    if(padPlan.grandRmb>=normalPlan.grandRmb) padPlan=null;
+  }
+
+  lastResult={normalPlan,padPlan};
+  saveState();
+  // Default: show better plan
+  if(padPlan&&padPlan.grandRmb<normalPlan.grandRmb) render(padPlan,true);
+  else render(normalPlan,false);
+}
+
+function tryPadding(items,zyC,xyC){
+  const opt=items.filter(i=>!i.noDisc);
+  const total=opt.reduce((s,i)=>s+i.price,0);
+  // 检测1: 总价距满减门槛 ≤180（原逻辑）
+  for(const thr of[6480,3280]){
+    const gap=thr-total;
+    if(gap>0&&gap<=180) return mkPads(gap);
+  }
+  // 检测2（v3 新增）: 批1(6480)分配后剩余距 3280 门槛 ≤180
+  //   例：批1用掉后剩 3100，加 3 件 60 珠凑满 3280 触发批2(省1680)
+  //   注意：必须看「批2用券之前」的剩余，不能看六步全跑完的剩余（会被销音/60减40吃掉）
+  let remAfterB1=[...opt];
+  const b1sim=minSubset(opt.filter(i=>!i.noHui),6480);
+  if(b1sim) remAfterB1=rmI(remAfterB1,b1sim.items);
+  const remTotal=remAfterB1.reduce((s,i)=>s+i.price,0);
+  const gap2=3280-remTotal;
+  if(gap2>0&&gap2<=180) return mkPads(gap2);
+  return [];
+}
+function mkPads(gap){
+  const n=Math.ceil(gap/60);
+  const pads=[];
+  for(let i=0;i<Math.min(n,3);i++) pads.push({cat:'pad',catN:'凑单皮肤',tier:6,price:60,noDisc:false,noHui:false,canXiao:false,canZheyin:true,isPad:true});
+  return pads;
+}
+
+function computeFull(items,padItems,zyC,xyC,cZhu,cYu,cCumul,cFuyao,fcC,weeksLeft){
+  const fixed=items.filter(i=>i.noDisc),opt=items.filter(i=>!i.noDisc);
+  const fixCost=fixed.reduce((s,i)=>s+i.price,0);
+  const totOrig=items.reduce((s,i)=>s+i.price,0);
+  // v3.2: 折音双策略——A放开用（上限⌊折音/5⌋次），B省着用（≤1次，即 v3.1 口径）
+  // 两策略有差异时挂 best.alt，渲染层做 AB 对比
+  const maxZ=Math.min(Math.floor(zyC/5),opt.filter(i=>i.canZheyin).length);
+  // v3: 枚举销音券可用上限 0~5，实际购买数 = 用券数 - 已有数
+  // 修复「珠已够时仍买券」：只在总花费更省时才买（buyReal>0 计入 grandRmb）
+  const tryAvail=(avail,zyCap)=>{
+    const cp=optConsume(opt,zyC,avail,zyCap);
+    const buyReal=Math.max(0,cp.xyUsed-xyC);
+    const totCost=cp.totCost+fixCost;
+    const need=Math.max(0,totCost-cZhu);
+    const rp=optRecharge(need,fcC,cCumul,cFuyao,buyReal,weeksLeft);
+    const mainP=rp.pA.rmb<=rp.pB.rmb?rp.pA:rp.pB;
+    const grandRmb=mainP.rmb+buyReal*6;
+    return {items,fixed,fixCost,opt,cp,rp,totCost,need,grandRmb,totOrig,padItems,cZhu,cYu,cCumul,cFuyao,zyC,xyC,xyToBuy:buyReal,weeksLeft};
+  };
+  const keepBetter=(cur,cand)=>!cur||cand.grandRmb<cur.grandRmb||(cand.grandRmb===cur.grandRmb&&cand.cp.totSaved>cur.cp.totSaved);
+  let best=null,bestCons=null;
+  for(let avail=0;avail<=5;avail++){
+    if(avail<Math.min(xyC,5))continue;   // 用不满已有券的支配方案跳过
+    const cand=tryAvail(avail,maxZ);
+    if(keepBetter(best,cand))best=cand;
+  }
+  if(maxZ>1){
+    for(let avail=0;avail<=5;avail++){
+      if(avail<Math.min(xyC,5))continue;
+      const cand=tryAvail(avail,1);
+      if(keepBetter(bestCons,cand))bestCons=cand;
+    }
+    // B 更贵 → 展示代价；B 同价但少花折音 → 也展示（同价省券）
+    if(bestCons&&bestCons.cp.zyUsed<best.cp.zyUsed&&bestCons.grandRmb>=best.grandRmb)best.alt=bestCons;
+    // 理论上不会发生（A 枚举超集），兜底：若 B 意外更便宜，B 上位为主方案
+    else if(bestCons&&bestCons.grandRmb<best.grandRmb){const t=best;best=bestCons;best.alt=t;}
+  }
+  return best;
+}
+
+// ============ CONSUMPTION OPTIMIZER ============
+function optConsume(items,zyC,xyAvail,zyCap=0){
+  const batches=[];let rem=[...items],totCost=0,totSaved=0,zyUsed=0,xyUsed=0;
+  // v3.2: maxZ = 本轮折音次数上限（5张=1次）；zyCap=0 时与 v3.1 前行为一致
+  const maxZ=Math.min(zyCap,Math.floor(zyC/5));
+
+  // Step 1: 满6480减3880
+  const e1=rem.filter(i=>!i.noHui);
+  const b1=minSubset(e1,6480,maxZ);
+  if(b1){batches.push({type:'huiyin',lbl:'满6480减3880',items:b1.items,orig:b1.sum,cost:b1.sum-3880,disc:3880});totCost+=b1.sum-3880;totSaved+=3880;rem=rmI(rem,b1.items);}
+
+  // Step 2: 满3280减1680
+  const e2=rem.filter(i=>!i.noHui);
+  const b2=minSubset(e2,3280,maxZ);
+  if(b2){batches.push({type:'huiyin',lbl:'满3280减1680',items:b2.items,orig:b2.sum,cost:b2.sum-1680,disc:1680});totCost+=b2.sum-1680;totSaved+=1680;rem=rmI(rem,b2.items);}
+
+  // Sort remaining by price desc
+  rem.sort((a,b)=>b.price-a.price);
+
+  // Step 3: 折音券 vs 销音券智能选择（v3.2: 支持多次折音，逐轮挑最优目标）
+  while(zyUsed<maxZ*5&&rem.length>0){
+    let top=rem.find(i=>i.canZheyin);
+    // v3: 60珠件折音省30 < 满60减40省40——若60减40只剩这一个目标，折音让路
+    if(top&&top.price<=60&&!top.noHui){
+      const huiCands=rem.filter(i=>!i.noHui&&i.price>=60).length;
+      if(huiCands<=1) top=null;
+    }
+    if(!top)break;
+    const zySave=Math.floor(top.price*0.5);
+    if(top.canXiao&&zySave<=240&&xyAvail>0){
+      // v3.1: 口径修正——销音净省约240珠(300-券价60珠)，非300
+      // 且销音券本轮真的可用（xyAvail>0）才让路
+      // 销音更划算，折音找下一个非canXiao商品；找不到就停，交给Step 4销音
+      const alt=rem.find(i=>i.canZheyin&&!i.canXiao);
+      if(alt){
+        const sv=Math.floor(alt.price*0.5);
+        batches.push({type:'zheyin',lbl:'折音券5折',items:[alt],orig:alt.price,cost:alt.price-sv,disc:sv});
+        totCost+=alt.price-sv;totSaved+=sv;zyUsed+=5;rem=rmI(rem,[alt]);
+      }else break;
+    }else{
+      // 折音更划算或商品不能用销音
+      batches.push({type:'zheyin',lbl:'折音券5折',items:[top],orig:top.price,cost:top.price-zySave,disc:zySave});
+      totCost+=top.price-zySave;totSaved+=zySave;zyUsed+=5;rem=rmI(rem,[top]);
+    }
+  }
+
+  // Step 4: 销音券（受可用上限约束，最多5张——每周限购1张）
+  const maxUse=Math.min(xyAvail,5);
+  const xt=rem.filter(i=>i.canXiao&&i.price>300).sort((a,b)=>b.price-a.price);
+  for(const it of xt){
+    if(xyUsed>=maxUse)break;
+    batches.push({type:'xiaoyin',lbl:'销音券膨胀',items:[it],orig:it.price,cost:it.price-300,disc:300});
+    totCost+=it.price-300;totSaved+=300;xyUsed++;rem=rmI(rem,[it]);
+  }
+
+  // Step 5: 满60减40
+  const e3=rem.filter(i=>!i.noHui&&i.price>=60);
+  if(e3.length>0){
+    e3.sort((a,b)=>a.price-b.price); // cheapest first = best ratio
+    const t=e3[0];
+    batches.push({type:'huiyin',lbl:'满60减40',items:[t],orig:t.price,cost:t.price-40,disc:40});
+    totCost+=t.price-40;totSaved+=40;rem=rmI(rem,[t]);
+  }
+
+  // Step 6: remaining
+  if(rem.length>0){const rc=rem.reduce((s,i)=>s+i.price,0);batches.push({type:'normal',lbl:'原价',items:[...rem],orig:rc,cost:rc,disc:0});totCost+=rc;}
+  return{batches,totCost,totSaved,zyUsed,xyUsed,rem};
+}
+
+function minSubset(items,thr,zTop=0){
+  const n=items.length;if(!n)return null;
+  const total=items.reduce((s,i)=>s+i.price,0);
+  if(total<thr)return null;
+  // v3.1: 同 sum 超集有意识选择——留篮最贵可折音商品（折音5折砸贵的省最多）
+  //   例：两组合同 6480，一个把 68 档吞进批、留 128 档给折音(省640)；
+  //   另一个留 68 档(折音只省340)。选前者，而不是按枚举顺序掷骰子。
+  // v3.2: zTop = 预计折音次数（5张=1次），预留 top-K 个折音目标；zTop=0 退化为 v3.1 单目标
+  const keepV=items.map(i=>i.canZheyin?Math.floor(i.price*0.5):0);
+  function leaveScore(mask){
+    const left=[];for(let i=0;i<n;i++)if(!(mask&(1<<i))&&keepV[i]>0)left.push(keepV[i]);
+    left.sort((a,b)=>b-a);
+    return left.slice(0,zTop).reduce((s,v)=>s+v,0);
+  }
+  let bi=null,bs=Infinity,bv=0;
+  if(n<=20){
+    for(let m=1;m<(1<<n);m++){
+      let s=0;for(let i=0;i<n;i++)if(m&(1<<i))s+=items[i].price;
+      if(s>=thr&&s<bs){bs=s;bi=[];for(let i=0;i<n;i++)if(m&(1<<i))bi.push(items[i]);bv=leaveScore(m);}
+      else if(s>=thr&&s===bs){const v=leaveScore(m);if(v>bv){bi=[];for(let i=0;i<n;i++)if(m&(1<<i))bi.push(items[i]);bv=v;}}
+    }
+  }else{
+    const so=[...items].sort((a,b)=>b.price-a.price);let s=0;const sub=[];
+    for(const it of so){s+=it.price;sub.push(it);if(s>=thr)break;}
+    if(s>=thr){bi=[...sub];bs=s;}
+    // swap improvement（含同价值时按批内折音价值优选：吞低价值的、留高价值的）
+    const batchZ=b=>b.reduce((x,i)=>x+(i.canZheyin?Math.floor(i.price*0.5):0),0);
+    if(bi&&bi.length<so.length){for(let i=bi.length-1;i>=0;i--)for(let j=bi.length;j<so.length;j++){const ns=bs-bi[i].price+so[j].price;if(ns>=thr&&ns<bs){bi[i]=so[j];bs=ns;}else if(ns===bs){const test=[...bi];test[i]=so[j];if(batchZ(test)<batchZ(bi)){bi[i]=so[j];bs=ns;}}}}
+  }
+  return bi?{items:bi,sum:bs}:null;
+}
+function rmI(a,r){const res=[...a];for(const i of r){const x=res.indexOf(i);if(x>=0)res.splice(x,1);}return res;}
+
+// ============ RECHARGE DFS + BRANCH-AND-BOUND ============
+function dfsSearch(need,fcC,cCumul,xC,cFuyao,weeksLeft){
+  // v3.1: 周卡张数受「活动余周」约束（每周限购1张，余周=1 则最多买1张）
+  const wCap=weeksLeft>0?Math.min(5,Math.floor(weeksLeft)):5;
+  const tiers=RTIERS.map(t=>({...t,
+    maxC: t.id==='weekly'?Math.min(t.maxC||10,wCap):(t.maxC||10),
+    ez:t.bz+(fcC[t.id]?0:t.fz),ey:fcC[t.id]?0:(t.fy||0),hf:!fcC[t.id]&&(t.fz>0||t.fy>0)}));
+  tiers.sort((a,b)=>(b.ez/b.cost)-(a.ez/a.cost)||(b.cost-a.cost));
+  let bestCost=Infinity,bestPlan=null;
+  function getCB(rmb){const nc=cCumul+rmb;return CUMUL.filter(r=>r.t>cCumul&&r.t<=nc).reduce((s,r)=>s+r.z,0);}   // rmb 已含 xC（dfs 基数为 xC）
+  // Initial upper bound (respect maxC, include xC base)
+  // v3.1: maxC=0 时跳过（原 `t.maxC||10` 会把 0 误当 falsy 换成 10，绕过年余周约束）
+  for(const t of tiers){if(t.ez>0&&t.maxC>0){let n=Math.ceil(need/t.ez);const maxC=t.maxC;if(n>maxC)continue;const fullRmb=xC+t.cost*n;const cb=CUMUL.filter(r=>r.t>cCumul&&r.t<=(cCumul+fullRmb)).reduce((s,r)=>s+r.z,0);const zhu=t.ez*n+cb;if(fullRmb<bestCost||(fullRmb===bestCost&&zhu>(bestPlan?bestPlan.zhu:0))){bestCost=fullRmb;const co={};co[t.id]=n;bestPlan={rmb:fullRmb,zhu,yu:t.hf?t.ey:0,mYu:(t.my||0)*n,cb,counts:co,usedF:t.hf?new Set([t.id]):new Set()};}}}
+  function countOps(counts){let n=0;for(const k in counts)n+=counts[k];return n;}
+  function dfs(idx,rmb,zhu,yu,mYu,usedF,counts){
+    const cb=getCB(rmb);const effZ=zhu+cb;
+    if(effZ>=need){
+      const ops=countOps(counts);
+      const bestOps=bestPlan?countOps(bestPlan.counts):Infinity;
+      // 优先：金额小 > 同金额次数少 > 同金额同次数珠多
+      if(rmb<bestCost||(rmb===bestCost&&ops<bestOps)||(rmb===bestCost&&ops===bestOps&&effZ>(bestPlan?bestPlan.zhu:0))){
+        bestCost=rmb;bestPlan={rmb,zhu:effZ,yu,mYu,cb,counts:{...counts},usedF:new Set(usedF)};
+      }
+      return;
+    }
+    if(rmb>bestCost||idx>=tiers.length)return;
+    for(let i=idx;i<tiers.length;i++){const t=tiers[i];const maxC=t.maxC;for(let c=1;c<=maxC;c++){const nRmb=rmb+t.cost*c;if(nRmb>bestCost)break;let az=t.bz*c,ay=0;const nF=new Set(usedF);if(t.hf&&!usedF.has(t.id)){az+=t.fz;ay+=t.ey;nF.add(t.id);}const am=(t.my||0)*c;const nc={...counts};nc[t.id]=(nc[t.id]||0)+c;dfs(i+1,nRmb,zhu+az,yu+ay,mYu+am,nF,nc);}}
+  }
+  dfs(0,xC,0,0,0,new Set(),{});
+  if(!bestPlan)return null;
+  // Build ops + warnings
+  const ops=[],warnings=[];
+  for(const t of tiers){const cnt=bestPlan.counts[t.id]||0;if(cnt>0){ops.push({...t,count:cnt,hasFirst:bestPlan.usedF.has(t.id)});if(t.id==='monthly'&&cnt>1)warnings.push(`月卡×${cnt}：需连续签到${cnt*30}天才能领完所有玉，请确认能坚持`);if(t.id==='weekly'&&cnt>1)warnings.push(`周卡×${cnt}：每周限购1张，需${cnt}周才能全部购买`);}}
+  // v3 修复：fullRmb 已含 xC，不再重复 +xC（原版扶摇录门槛双算销音券费）
+  const fullRmb=bestPlan.rmb;
+  const newC=cCumul+fullRmb;const newF=cFuyao+fullRmb;
+  const fy=FUYAO.filter(r=>r.t>cFuyao&&r.t<=newF);
+  return{ops,rmb:bestPlan.rmb-xC,zhu:bestPlan.zhu,yu:bestPlan.yu,mYu:bestPlan.mYu,cb:bestPlan.cb,fuyao:fy,newC,newF,xC,warnings};
+}
+
+function optRecharge(need,fcC,cCumul,cFuyao,xyToBuy,weeksLeft){
+  const xC=xyToBuy*6;
+  const empty={ops:[],rmb:0,zhu:0,yu:0,mYu:0,cb:0,fuyao:[],newC:cCumul+xC,newF:cFuyao+xC,xC,warnings:[]};
+  if(need<=0)return{pA:empty,pB:empty,dual:false,dualType:'',dual6:null};
+
+  // Step 1: 搜索基础最优方案（全档位可用）
+  const base=dfsSearch(need,fcC,cCumul,xC,cFuyao,weeksLeft);
+  if(!base)return{pA:empty,pB:empty,dual:false,dualType:'',dual6:null};
+
+  // Step 2: 检查基础方案中是否有30元档(直充30或月卡)
+  const count30=base.ops.filter(o=>o.id==='direct_30'||o.id==='monthly').reduce((s,o)=>s+o.count,0);
+
+  // 通用evalOps函数：rmb返回的是纯充值金额（不含销音券），销音券费用单独在xC里
+  function evalOps(ops){
+    let rmb=0,zhu=0,yu=0,mYu=0;const uf=new Set();
+    for(const o of ops){rmb+=o.cost*o.count;zhu+=o.bz*o.count;if(o.hf&&!uf.has(o.id)){zhu+=(o.fz||0);yu+=(o.ey||0);uf.add(o.id);}mYu+=(o.my||0)*o.count;}
+    const nc=cCumul+rmb+xC;const cb=CUMUL.filter(r=>r.t>cCumul&&r.t<=nc).reduce((s,r)=>s+r.z,0);
+    zhu+=cb;const nf=cFuyao+rmb+xC;const fy=FUYAO.filter(r=>r.t>cFuyao&&r.t<=nf);
+    const warnings=[];
+    const wk=ops.filter(o=>o.id==='weekly').reduce((s,o)=>s+o.count,0);
+    if(wk>1)warnings.push(`周礼包×${wk}：每周限购1张，需${wk}周购完`);
+    const mc=ops.filter(o=>o.id==='monthly').reduce((s,o)=>s+o.count,0);
+    if(mc>1)warnings.push(`月卡×${mc}：需连续签到${mc*30}天领完所有玉`);
+    return{ops,rmb,zhu,yu,mYu,cb,fuyao:fy,newC:nc,newF:nf,xC,warnings};
+  }
+
+  // Step 3: 30元档AB对比（成立先收集，不立即返回——6元档AB可能同时有意义）
+  let r30=null;
+  if(count30>0){
+    const baseOther=base.ops.filter(o=>o.id!=='direct_30'&&o.id!=='monthly');
+    const d30=RTIERS.find(t=>t.id==='direct_30');
+    const mth=RTIERS.find(t=>t.id==='monthly');
+    const d30hf=!fcC['direct_30']&&(d30.fz>0||d30.fy>0);
+
+    const opsA=[...baseOther,{...d30,hf:d30hf,count:count30,hasFirst:d30hf}];
+    const opsB=[...baseOther,{...mth,hf:false,count:count30,hasFirst:false}];
+
+    const planA=evalOps(opsA);
+    const planB=evalOps(opsB);
+
+    // AB对比前提：同价、双方珠都够、且两方案有实质差异
+    const hasDiff=(planA.zhu!==planB.zhu)||(planA.yu!==planB.yu)||(planA.mYu!==planB.mYu);
+    if(hasDiff&&planA.zhu>=need&&planB.zhu>=need){
+      r30={pA:planA,pB:planB};
+    }
+  }
+
+  // Step 4: 6元档AB对比（v3.1: 与30元AB并存，不再被吞）
+  const wkC=base.ops.filter(o=>o.id==='weekly').reduce((s,o)=>s+o.count,0);
+  const d6C=base.ops.filter(o=>o.id==='direct_6').reduce((s,o)=>s+o.count,0);
+  const total6=wkC+d6C;
+
+  let r6=null;
+  if(total6>=2){
+    const baseOther6=base.ops.filter(o=>o.id!=='weekly'&&o.id!=='direct_6');
+    const wkTier=RTIERS.find(t=>t.id==='weekly');
+    const d6Tier=RTIERS.find(t=>t.id==='direct_6');
+    const d6hf=!fcC['direct_6']&&(d6Tier.fz>0||d6Tier.fy>0);
+
+    // A方案=尽量多周礼包(上限受活动余周约束)，多余仍用直充6
+    const wkCap=weeksLeft>0?Math.min(5,Math.floor(weeksLeft)):5;
+    const wkMaxA=Math.min(total6,wkCap);
+    const d6RemA=total6-wkMaxA;
+    const opsA6=[...baseOther6,{...wkTier,ez:66,ey:0,hf:false,count:wkMaxA,hasFirst:false}];
+    if(d6RemA>0)opsA6.push({...d6Tier,ez:60,ey:d6hf?d6Tier.fy:0,hf:d6hf,count:d6RemA,hasFirst:d6hf});
+    // B方案=周礼包×1 + 直充6×(N-1)
+    const opsB6=[...baseOther6,{...wkTier,ez:66,ey:0,hf:false,count:1,hasFirst:false},{...d6Tier,ez:60,ey:d6hf?d6Tier.fy:0,hf:d6hf,count:total6-1,hasFirst:d6hf}];
+
+    const planA6=evalOps(opsA6);
+    const planB6=evalOps(opsB6);
+    // 同价、双方珠都够、且两方案有实质珠差异才展示AB
+    if(planA6.zhu>=need&&planB6.zhu>=need&&planA6.zhu!==planB6.zhu){
+      r6={pA:planA6,pB:planB6};
+    }
+  }
+
+  if(r30) return{pA:r30.pA,pB:r30.pB,dual:true,dualType:'30',dual6:r6};
+  if(r6)  return{pA:r6.pA,pB:r6.pB,dual:true,dualType:'6',dual6:null};
+  return{pA:base,pB:base,dual:false,dualType:'',dual6:null};
+}
+
+// ============ RENDER ============
+function togglePlan(){
+  if(!lastResult)return;
+  const btn=document.getElementById('toggle-btn');
+  const showing=btn.dataset.showing;
+  if(showing==='pad'){render(lastResult.normalPlan,false);}
+  else if(lastResult.padPlan){render(lastResult.padPlan,true);}
+}
+
+function renderOnePlan(rp,cp,cZhu,cYu,totCost,zyC,xyC,xyToBuy,label,dualType){
+  const grand=rp.rmb+(xyToBuy*6);
+  const yuG=rp.yu+(rp.mYu||0);
+  const totYu=cYu+yuG;
+  const rem=cZhu+rp.zhu-totCost;
+  let h='';
+  if(label==='A'){
+    if(dualType==='6')h+='<div class="plan-col-header plan-a-header">方案A · 多周礼包(等更久)</div>';
+    else h+='<div class="plan-col-header plan-a-header">方案A · 直充30</div>';
+  }else if(label==='B'){
+    if(dualType==='6')h+='<div class="plan-col-header plan-b-header">方案B · 少等(周礼包+直充6)</div>';
+    else h+='<div class="plan-col-header plan-b-header">方案B · 月卡30</div>';
+  }
+
+  h+=`<div class="text-center mb-2"><span class="text-2xl font-bold highlight">¥${grand}</span></div>`;
+  if(rp.ops.length===0&&xyToBuy===0){h+='<p class="text-xs" style="color:#9A9A9A">无需充值</p>';}
+  else{
+    rp.ops.forEach(op=>{
+      let lbl=op.name+(op.count>1?` ×${op.count}`:'');
+      let bonus='';
+      if(op.hasFirst){const p=[];if(op.fz>0)p.push(`+${op.fz}珠`);if(op.ey>0)p.push(`+${op.ey}玉`);bonus=p.join(' ');}
+      if(op.my)bonus+=(bonus?' ':'')+'每日100玉×30天';
+      h+=`<div class="flex items-center gap-1 py-1 text-xs"><span class="font-medium">${lbl}</span><span style="color:#9A9A9A;font-size:10px">${bonus}</span><span class="ml-auto highlight">¥${op.cost*op.count}</span></div>`;
+    });
+    if(xyToBuy>0){
+      const xyNote=xyToBuy>1?`6元/张，抵300珠，每周限购1张需${xyToBuy}周`:'6元/张，抵300珠';
+      h+=`<div class="flex items-center py-1 text-xs"><span>购买销音券 ×${xyToBuy}</span><span style="color:#9A9A9A;font-size:10px">${xyNote}</span><span class="ml-auto highlight">¥${xyToBuy*6}</span></div>`;
+    }
+    const xyFromOwn=Math.min(xyC,cp.xyUsed);
+    if(xyFromOwn>0){
+      h+=`<div class="flex items-center py-1 text-xs"><span>使用已有销音券 ×${xyFromOwn}</span><span style="color:#9A9A9A;font-size:10px">抵300珠/张</span><span class="ml-auto" style="color:#3B9B8F">¥0</span></div>`;
+    }
+  }
+  // Balance
+  h+='<div class="mt-2 pt-2 text-xs" style="border-top:1px solid #E8E2DA">';
+  h+=`<div class="flex justify-between py-0.5"><span style="color:#9A9A9A">获得珠</span><span class="highlight">${rp.zhu}</span></div>`;
+  if(yuG>0)h+=`<div class="flex justify-between py-0.5"><span style="color:#9A9A9A">玉(最多)</span><span>${yuG}→${Math.floor(yuG/160)}抽</span></div>`;
+  if(rp.cb>0)h+=`<div class="flex justify-between py-0.5"><span style="color:#9A9A9A">累充奖励珠</span><span>+${rp.cb}</span></div>`;
+  h+=`<div class="flex justify-between py-0.5"><span style="color:#9A9A9A">剩余珠</span><span class="font-semibold">${rem}</span></div>`;
+  h+=`<div class="flex justify-between py-0.5"><span style="color:#9A9A9A">剩余折音</span><span>${zyC-cp.zyUsed}张</span></div>`;
+  h+='</div>';
+  if(rp.fuyao&&rp.fuyao.length>0){
+    h+='<div class="mt-2 pt-2 text-xs" style="border-top:1px solid #E8E2DA;color:#8B5E3C"><b>扶摇录：</b>';
+    rp.fuyao.forEach(r=>{h+=`${r.t}元→${r.i} `;});h+='</div>';
+  }
+  // Warnings
+  if(rp.warnings&&rp.warnings.length>0){
+    h+='<div class="text-xs mt-1" style="color:#9A9A9A">';
+    rp.warnings.forEach(w=>{h+=`⏰ ${w} `;});h+='</div>';
+  }
+  return h;
+}
+
+function renderConsumeTable(cp,fixed,fixCost,totOrig){
+  let h='<div style="overflow-x:auto"><table class="consume-table"><thead><tr><th>批次</th><th>优惠类型</th><th>购买内容</th><th>原价</th><th>实付</th><th>折扣</th></tr></thead><tbody>';
+  let bN=1;
+  cp.batches.forEach(b=>{
+    const itemMap={};b.items.forEach(i=>{const k=i.isDb?i.catN:`${i.catN}${i.tier}档${i.isPad?' [凑单]':''}`;itemMap[k]=(itemMap[k]||0)+1;});
+    const iStr=Object.entries(itemMap).map(([k,v])=>`${k}×${v}`).join(' + ');
+    const fold=b.orig>0&&b.disc>0?(b.cost/b.orig*10).toFixed(3)+'折':'—';
+    const tc=b.type==='huiyin'?'#CC4444':b.type==='zheyin'?'#3B9B8F':b.type==='xiaoyin'?'#8B5EBF':'#999';
+    h+=`<tr><td>${bN++}</td><td style="color:${tc};font-weight:500">${b.lbl}</td><td>${iStr}</td><td>${b.orig}珠</td><td class="highlight">${b.cost}珠</td><td class="discount-cell save-tag">${fold}</td></tr>`;
+  });
+  if(fixed.length>0){
+    const fm={};fixed.forEach(i=>{const k=i.isDb?i.catN:`${i.catN}${i.tier}档`;fm[k]=(fm[k]||0)+1;});
+    const fi=Object.entries(fm).map(([k,v])=>`${k}×${v}`).join(' + ');
+    h+=`<tr><td>${bN++}</td><td style="color:#999">不参与活动</td><td>${fi}</td><td>${fixCost}珠</td><td>${fixCost}珠</td><td>—</td></tr>`;
+  }
+  h+=`</tbody></table></div>`;
+  h+=`<div class="text-xs mt-2" style="color:#9A9A9A">原价共${totOrig}珠 → 实付${cp.totCost+fixCost}珠，总省 <span class="save-tag">${cp.totSaved}珠</span></div>`;
+  return h;
+}
+function renderRechargeSection(rp,cp,cZhu,cYu,totCost,zyC,xyC,xyToBuy,need){
+  let h='';
+  if(need<=0&&xyToBuy===0){
+    h+='<p class="text-xs" style="color:#9A9A9A">无需充值，当前珠数足够</p>';
+  }else if(!rp.dual){
+    h+='<div class="plan-col">'+renderOnePlan(rp.pA.rmb<=rp.pB.rmb?rp.pA:rp.pB,cp,cZhu,cYu,totCost,zyC,xyC,xyToBuy,'',rp.dualType)+'</div>';
+  }else{
+    h+='<div class="grid grid-cols-1 md:grid-cols-2 gap-3">';
+    h+='<div class="plan-col">'+renderOnePlan(rp.pA,cp,cZhu,cYu,totCost,zyC,xyC,xyToBuy,'A',rp.dualType)+'</div>';
+    h+='<div class="plan-col">'+renderOnePlan(rp.pB,cp,cZhu,cYu,totCost,zyC,xyC,xyToBuy,'B',rp.dualType)+'</div>';
+    h+='</div>';
+  }
+  // v3.1: 6元档AB与30元AB并存展示（不再被吞）
+  if(rp.dual6){
+    h+='<div class="mt-2"><div class="text-xs font-semibold mb-1" style="color:#8B5E3C">🔀 6元档分配对比（同价，珠数 vs 等待时间）</div>';
+    h+='<div class="grid grid-cols-1 md:grid-cols-2 gap-3">';
+    h+='<div class="plan-col">'+renderOnePlan(rp.dual6.pA,cp,cZhu,cYu,totCost,zyC,xyC,xyToBuy,'A','6')+'</div>';
+    h+='<div class="plan-col">'+renderOnePlan(rp.dual6.pB,cp,cZhu,cYu,totCost,zyC,xyC,xyToBuy,'B','6')+'</div>';
+    h+='</div></div>';
+  }
+  return h;
+}
+
+function render(plan,isPad){
+  const{items,fixed,fixCost,cp,rp,totCost,need,grandRmb,totOrig,padItems,cZhu,cYu,cCumul,cFuyao,zyC,xyC,xyToBuy,alt}=plan;
+  const{pA,pB,dual,dualType}=rp;
+  const mainP=pA.rmb<=pB.rmb?pA:pB;
+  const mainGrand=mainP.rmb+(xyToBuy*6);
+  const yuGA=pA.yu+(pA.mYu||0);const yuGB=pB.yu+(pB.mYu||0);
+  const totYuA=cYu+yuGA;const totYuB=cYu+yuGB;
+  const remZhuA=cZhu+pA.zhu-totCost;const remZhuB=cZhu+pB.zhu-totCost;
+
+  let h='<div class="result-section">';
+
+  // Title + toggle button on same line
+  h+='<div class="flex items-center justify-between mb-3">';
+  h+='<h2 class="title-font text-lg font-bold" style="color:#8B5E3C">✨ 最划算方案</h2>';
+  if(lastResult&&lastResult.padPlan){
+    const lbl=isPad?'📋 不凑单':'💡 凑单方案';
+    const diff=lastResult.normalPlan.grandRmb-lastResult.padPlan.grandRmb;
+    const note=isPad?'':'(省¥'+diff+')';
+    h+=`<button id="toggle-btn" data-showing="${isPad?'pad':'normal'}" onclick="togglePlan()" class="toggle-btn">${lbl} ${note}</button>`;
+  }
+  h+='</div>';
+
+  // Xiaoyin weekly warning (top level)
+  if(xyToBuy>1){
+    h+=`<div class="warning-box">⚠️ 销音券×${xyToBuy}：每周限购1张，需${xyToBuy}周才能全部购买</div>`;
+  }
+
+  // Padding notice
+  if(isPad&&padItems&&padItems.length>0){
+    h+=`<div class="padding-notice">💡 凑单建议：已添加 ${padItems.length} 件6元皮肤凑满减门槛，额外花费 ${padItems.length*60} 珠(${padItems.length*6}元)，触发满减后整体更划算</div>`;
+  }
+
+  // Resource bar
+  h+='<div class="resource-bar">';
+  h+=`<div class="resource-item"><div class="val">¥${mainGrand}</div><div class="lbl">总花费</div></div>`;
+  h+=`<div class="resource-item"><div class="val" style="color:#3B9B8F">${cp.totSaved}</div><div class="lbl">节省珠</div></div>`;
+  h+=`<div class="resource-item"><div class="val">${mainP.zhu}</div><div class="lbl">获得珠</div></div>`;
+  if(dual&&totYuA!==totYuB){
+    h+=`<div class="resource-item"><div style="display:flex;justify-content:center;gap:12px;align-items:center"><div style="text-align:center"><div class="val" style="font-size:18px">${totYuA}</div><div style="font-size:10px;color:#C4883C">A ≈${Math.floor(totYuA/160)}抽</div></div><div style="width:1px;height:28px;background:#E8E2DA"></div><div style="text-align:center"><div class="val" style="font-size:18px;color:#2E7D32">${totYuB}</div><div style="font-size:10px;color:#2E7D32">B ≈${Math.floor(totYuB/160)}抽</div></div></div><div class="lbl">玉</div></div>`;
+  }else{
+    h+=`<div class="resource-item"><div class="val">${totYuA}</div><div class="lbl">玉(≈${Math.floor(totYuA/160)}抽)</div></div>`;
+  }
+  if(dual&&remZhuA!==remZhuB){
+    h+=`<div class="resource-item"><div style="display:flex;justify-content:center;gap:12px;align-items:center"><div style="text-align:center"><div class="val" style="font-size:18px">${remZhuA}</div><div style="font-size:10px;color:#C4883C">A</div></div><div style="width:1px;height:28px;background:#E8E2DA"></div><div style="text-align:center"><div class="val" style="font-size:18px;color:#2E7D32">${remZhuB}</div><div style="font-size:10px;color:#2E7D32">B</div></div></div><div class="lbl">剩余珠</div></div>`;
+  }else{
+    h+=`<div class="resource-item"><div class="val">${remZhuA}</div><div class="lbl">剩余珠</div></div>`;
+  }
+  h+='</div>';
+
+  // Consume + recharge（v3.2: 折音双策略有差异时改 AB 双栏）
+  if(!alt){
+    h+='<div class="mb-4"><div class="text-sm font-semibold mb-2" style="color:#8B5E3C">🛍️ 怎么买</div>';
+    h+=renderConsumeTable(cp,fixed,fixCost,totOrig);
+    h+='</div>';
+    h+='<div class="mb-4"><div class="text-sm font-semibold mb-2" style="color:#8B5E3C">💰 怎么充</div>';
+    h+=renderRechargeSection(rp,cp,cZhu,cYu,totCost,zyC,xyC,xyToBuy,need);
+    h+='</div>';
+  }else{
+    const zyDiff=cp.zyUsed-alt.cp.zyUsed;
+    const rmbDiff=alt.grandRmb-grandRmb;
+    const col=(cand,lbl)=>{
+      let s='';
+      s+=lbl==='A'
+        ?'<div class="plan-col-header plan-a-header">方案A · 折音放开用（总花费更低）</div>'
+        :`<div class="plan-col-header plan-b-header">方案B · 折音省着用（多留 ${zyDiff} 张折音券）</div>`;
+      s+='<div class="text-xs font-semibold mt-2 mb-1" style="color:#8B5E3C">🛍️ 怎么买</div>';
+      s+=renderConsumeTable(cand.cp,cand.fixed,cand.fixCost,cand.totOrig);
+      s+='<div class="text-xs font-semibold mt-2 mb-1" style="color:#8B5E3C">💰 怎么充</div>';
+      s+=renderRechargeSection(cand.rp,cand.cp,cZhu,cYu,cand.totCost,zyC,xyC,cand.xyToBuy,cand.need);
+      return s;
+    };
+    h+='<div class="mb-4">';
+    h+=`<div class="explain-box">🔀 <b>折音策略对比</b>：折音券5张=1次。方案B 折音只砸最贵一件，多留 <b>${zyDiff}</b> 张折音券${rmbDiff>0?`（总花费多 ¥${rmbDiff}）`:`（总花费相同）`}，不舍得在低档位花折音时选 B。</div>`;
+    h+='<div class="grid grid-cols-1 md:grid-cols-2 gap-3">';
+    h+='<div class="plan-col">'+col(plan,'A')+'</div>';
+    h+='<div class="plan-col">'+col(alt,'B')+'</div>';
+    h+='</div></div>';
+  }
+
+  // 替代方案解释（为什么选这个组合）
+  if(need>0&&mainP.ops.length>0){
+    const totalRCost=mainP.rmb;
+    const curLabel=mainP.ops.map(o=>(o.count>1?o.count+'×':'')+o.name).join('+');
+    const fcRef=window._fcC||{};
+    const calcZ=(t,cnt)=>{let z=t.bz*cnt;if(!fcRef[t.id]&&cnt>=1)z+=(t.fz||0);return z;};
+    const altCombos=[];
+    const costRange=[totalRCost*0.6,totalRCost*1.5];
+    RTIERS.forEach(t=>{for(let c=1;c<=4;c++){const cost=t.cost*c;if(cost>=costRange[0]&&cost<=costRange[1]){const z=calcZ(t,c);const nc=cCumul+cost+(xyToBuy*6);const cb=CUMUL.filter(r=>r.t>cCumul&&r.t<=nc).reduce((s,r)=>s+r.z,0);altCombos.push({label:`${c>1?c+'×':''}${t.name}`,cost,zhu:z+cb});}}});
+    for(const t1 of RTIERS){for(const t2 of RTIERS){const cost=t1.cost+t2.cost;if(cost>=costRange[0]&&cost<=costRange[1]){let z=t1.bz+t2.bz;if(!fcRef[t1.id])z+=(t1.fz||0);if(!fcRef[t2.id]&&t2.id!==t1.id)z+=(t2.fz||0);const nc=cCumul+cost+(xyToBuy*6);const cb=CUMUL.filter(r=>r.t>cCumul&&r.t<=nc).reduce((s,r)=>s+r.z,0);const lbl=t1.id===t2.id?`2×${t1.name}`:`${t1.name}+${t2.name}`;altCombos.push({label:lbl,cost,zhu:z+cb});}}}
+    // v3.1: 三档组合（各×1）加入备选池
+    for(const t1 of RTIERS){for(const t2 of RTIERS){for(const t3 of RTIERS){
+      if(t2.id===t1.id||t3.id===t1.id||t3.id===t2.id)continue;
+      const cost=t1.cost+t2.cost+t3.cost;
+      if(cost>=costRange[0]&&cost<=costRange[1]){
+        let z=t1.bz+t2.bz+t3.bz;
+        if(!fcRef[t1.id])z+=(t1.fz||0);if(!fcRef[t2.id])z+=(t2.fz||0);if(!fcRef[t3.id])z+=(t3.fz||0);
+        const nc=cCumul+cost+(xyToBuy*6);
+        const cb=CUMUL.filter(r=>r.t>cCumul&&r.t<=nc).reduce((s,r)=>s+r.z,0);
+        altCombos.push({label:`${t1.name}+${t2.name}+${t3.name}`,cost,zhu:z+cb});
+      }
+    }}}
+    const validAlts=altCombos.filter(a=>a.label!==curLabel).sort((a,b)=>Math.abs(a.cost-totalRCost)-Math.abs(b.cost-totalRCost));
+    const cheaperNot=validAlts.filter(a=>a.cost<=totalRCost&&a.zhu<need).slice(0,2);
+    const sameBut=validAlts.filter(a=>a.cost<=totalRCost&&a.zhu>=need&&a.zhu<mainP.zhu).slice(0,1);
+    const moreExp=validAlts.filter(a=>a.cost>totalRCost&&a.zhu>=need).slice(0,2);
+    const showAlts=[...cheaperNot,...sameBut,...moreExp];
+    const seen=new Set();const finalAlts=[];showAlts.forEach(a=>{if(!seen.has(a.label)){seen.add(a.label);finalAlts.push(a);}});
+    if(finalAlts.length>0){
+      h+='<div class="explain-box"><b>❓ 为什么选这个组合？</b><br>';
+      h+=`需要：${need}珠。当前方案 <b>${curLabel}=¥${totalRCost}→${mainP.zhu}珠</b>。<br>`;
+      finalAlts.slice(0,4).forEach(a=>{
+        if(a.zhu<need)h+=`· ${a.label}(¥${a.cost})→${a.zhu}珠：${a.cost<totalRCost?'更便宜但':''}珠数不足${need}，不够用。<br>`;
+        else if(a.cost>totalRCost)h+=`· ${a.label}(¥${a.cost})→${a.zhu}珠：多花¥${a.cost-totalRCost}，珠数已超出需求。<br>`;
+        else h+=`· ${a.label}(¥${a.cost})→${a.zhu}珠：同价但珠数少${mainP.zhu-a.zhu}，当前更优。<br>`;
+      });
+      h+='</div>';
+    }
+
+    // 30元档未展示AB对比时的解释
+    const has30InPlan=mainP.ops.some(o=>o.id==='direct_30');
+    const hasMInPlan=mainP.ops.some(o=>o.id==='monthly');
+    if(!dual&&(has30InPlan||hasMInPlan)){
+      const d30T=RTIERS.find(t=>t.id==='direct_30');
+      const mthT=RTIERS.find(t=>t.id==='monthly');
+      const fcRef2=window._fcC||{};
+      const d30bonus=!fcRef2['direct_30']?(d30T.fz||0):0;
+      if(has30InPlan){
+        // 方案选了直充30，解释为什么不用月卡
+        h+='<div class="explain-box"><b>🔄 为什么不选月卡30？</b><br>';
+        if(d30bonus>0){
+          h+=`直充30有首充奖励(+${d30bonus}珠+${d30T.fy}玉)，月卡30无首充。本方案需要这${d30bonus}珠才能覆盖需求，换月卡会珠数不足。<br>`;
+          h+=`月卡优势：每日100玉×30天(共3000玉≈18抽)，但需要每天签到。`;
+        }else{
+          h+=`首充30已领，直充30和月卡30基础珠相同(300珠/¥30)。<br>`;
+          h+=`月卡优势：每日100玉×30天(共3000玉≈18抽)，但需要每天签到30天。当前方案不含月卡可能因为DFS找到了更优的非30元组合。`;
+        }
+        h+='</div>';
+      }else if(hasMInPlan){
+        h+='<div class="explain-box"><b>🔄 为什么选月卡不选直充30？</b><br>';
+        h+=`月卡30和直充30基础珠相同(300珠/¥30)，月卡额外获得每日100玉×30天(共3000玉≈18抽)。`;
+        if(d30bonus>0)h+=`<br>代价：放弃直充30首充奖励(+${d30bonus}珠+${d30T.fy}玉)，但当前珠数足够不需要这额外的${d30bonus}珠。`;
+        h+='</div>';
+      }
+    }
+  }
+
+  // Explanation for unused coupons
+  const u6=!cp.batches.some(b=>b.lbl&&b.lbl.includes('6480'));
+  const u3=!cp.batches.some(b=>b.lbl&&b.lbl.includes('3280'));
+  const u60=!cp.batches.some(b=>b.lbl&&b.lbl.includes('60减40'));
+  if(u6||u3||u60){
+    h+='<div class="explain-box"><b>💡 未使用的惠音券说明：</b><br>';
+    if(u6){const eT=items.filter(i=>!i.noDisc&&!i.noHui).reduce((s,i)=>s+i.price,0);h+=`· <b>满6480减3880</b>：可参与商品原价合计${eT}珠${eT<6480?'，不足6480门槛':''}。<br>`;}
+    if(u3)h+='· <b>满3280减1680</b>：高优先券使用后剩余商品不够3280门槛。<br>';
+    if(u60)h+='· <b>满60减40</b>：没有剩余≥60珠的可用商品。<br>';
+    h+='</div>';
+  }
+
+  // Xiaoyin explanation
+  if(xyToBuy>0){
+    h+=`<div class="explain-box"><b>🎫 销音券自动购买说明：</b><br>花¥${xyToBuy*6}购买${xyToBuy}张销音券，每张为68/98档商品直降300珠。<br>净省${xyToBuy*240}珠(≈¥${xyToBuy*24})，相当于用6元买了约4折的折扣。</div>`;
+  }
+
+  h+='</div>';
+  document.getElementById('result-area').innerHTML=h;
+}
+
+// 启动：无外部数据源依赖，直接初始化
+// （历史遗留：localStorage 中若有 db_ 开头的图鉴联动购物车键，loadState 会因键未注册而自动忽略）
+initUI();
+</script>
+</body>
+</html>

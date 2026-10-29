@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>燕云穿搭库</title>
+<script src="yysls-db/yysls-data.js"></script>
+<script src="yysls-db/yysls-mine.js" onerror="window.__noMine=1"></script>
+<script src="yysls-style.js"></script>
+<script src="yysls-synonyms.js"></script>
+<script src="yysls-usage.js"></script>
+<style>
+/* ============ 主题变量（与图鉴同源） ============ */
+:root{
+  --paper:#F6F2EA;
+  --card:#FFFFFF;
+  --ink:#3A3028;
+  --ink-soft:#6E6356;
+  --mute:#A79C8D;
+  --line:#E9E1D4;
+  --gold:#B97F33;
+  --gold-2:#D4A746;
+  --gold-bg:#FFF7E8;
+  --teal:#3B9B8F;
+  --red:#CC4444;
+  --radius:14px;
+  --shadow-sm:0 1px 3px rgba(60,45,20,.05);
+  --shadow-md:0 6px 20px rgba(60,45,20,.10);
+  --shadow-gold:0 10px 28px rgba(185,127,51,.20);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;padding:0 14px 48px;max-width:1120px;margin:0 auto;
+  background-color:var(--paper);
+  background-image:
+    radial-gradient(1100px 480px at 88% -8%, rgba(196,136,60,.09), transparent 60%),
+    radial-gradient(900px 400px at -5% 0%, rgba(59,155,143,.07), transparent 55%);
+  color:var(--ink);
+  font-family:'PingFang SC','HarmonyOS Sans SC','Microsoft YaHei','Noto Sans CJK SC',sans-serif;
+  font-size:14px;line-height:1.5;
+}
+::selection{background:rgba(196,136,60,.25);}
+a{color:var(--gold);text-decoration:none;}
+a:hover{text-decoration:underline;}
+button{font-family:inherit;cursor:pointer;}
+input,textarea{font-family:inherit;}
+
+/* ============ 头部 ============ */
+.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:28px 4px 16px;position:relative;}
+.hero::after{content:'';position:absolute;left:4px;right:4px;bottom:0;height:1px;background:linear-gradient(90deg,var(--gold),rgba(185,127,51,.15) 55%,transparent);}
+.eyebrow{font-size:11px;color:var(--mute);letter-spacing:.3em;margin-bottom:6px;}
+h1{display:flex;align-items:center;gap:12px;margin:0;font-size:28px;color:var(--ink);font-family:Georgia,'Noto Serif SC','Songti SC','SimSun',serif;font-weight:700;letter-spacing:.02em;}
+h1 .seal{
+  flex:none;font-size:13px;line-height:1.15;color:#FDF3E0;font-weight:600;
+  background:linear-gradient(135deg,#B23A2F,#8E2E25);
+  border-radius:6px;padding:8px 5px;writing-mode:vertical-rl;letter-spacing:.18em;
+  transform:rotate(-6deg);box-shadow:0 3px 8px rgba(178,58,47,.35);
+}
+.hero .links{display:flex;gap:8px;flex-wrap:wrap;padding-bottom:2px;}
+.hero .links a{
+  font-size:12px;color:var(--ink-soft);background:var(--card);
+  border:1px solid var(--line);border-radius:999px;padding:5px 14px;
+  transition:all .2s;
+}
+.hero .links a:hover{border-color:var(--gold);color:var(--gold);text-decoration:none;box-shadow:var(--shadow-sm);}
+.hero .links a.on{background:var(--gold);border-color:var(--gold);color:#FFF7E8;}
+
+/* ============ 搜索区 ============ */
+.searchwrap{padding:18px 4px 0;}
+.searchbox{
+  display:flex;align-items:center;gap:10px;background:var(--card);
+  border:1.5px solid var(--line);border-radius:999px;padding:10px 18px;
+  box-shadow:var(--shadow-sm);transition:all .25s;
+}
+.searchbox:focus-within{border-color:var(--gold);box-shadow:var(--shadow-gold);}
+.searchbox .ic{color:var(--mute);font-size:16px;}
+.searchbox input{
+  flex:1;border:none;outline:none;background:transparent;
+  font-size:15px;color:var(--ink);padding:2px 0;
+}
+.searchbox input::placeholder{color:var(--mute);}
+.searchbox .clear{
+  border:none;background:transparent;color:var(--mute);font-size:16px;
+  padding:0 4px;visibility:hidden;
+}
+.chipsline{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px;min-height:26px;}
+.chipsline .lbl{font-size:11px;color:var(--mute);letter-spacing:.15em;flex:none;}
+.chl{font-size:11px;color:var(--gold);letter-spacing:.05em;flex:none;margin-left:8px;}
+.chl:first-of-type{margin-left:0;}
+.wsep{flex-basis:100%;height:4px;}
+.chip.dim{opacity:.4;cursor:default;}
+.chip.dim:hover{border-color:var(--line);color:var(--ink-soft);}
+.chip{
+  font-size:12px;color:var(--ink-soft);background:var(--card);
+  border:1px solid var(--line);border-radius:999px;padding:3px 12px;
+  transition:all .18s;user-select:none;
+}
+.chip:hover{border-color:var(--gold);color:var(--gold);}
+.chip.on{background:var(--gold);border-color:var(--gold);color:#FFF7E8;box-shadow:var(--shadow-sm);}
+.chip.word.on{background:var(--teal);border-color:var(--teal);}
+.chipword{border-style:dashed;}
+
+/* ============ 网格卡片 ============ */
+.grid{display:flex;flex-wrap:wrap;gap:14px;margin-top:18px;align-items:flex-start;justify-content:center;--u:clamp(140px,15vw,168px);}
+.card{
+  width:var(--u);background:transparent;border:none;border-radius:0;
+  overflow:visible;box-shadow:none;transition:transform .22s;
+}
+.card:hover{transform:translateY(-3px);}
+.card:hover .thumb{box-shadow:var(--shadow-gold);}
+.card .thumb{position:relative;overflow:hidden;cursor:zoom-in;background:#EDE6D8;aspect-ratio:3/4;border-radius:12px;transition:box-shadow .22s;}
+.card .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s;}
+.card:hover .thumb img{transform:scale(1.06);}
+.card .thumb .cover{position:absolute;left:6px;bottom:6px;font-size:10px;color:#FFF;background:rgba(40,30,15,.55);border-radius:999px;padding:2px 8px;backdrop-filter:blur(2px);}
+.card .body{padding:9px 2px 0;}
+/* 色卡条：图片左上角竖排裸色块，无描边无投影 */
+.thumbsw{
+  position:absolute;top:7px;left:7px;display:flex;flex-direction:column;gap:3px;align-items:center;
+  background:transparent;
+  max-height:calc(100% - 14px);overflow:hidden;
+}
+.thumbsw .sw{
+  width:12px;height:12px;border-radius:3px;
+  border:none;box-shadow:none;
+}
+.card .name{
+  font-size:20px;font-weight:700;color:var(--ink);line-height:1.25;margin-bottom:10px;
+  font-family:Georgia,'Noto Serif SC','Songti SC',serif;letter-spacing:.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.sw{
+  width:15px;height:15px;border-radius:4px;border:1px solid rgba(60,45,20,.15);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.35);cursor:default;position:relative;transition:transform .15s;
+}
+.sw:hover{transform:scale(1.3);z-index:2;}
+/* 详情大图里色卡保持大块 */
+.lb-palette .sw{width:30px;height:18px;}
+.card .foot{
+  display:flex;flex-wrap:wrap;gap:7px;align-items:center;
+  border-top:none;padding-top:0;
+  max-height:16px;overflow:hidden;
+}
+/* 穿着信息：轻量小字，不抢视觉（图片第一、名字第二）。
+   利用率档位不挂徽标，只以条目外边框颜色示意：金=百搭棒 / 青绿=可食 / 灰=压箱底
+   描边用 outline（不占布局空间），避免 .foot 的 max-height 截断 */
+.witem{
+  font-size:11px;color:var(--mute);cursor:pointer;transition:color .15s,outline-color .15s;user-select:none;
+  border-radius:999px;padding:0 6px;line-height:1.4;
+}
+.witem:hover{color:var(--gold);}
+.witem.t-best{outline:1px solid rgba(196,136,60,.65);outline-offset:-1px;}
+.witem.t-good{outline:1px solid rgba(63,185,180,.55);outline-offset:-1px;}
+.witem.t-boxed{outline:1px solid rgba(167,156,141,.4);outline-offset:-1px;}
+.pill{
+  font-size:11px;color:var(--ink-soft);background:var(--gold-bg);
+  border:1px solid rgba(185,127,51,.25);border-radius:999px;padding:2px 9px;
+}
+.pill.code{cursor:pointer;user-select:none;transition:all .15s;}
+.pill.code:hover{background:var(--gold);border-color:var(--gold);color:#FFF7E8;}
+
+/* ============ 计数 / 空状态 / 底部 ============ */
+.totalcount{margin-left:16px;font-size:14px;color:var(--ink-soft);font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-weight:400;letter-spacing:0;}
+.totalcount b{font-size:26px;color:var(--gold);font-family:Georgia,'Noto Serif SC',serif;margin:0 3px;}
+.empty{
+  grid-column:1/-1;text-align:center;color:var(--mute);padding:70px 20px;
+  background:rgba(255,255,255,.5);border:1px dashed var(--line);border-radius:var(--radius);margin-top:18px;
+}
+.empty .big{font-size:38px;display:block;margin-bottom:10px;}
+.footnote{text-align:center;color:var(--mute);font-size:11px;margin-top:26px;letter-spacing:.06em;}
+
+/* ============ 大图 ============ */
+.lightbox{
+  position:fixed;inset:0;background:rgba(45,34,20,.82);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;z-index:50;padding:24px;
+}
+.lightbox.on{display:flex;}
+.lb-card{
+  background:var(--card);border-radius:var(--radius);overflow:hidden;
+  max-width:min(680px,94vw);max-height:92vh;box-shadow:var(--shadow-gold);
+  display:flex;flex-direction:column;
+}
+.lb-img{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;background:#221A12;}
+.lb-img img{max-width:100%;max-height:62vh;object-fit:contain;display:block;}
+.lb-info{padding:14px 18px 16px;}
+.lb-name{font-size:16px;font-weight:700;font-family:Georgia,'Noto Serif SC','Songti SC',serif;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.lb-note{font-size:13px;color:var(--ink-soft);margin-top:6px;}
+.lb-wear{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;align-items:center;}
+.lb-palette{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;align-items:center;}
+.lb-close{
+  position:absolute;top:14px;right:18px;border:none;background:rgba(255,255,255,.12);
+  color:#FFF;font-size:22px;width:38px;height:38px;border-radius:50%;transition:all .2s;
+}
+.lb-close:hover{background:var(--red);transform:rotate(90deg);}
+
+/* ============ toast ============ */
+.toast{
+  position:fixed;left:50%;bottom:36px;transform:translateX(-50%) translateY(16px);
+  background:rgba(58,48,40,.94);color:#FDF3E0;font-size:13px;
+  padding:9px 20px;border-radius:999px;opacity:0;pointer-events:none;
+  transition:all .25s;z-index:99;box-shadow:var(--shadow-md);
+}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ============ 编辑模式（?edit=1） ============ */
+.ebtn{
+  border:none;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:600;
+  background:var(--gold);color:#FFF7E8;cursor:pointer;box-shadow:var(--shadow-sm);transition:all .2s;
+  font-family:inherit;
+}
+.ebtn:hover{background:var(--gold-2);}
+.ebtn.ghost{background:var(--card);color:var(--ink-soft);border:1px solid var(--line);font-weight:400;}
+.ebtn.ghost:hover{border-color:var(--gold);color:var(--gold);}
+.ebtn.danger{color:var(--red);}
+.ebtn.danger:hover{border-color:var(--red);color:var(--red);}
+.ebtn:disabled{opacity:.45;cursor:not-allowed;}
+.connstate{font-size:11px;color:var(--teal);}
+.editmask{
+  position:fixed;inset:0;background:rgba(45,34,20,.55);backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;z-index:60;padding:18px;
+}
+.editmask.on{display:flex;}
+.editcard{
+  background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-gold);
+  width:min(600px,96vw);max-height:92vh;display:flex;flex-direction:column;overflow:hidden;
+}
+.edithead{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--line);}
+.edithead h3{margin:0;font-size:15px;font-family:Georgia,'Noto Serif SC',serif;}
+.editbody{padding:14px 18px 18px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;}
+.f-label{font-size:12px;color:var(--ink-soft);font-weight:600;display:block;margin-bottom:5px;}
+.f-label .hint{font-weight:400;color:var(--mute);}
+.f-input{
+  width:100%;border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;
+  font-size:14px;background:var(--paper);outline:none;transition:all .2s;color:var(--ink);
+  font-family:inherit;box-sizing:border-box;
+}
+.f-input:focus{border-color:var(--gold);background:var(--card);}
+textarea.f-input{resize:vertical;min-height:56px;}
+.imgbox{display:flex;gap:12px;align-items:flex-start;}
+.imgprev{
+  width:190px;border:1.5px dashed var(--line);border-radius:10px;overflow:visible;
+  background:var(--paper);position:relative;cursor:crosshair;flex:none;min-height:110px;
+  display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:12px;
+}
+.imgprev img{width:100%;display:block;border-radius:8px;}
+.imgprev .empty-tip{padding:34px 10px;text-align:center;}
+.imgside{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0;}
+.eloupe{
+  position:absolute;pointer-events:none;z-index:5;width:96px;height:96px;
+  border:2px solid var(--gold);border-radius:8px;box-shadow:var(--shadow-md);
+  background:#222;display:none;
+}
+.pal-edit{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--paper);min-height:40px;}
+.pal-edit .tip,.hue-edit .tip{font-size:11px;color:var(--mute);}
+.pc{
+  display:inline-flex;align-items:center;gap:5px;background:var(--card);
+  border:1px solid var(--line);border-radius:999px;padding:3px 9px 3px 5px;
+  font-size:11px;color:var(--ink-soft);cursor:pointer;transition:all .15s;user-select:none;
+}
+.pc:hover{border-color:var(--red);color:var(--red);}
+.pc b{width:26px;height:18px;border-radius:4px;display:inline-block;border:1px solid rgba(60,45,20,.15);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35);}
+.hue-edit{display:flex;flex-wrap:wrap;gap:5px;align-items:center;padding:8px 10px;border:1px dashed var(--line);border-radius:10px;background:var(--paper);min-height:36px;}
+.hc{
+  display:inline-flex;align-items:center;padding:3px 10px;border:1px solid var(--line);
+  border-radius:999px;font-size:11px;color:var(--ink-soft);cursor:pointer;user-select:none;
+  background:var(--card);transition:all .15s;
+}
+.hc:hover{border-color:var(--gold);color:var(--gold);}
+.hc.on{background:var(--gold);border-color:var(--gold);color:#FFF7E8;}
+.pick-hint{font-size:11px;color:var(--teal);}
+.pick-hint.off{color:var(--mute);}
+.tag-picks{display:flex;flex-direction:column;gap:6px;}
+.tag-group{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.tag-group .gl{font-size:11px;color:var(--mute);letter-spacing:.1em;flex:none;width:30px;}
+.link-sel{position:relative;margin-bottom:8px;}
+.link-cands{
+  position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--card);
+  border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow-md);
+  max-height:170px;overflow-y:auto;z-index:20;display:none;
+}
+.link-cands.on{display:block;}
+.link-cand{padding:6px 12px;font-size:12px;cursor:pointer;}
+.link-cand:hover{background:var(--gold-bg);color:var(--gold);}
+.sel-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+.sel-tag{
+  font-size:11px;background:var(--gold-bg);border:1px solid rgba(185,127,51,.25);
+  border-radius:999px;padding:2px 8px;color:var(--ink-soft);cursor:pointer;
+}
+.sel-tag:hover{border-color:var(--red);color:var(--red);}
+.sel-tag b{margin-left:3px;color:var(--mute);}
+.save-row{display:flex;gap:10px;align-items:center;margin-top:2px;}
+.save-row .save{flex:1;padding:10px;font-size:14px;}
+
+/* ============ FAB 新建穿搭（编辑模式主行动） ============ */
+.fab-new{
+  position:fixed;right:22px;bottom:22px;z-index:40;
+  display:flex;align-items:center;gap:9px;
+  padding:13px 24px;border:none;border-radius:999px;cursor:pointer;
+  background:linear-gradient(135deg,var(--gold-2),var(--gold));
+  color:#FFF7E8;font-size:15px;font-weight:700;letter-spacing:.06em;
+  box-shadow:0 8px 24px rgba(185,127,51,.40);transition:all .2s;
+}
+.fab-new:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(185,127,51,.50);}
+.fab-new .plus{font-size:20px;font-weight:400;line-height:1;}
+
+/* 顺手点选 · 词表新增入口（＋/输入框） */
+.hc-add{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border:1px dashed var(--gold);border-radius:50%;
+  color:var(--gold);font-size:14px;line-height:1;cursor:pointer;user-select:none;
+  background:var(--gold-bg);transition:all .15s;
+}
+.hc-add:hover{background:var(--gold);color:#FFF7E8;border-style:solid;}
+.tag-add-input{
+  flex:1;min-width:110px;border:1.5px solid var(--gold);border-radius:999px;
+  padding:4px 12px;font-size:12px;outline:none;background:var(--card);color:var(--ink);
+}
+/* 顺手点选：章/图分组小标题（独立一行的行首标签） */
+.e-chl{font-size:10px;color:var(--gold);letter-spacing:.05em;flex:none;user-select:none;width:64px;}
+.e-chl::before{content:'└';margin-right:3px;color:var(--mute);}
+
+/* ============ 词表管理面板 ============ */
+.mgr-row{display:flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid var(--line);border-radius:9px;background:var(--paper);}
+.mgr-row .w{flex:1;font-size:12px;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mgr-row .op{border:none;background:var(--card);border:1px solid var(--line);border-radius:6px;width:22px;height:22px;font-size:11px;color:var(--ink-soft);cursor:pointer;flex:none;line-height:1;}
+.mgr-row .op:hover{border-color:var(--gold);color:var(--gold);}
+.mgr-row .op.del:hover{border-color:var(--red);color:var(--red);}
+.mgr-row .op:disabled{opacity:.3;cursor:default;}
+.mgr-row .w.rename{border:1.5px solid var(--gold);background:var(--card);border-radius:6px;padding:2px 6px;outline:none;font-size:12px;color:var(--ink);}
+.mgr-sec{font-size:11px;color:var(--ink-soft);font-weight:600;margin:10px 0 6px;letter-spacing:.1em;}
+.mgr-sec:first-child{margin-top:0;}
+.mgr-subsec{font-size:10px;color:var(--gold);margin:8px 0 4px;}
+.mgr-list{display:flex;flex-direction:column;gap:5px;}
+.mgr-hint{font-size:11px;color:var(--mute);margin-top:8px;}
+/* 标签规则弹窗 */
+.rules-body h4{margin:13px 0 5px;font-size:13px;color:var(--ink);}
+.rules-body h4:first-child{margin-top:0;}
+.rules-body table{width:100%;border-collapse:collapse;font-size:12px;margin:4px 0;}
+.rules-body td,.rules-body th{border:1px solid var(--line);padding:5px 9px;text-align:left;vertical-align:top;}
+.rules-body th{background:var(--gold-bg);color:var(--ink);font-weight:600;white-space:nowrap;}
+.rules-body ul{margin:3px 0;padding-left:18px;font-size:12px;color:var(--ink-soft);}
+.rules-body li{margin:2px 0;}
+.rules-body code{background:var(--gold-bg);border-radius:4px;padding:1px 5px;font-size:11px;color:var(--gold);}</style>
+</head>
+<body>
+
+<header class="hero">
+  <div>
+    <div class="eyebrow">燕云十六声 · 个人穿搭检索</div>
+    <h1>穿搭库 <span class="seal">衣妆</span><span class="totalcount" id="totalcount-wrap">共 <b id="totalcount">0</b> 套</span></h1>
+  </div>
+  <nav class="links">
+    <a href="index-pedia.html">📖 外观图鉴</a>
+    <a href="javascript:void(0)" onclick="openRules()">📜 标签规则</a>
+    <span id="edit-tools" style="display:none;gap:8px;align-items:center;">
+      <button class="ebtn" id="btn-conn" onclick="connectEdit()">🔗 连接数据</button>
+      <button class="ebtn ghost" id="btn-mgr" onclick="openMgr()" style="display:none">🗂 词表</button>
+      <span class="connstate" id="connstate"></span>
+    </span>
+  </nav>
+</header>
+
+<div class="searchwrap">
+  <div class="searchbox">
+    <span class="ic">🔍</span>
+    <input type="text" id="search" placeholder="搜备注 / 名字 / 色名 / 衣服…（空格分隔 = 同时命中）" oninput="onSearch()">
+    <button class="clear" id="btn-clear" onclick="clearSearch()" title="清空">✕</button>
+  </div>
+  <div class="chipsline" id="tag-chips"></div>
+  <div class="chipsline" id="story-chips"></div>
+  <div class="chipsline" id="baotai-chips"></div>
+  <div class="chipsline" id="sub-chips"></div>
+  <div class="chipsline" id="color-chips"><span class="lbl">色系</span></div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="footnote" id="footnote"></div>
+
+<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLb()">
+  <button class="lb-close" onclick="closeLb()">✕</button>
+  <div class="lb-card">
+    <div class="lb-img"><img id="lb-img" src="" alt=""></div>
+    <div class="lb-info">
+      <div class="lb-name" id="lb-name"></div>
+      <div class="lb-wear" id="lb-wear"></div>
+      <div class="lb-palette" id="lb-palette"></div>
+      <div class="lb-note" id="lb-note"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- 编辑模式 FAB：新建穿搭主行动（未连接时点击引导连接） -->
+<button class="fab-new" id="fab-new" onclick="fabNew()" style="display:none"><span class="plus">＋</span> 新建穿搭</button>
+
+<!-- ============ 编辑弹窗（?edit=1 隐藏模式） ============ -->
+<!-- ============ 词表管理面板（?edit=1，连接数据后 header「🗂 词表」打开） ============ -->
+<!-- ============ 标签规则说明弹窗 ============ -->
+<div class="editmask" id="rulesmask" onclick="if(event.target===this)closeRules()">
+  <div class="editcard" style="width:min(720px,96vw);">
+    <div class="edithead">
+      <h3>📜 穿搭标签边界说明</h3>
+      <button class="lb-close" style="position:static;width:30px;height:30px;font-size:16px;background:transparent;color:var(--mute);" onclick="closeRules()">✕</button>
+    </div>
+    <div class="editbody rules-body">
+      <h4>一、场景粗词</h4>
+      <table>
+        <tr><th>词</th><th>语义</th><th>边界</th></tr>
+        <tr><td>主线</td><td>主线剧情穿搭（主干时间线）</td><td>主线穿的都点；<b>同时点所属阶段词</b>（<code>主线·章·节</code>）</td></tr>
+        <tr><td>残章</td><td><b>残章特化/专属套</b></td><td>主线通用套<b>不重复点</b>——残章跟随主线的时段，看主线时间线即可</td></tr>
+        <tr><td>大世界跑图</td><td>非剧情的大世界探索套</td><td>跑图/清图专用</td></tr>
+        <tr><td>江湖百态</td><td>扮装 / 职业穿搭大类</td><td>子标签<b>互斥单选</b>：<code>配色COS</code>（借角色配色自搭，主力）/ <code>角色同款</code>（同款服装，少数）/ <code>行当职业</code>（厨娘衙役等身份）/ <code>闲情</code>（无目的纯审美：看结算动画、拍照、散步）</td></tr>
+        <tr><td>打架 / 戏乐</td><td>玩法类型</td><td>按玩法点</td></tr>
+      </table>
+      <h4>二、主线阶段词</h4>
+      <ul>
+        <li>词形：<code>主线·章名·节名</code>（如 <code>主线·天地熔炉·开封新客</code>）</li>
+        <li><b>词表顺序 = 剧情先后</b>；新章节用「🗂 词表」新增，追加到末尾</li>
+        <li>点「主线」后按<b>剧情序</b>排列（章节序 → 剧情地图序）；不点剧情词保持新图优先</li>
+      </ul>
+      <table>
+        <tr><th>章</th><td>神仙不渡</td><td>天地熔炉</td><td>问月长安</td><td>金乌衔枝</td><td>最忆江南</td></tr>
+        <tr><th>地图</th><td>清河</td><td>开封</td><td>河西</td><td>不见山</td><td>江南</td></tr>
+      </table>
+      <h4>三、地图与子区</h4>
+      <ul>
+        <li>地图词：大地图，顺序 = 新图优先（新图加最前）</li>
+        <li>子区词：<code>地图·子区</code>（如 <code>江南·杭州</code>）；<b>点选子区自动带父地图标签</b>，不用手动点两个</li>
+        <li>子区不参与排序，只做筛选</li>
+        <li>残章副本地点（夜台、无明春山、捍海塘等）不是大地图子区，<b>不建子区词</b>，写备注</li>
+      </ul>
+      <h4>四、展示页交互速记</h4>
+      <ul>
+        <li>点「主线」→ 剧情行展开章节时间线；再点地图 → 只显示该图对应章的子节</li>
+        <li>点某地图 → 子区行出现该图全部子区</li>
+        <li>点阶段词/章名 → 剧情序排序；不点 → 新图优先</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="editmask" id="mgrmask" onclick="if(event.target===this)closeMgr()">
+  <div class="editcard" style="width:min(680px,96vw);">
+    <div class="edithead">
+      <h3 id="mgr-title">🗂 词表管理</h3>
+      <button class="lb-close" style="position:static;width:30px;height:30px;font-size:16px;background:transparent;color:var(--mute);" onclick="closeMgr()">✕</button>
+    </div>
+    <div class="editbody" id="mgrbody"></div>
+    <div class="edithead" style="border-top:1px solid var(--line);border-bottom:none;justify-content:flex-end;gap:10px;">
+      <span class="mgr-hint" id="mgr-hint" style="margin:0;flex:1;"></span>
+      <button class="ebtn ghost" onclick="closeMgr()">放弃改动</button>
+      <button class="ebtn save" style="padding:8px 22px;" onclick="msaveMgr()">💾 保存词表</button>
+    </div>
+  </div>
+</div>
+
+<div class="editmask" id="editmask" onclick="if(event.target===this)closeEdit()">
+  <div class="editcard">
+    <div class="edithead">
+      <h3 id="edit-title">✏️ 编辑穿搭</h3>
+      <button class="lb-close" style="position:static;width:30px;height:30px;font-size:16px;background:transparent;color:var(--mute);" onclick="closeEdit()">✕</button>
+    </div>
+    <div class="editbody">
+      <div>
+        <label class="f-label">名字 <span class="hint">（主色+场景+记忆点，如 月白·雪地跑图）</span></label>
+        <input class="f-input" id="ef-name" placeholder="月白·雪地跑图">
+      </div>
+      <div>
+        <label class="f-label">截图 <span class="hint">（换图后自动提取主题色）</span></label>
+        <div class="imgbox">
+          <div class="imgprev" id="eimgprev" onclick="etryPickColor(event)" onmousemove="eonImgMove(event)" onmouseleave="ehideLoupe()">
+            <span class="empty-tip" id="eimgempty">未选图片</span>
+            <canvas class="eloupe" id="eloupe" width="96" height="96"></canvas>
+          </div>
+          <div class="imgside">
+            <button class="ebtn ghost" id="ebtn-img" onclick="epickImage()">🖼 选择/更换图片</button>
+            <div class="pal-edit" id="epal-edit"><span class="tip">主题色会出现在这里</span></div>
+            <div class="hue-edit" id="ehue-edit"><span class="tip">色系归类（选图后自动）</span></div>
+            <div class="pick-hint off" id="epick-hint">💡 点「取色」后点击图片可手动补色</div>
+            <button class="ebtn ghost" id="ebtn-pick" onclick="etogglePick()" disabled>🎯 取色</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <label class="f-label">关联穿着 <span class="hint">（分部位；图鉴有点候选关联，没有点「手输」或直接回车）</span></label>
+        <div class="link-sel"><input class="f-input" id="ef-link-hair" placeholder="💇 头发（发型）…" oninput="eonLinkInput('hair', this.value)" onkeydown="eonLinkKey(event,'hair')"><div class="link-cands" id="elink-cands-hair"></div></div>
+        <div class="link-sel"><input class="f-input" id="ef-link-top" placeholder="👕 上衣（上下拆分时才填）…" oninput="eonLinkInput('top', this.value)" onkeydown="eonLinkKey(event,'top')"><div class="link-cands" id="elink-cands-top"></div></div>
+        <div class="link-sel"><input class="f-input" id="ef-link-bottom" placeholder="👖 下装（上下拆分时才填）…" oninput="eonLinkInput('bottom', this.value)" onkeydown="eonLinkKey(event,'bottom')"><div class="link-cands" id="elink-cands-bottom"></div></div>
+        <div class="link-sel"><input class="f-input" id="ef-link-full" placeholder="👘 整套（无拆分时填）…" oninput="eonLinkInput('full', this.value)" onkeydown="eonLinkKey(event,'full')"><div class="link-cands" id="elink-cands-full"></div></div>
+        <div class="sel-tags" id="esel-tags"></div>
+      </div>
+      <div>
+        <label class="f-label">顺手点选 <span class="hint">（可选项；点「主线」展开章节，点地图展开子区。新增/改词走 header「🗂 词表」）</span></label>
+        <div class="tag-picks" id="etag-picks"></div>
+      </div>
+      <div>
+        <label class="f-label">万象集分享码 <span class="hint">（发布过才填，可空）</span></label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <input class="f-input" id="ef-dyecode" placeholder="🎨 染色码" style="flex:1;min-width:120px;">
+          <input class="f-input" id="ef-outfitcode" placeholder="📋 搭配分享码" style="flex:1;min-width:120px;">
+        </div>
+      </div>
+      <div>
+        <label class="f-label">备注 <span class="hint">（自由写，模糊检索 + 快捷词的数据源）</span></label>
+        <textarea class="f-input" id="ef-note" placeholder="裙摆不穿模，跑图利索，适合雪景大世界…"></textarea>
+      </div>
+      <div class="save-row">
+        <button class="ebtn save" id="ebtn-save" onclick="esaveOutfit()">💾 保存（需先连接）</button>
+        <button class="ebtn ghost danger" id="ebtn-del" onclick="edeleteOutfit()" style="display:none">🗑 删除</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ 数据 ============
+const DB = window.YYSLS_DB || {items:[]};
+const STYLE = window.YYSLS_STYLE || {meta:{},colors:[],outfits:[]};
+const SYN = window.YYSLS_SYNONYMS || {};
+const outfits = STYLE.outfits || [];
+const MINE = window.YYSLS_MINE || {records:{}};
+// 三组筛选状态：组间 AND 叠加（筛完全满足的），组内互斥单选（再点取消）
+let activeColor = '';      // 色系组选中的桶名（红橙黄绿青蓝紫黑白）
+let activeScene = '';      // 场景组选中的词（词尾带 · = 章前缀筛选）
+let activeMap = '';        // 地图组选中的词
+let activeSub = '';        // 子区组选中的完整词（地图·子区）
+
+const itemName = id => {
+  const it = DB.items.find(x => x.id === id);
+  return it ? it.name : id;
+};
+
+// ============ 穿搭利用率徽标（分层口径与图鉴一致：mine owned 做分母；编辑保存后清缓存） ============
+let _uCache = null, _tCache = null;
+function styleTierCache(){
+  if (!_tCache){
+    _uCache = window.YYSLS_USAGE.computeUsage(outfits);
+    const ownedIds = DB.items.filter(it => {
+      const r = MINE.records && MINE.records[it.id];
+      return r && r.status === 'owned';
+    }).map(it => it.id);
+    _tCache = window.YYSLS_USAGE.assignTiers(ownedIds, _uCache);
+  }
+  return _tCache;
+}
+function styleTierCls(itemId){
+  const t = styleTierCache().get(itemId);
+  if (!t) return '';   // mine 未标记拥有（如漏标）→ 不加边框色
+  return t === '百搭棒' ? 't-best' : t === '可食' ? 't-good' : 't-boxed';
+}
+function clearTierCache(){ _uCache = null; _tCache = null; }
+
+// ============ 同义词扩展 ============
+function expandTerm(term){
+  const out = new Set([term]);
+  for (const [main, aliases] of Object.entries(SYN)){
+    if (main === term){ aliases.forEach(a => out.add(a)); }
+    else if ((aliases||[]).includes(term)){ out.add(main); (aliases||[]).forEach(a => out.add(a)); }
+  }
+  return out;
+}
+
+// ============ 标签常量（场景/地图固定行 + 搜索用） ============
+const TAG_PRESETS = window.YYSLS_TAG_PRESETS || {};
+const TAGS = new Set(Object.values(TAG_PRESETS).flat());
+const FIXED_GROUPS = ['场景', '地图'];
+const FIXED_TAGS = new Set(FIXED_GROUPS.flatMap(g => TAG_PRESETS[g] || []));
+const SUBAREAS = window.YYSLS_SUBAREAS || {};
+const STORY_MAP = window.YYSLS_STORY_MAP || {};   // 章名 → 大地图名
+const STAGE_PREFIX = '主线·';
+// 阶段词 = 场景组里带「主线·」前缀的词（词表顺序即剧情先后）；粗词行渲染时排除
+const isStageWord = w => w.startsWith(STAGE_PREFIX);
+// 子区完整词（地图·子区）：freq 统计与筛选用
+const SUBAREA_WORDS = new Set(Object.entries(SUBAREAS).flatMap(([m, subs]) => subs.map(s => m + '·' + s)));
+
+// ============ 标签分组行（场景/地图固定全量显示；剧情/百态/子区行按展开条件显示） ============
+function buildTagChips(){
+  const wrap = document.getElementById('tag-chips');
+  const freq = {};
+  for (const o of outfits){
+    const tags = o.tags || [];
+    for (const w of FIXED_TAGS){
+      // 与筛选同口径：标签精确匹配（开封 ≠ 开封皇宫）
+      if (tags.includes(w)) freq[w] = (freq[w]||0) + 1;
+    }
+  }
+  const groups = [];
+  for (const group of FIXED_GROUPS){
+    // 粗词 = 不含 · 的词（主线阶段词与江湖百态子标签都带 ·，各自走展开行）
+    const words = ((window.YYSLS_TAG_PRESETS||{})[group] || []).filter(w => !w.includes('·'));
+    const isScene = group === '场景';
+    const chips = words.map(w => {
+      const n = freq[w] || 0;
+      if (!n) return `<button class="chip dim" disabled title="还没有穿搭命中这个词（编辑版点选后亮起）">${esc(w)}</button>`;
+      const on = isScene ? (activeScene === w) : (activeMap === w);
+      const act = isScene ? `setScene('${esc(w)}')` : `setMap('${esc(w)}')`;
+      return `<button class="chip ${on?'on':''}" onclick="${act}">${esc(w)}<span style="opacity:.55;font-size:10px">×${n}</span></button>`;
+    }).join('');
+    groups.push(`<span class="lbl">${esc(group)}</span>` + chips);
+  }
+  wrap.innerHTML = groups.join('<span class="wsep"></span>');
+}
+
+// 剧情行：默认只渲染有命中的节；点「主线」/阶段词/章前缀 → 展开全部 24 节按章分组（无命中 dim）
+function buildStoryChips(){
+  const wrap = document.getElementById('story-chips');
+  const stageWords = (TAG_PRESETS['场景'] || []).filter(isStageWord);
+  if (!stageWords.length){ wrap.innerHTML = ''; return; }
+  const freq = {};
+  for (const o of outfits){
+    for (const w of (o.tags || [])){
+      if (isStageWord(w)) freq[w] = (freq[w]||0) + 1;
+    }
+  }
+  // 按章分组（章名 = 第二段）；节 chip 短名 = 去掉「主线·章名·」前缀
+  const chapters = [];
+  for (const w of stageWords){
+    const m = w.match(/^主线·([^·]+)·/);
+    const name = m ? m[1] : '其他';
+    let cur = chapters[chapters.length - 1];
+    if (!cur || cur.name !== name){ cur = {name, words: []}; chapters.push(cur); }
+    cur.words.push(w);
+  }
+  // 展开态：点「主线」/阶段词/章前缀才显示整行；收起态连容器一起隐藏（不留占位空隙）
+  const expanded = activeScene && (activeScene === '主线' || activeScene.startsWith(STAGE_PREFIX));
+  if (!expanded){ wrap.innerHTML = ''; wrap.style.display = 'none'; return; }
+  wrap.style.display = '';
+  // 主线+地图双筛选：行标签换成主线名（静态不可点），只渲染该章子节按钮
+  const mapChapter = activeMap ? Object.keys(STORY_MAP).find(k => STORY_MAP[k] === activeMap) : null;
+  if (activeMap){
+    const ch = chapters.find(c => c.name === mapChapter);
+    if (!ch){
+      wrap.innerHTML = `<span class="lbl">剧情</span><span style="font-size:11px;color:var(--mute)">「${esc(activeMap)}」暂无主线章节</span>`;
+      return;
+    }
+    const chips = ch.words.map(w => {
+      const short = w.slice(('主线·' + ch.name + '·').length);
+      const n = freq[w] || 0;
+      if (!n) return `<button class="chip dim" disabled title="还没有穿搭命中这个词（编辑版点选后亮起）">${esc(short)}</button>`;
+      const on = activeScene === w;
+      return `<button class="chip ${on?'on':''}" onclick="setScene('${esc(w)}')" title="${esc(w)}">${esc(short)}<span style="opacity:.55;font-size:10px">×${n}</span></button>`;
+    });
+    wrap.innerHTML = `<span class="lbl">${esc(mapChapter)}</span>` + chips.join('');
+    return;
+  }
+  // 纯点主线（未点地图）：章名按钮（可筛整章）+ 全量节词
+  const parts = [];
+  for (const ch of chapters){
+    const chips = ch.words.map(w => {
+      const short = w.slice(('主线·' + ch.name + '·').length);
+      const n = freq[w] || 0;
+      if (!n) return `<button class="chip dim" disabled title="还没有穿搭命中这个词（编辑版点选后亮起）">${esc(short)}</button>`;
+      const on = activeScene === w;
+      return `<button class="chip ${on?'on':''}" onclick="setScene('${esc(w)}')" title="${esc(w)}">${esc(short)}<span style="opacity:.55;font-size:10px">×${n}</span></button>`;
+    }).filter(Boolean);
+    const chOn = activeScene === ('主线·' + ch.name + '·');
+    parts.push(`<button class="chip chl ${chOn?'on':''}" onclick="setScene('${esc('主线·' + ch.name + '·')}')" title="筛整章：${esc(ch.name)}">${esc(ch.name)}</button>` + chips.join(''));
+  }
+  wrap.innerHTML = `<span class="lbl">剧情</span>` + parts.join('<span class="wsep"></span>');
+}
+
+// 百态行：点「江湖百态」或任一子标签时保持展开（点选后可随时切换子标签）；不触发剧情序
+function buildBaotaiChips(){
+  const wrap = document.getElementById('baotai-chips');
+  const btWords = (TAG_PRESETS['场景'] || []).filter(w => w.startsWith('江湖百态·'));
+  const expanded = activeScene && (activeScene === '江湖百态' || activeScene.startsWith('江湖百态·'));
+  if (!expanded || !btWords.length){
+    wrap.innerHTML = ''; wrap.style.display = 'none'; return;
+  }
+  wrap.style.display = '';
+  const freq = {};
+  for (const o of outfits){
+    for (const w of (o.tags || [])){
+      if (w.startsWith('江湖百态·')) freq[w] = (freq[w]||0) + 1;
+    }
+  }
+  const chips = btWords.map(w => {
+    const short = w.replace('江湖百态·', '');
+    const n = freq[w] || 0;
+    if (!n) return `<button class="chip dim" disabled title="还没有穿搭命中这个词（编辑版点选后亮起）">${esc(short)}</button>`;
+    const on = activeScene === w;
+    return `<button class="chip ${on?'on':''}" onclick="setScene('${esc(w)}')" title="${esc(w)}">${esc(short)}<span style="opacity:.55;font-size:10px">×${n}</span></button>`;
+  });
+  wrap.innerHTML = `<span class="lbl">百态</span>` + chips.join('');
+}
+
+// 子区行：只有点了某地图才显示该图全部子区（无命中 dim）；没点地图整行隐藏
+function buildSubChips(){
+  const wrap = document.getElementById('sub-chips');
+  const m = activeMap;
+  if (!m){
+    wrap.innerHTML = '';
+    wrap.style.display = 'none';
+    return;
+  }
+  const freq = {};
+  for (const o of outfits){
+    for (const w of (o.tags || [])){
+      if (SUBAREA_WORDS.has(w)) freq[w] = (freq[w]||0) + 1;
+    }
+  }
+  const subs = (SUBAREAS[m] || []).map(s => m + '·' + s);
+  if (!subs.length){
+    wrap.innerHTML = '';
+    wrap.style.display = 'none';
+    return;
+  }
+  const chips = subs.map(w => {
+    const short = w.slice((m + '·').length);   // 只显示子区名，父图已是分组标题
+    const n = freq[w] || 0;
+    if (!n) return `<button class="chip chipword dim" disabled title="还没有穿搭命中这个子区（编辑版点选后亮起）">${esc(short)}</button>`;
+    const on = activeSub === w;
+    return `<button class="chip chipword ${on?'on':''}" onclick="setSub('${esc(w)}')" title="${esc(w)}">${esc(short)}<span style="opacity:.55;font-size:10px">×${n}</span></button>`;
+  });
+  wrap.innerHTML = `<span class="lbl">子区</span><span class="chl">${esc(m)}</span>` + chips.join('');
+  wrap.style.display = '';
+}
+
+// ============ 色系（彩虹七色 + 黑白九桶） ============
+const HUE_ORDER = ['红','橙','黄','绿','青','蓝','紫','黑','白'];
+function hexToRgb(hex){
+  const h = (hex||'').replace('#','');
+  if (h.length < 6) return null;
+  return {
+    r: parseInt(h.slice(0,2),16),
+    g: parseInt(h.slice(2,4),16),
+    b: parseInt(h.slice(4,6),16)
+  };
+}
+function hueClass(hex){
+  const c = hexToRgb(hex);
+  if (!c) return '白';
+  const mx = Math.max(c.r,c.g,c.b), mn = Math.min(c.r,c.g,c.b), d = mx-mn;
+  const v = mx/255, s = mx ? d/mx : 0;
+  if (v >= 0.85 && s < 0.25) return '白';
+  if (v <= 0.18) return '黑';
+  if (s < 0.15) return v >= 0.5 ? '白' : '黑';
+  let h;
+  if (d === 0) h = 0;
+  else if (mx === c.r) h = (((c.g-c.b)/d) % 6 + 6) % 6 * 60;
+  else if (mx === c.g) h = ((c.b-c.r)/d + 2) * 60;
+  else h = ((c.r-c.g)/d + 4) * 60;
+  if (h < 15 || h >= 345) return '红';
+  if (h < 45) return '橙';
+  if (h < 70) return '黄';
+  if (h < 160) return '绿';
+  if (h < 200) return '青';
+  if (h < 255) return '蓝';
+  return '紫';
+}
+// 某套穿搭的色系桶：手动 hues 字段优先（编辑版可调），无则自动归类
+function huesOf(o){
+  if (o.hues && o.hues.length) return o.hues;
+  const s = new Set();
+  for (const p of (o.palette||[])) s.add(hueClass(p.color));
+  return [...s];
+}
+function collectColors(){
+  const map = {};
+  for (const o of outfits){
+    for (const h of huesOf(o)){
+      map[h] = (map[h]||0) + 1;
+    }
+  }
+  return HUE_ORDER.filter(h => map[h]).map(h => ({name:h, n:map[h]}));
+}
+
+// ============ 过滤 ============
+function searchBlob(o){
+  const wearing = (o.wearing||[]).map(w => w.name).join(' ');
+  const cnames = (o.palette||[]).map(p => p.name).join(' ');
+  return (o.name + ' ' + (o.note||'') + ' ' + wearing + ' ' + cnames + ' '
+    + (o.hues||[]).join(' ') + ' '
+    + (o.dyeCode||'') + ' ' + (o.outfitCode||'') + ' ' + (o.tags||[]).join(' ')).toLowerCase();
+}
+function filtered(){
+  const kw = document.getElementById('search').value.trim().toLowerCase();
+  let list = outfits.slice();
+  // 五组筛选：组间 AND 叠加，完全满足才留下
+  // 场景词尾带 · = 章前缀筛选（如「主线·神仙不渡·」筛整章）；否则标签精确匹配
+  if (activeScene){
+    const pre = activeScene.endsWith('·') ? activeScene : '';
+    list = list.filter(o => {
+      const tags = o.tags || [];
+      return pre ? tags.some(t => t.startsWith(pre)) : tags.includes(activeScene);
+    });
+  }
+  if (activeMap) list = list.filter(o => (o.tags||[]).includes(activeMap));
+  if (activeSub) list = list.filter(o => (o.tags||[]).includes(activeSub));
+  if (activeColor) list = list.filter(o => huesOf(o).includes(activeColor));
+  // 搜索框手输：独立条件，与其他筛选 AND
+  if (kw){
+    const terms = kw.split(/\s+/).filter(Boolean);
+    list = list.filter(o => {
+      const blob = searchBlob(o);
+      // 单字与多字统一走模糊包含：tags 整词已并入 blob，无需特判（特判会让单字永远搜不到）
+      return terms.every(t => [...expandTerm(t)].some(w => blob.includes(w)));
+    });
+  }
+  // 剧情视角：点「主线/残章」粗词或任何阶段词/章前缀 → 剧情序排序
+  const storyMode = activeScene && (activeScene === '主线' || activeScene === '残章' || activeScene.startsWith(STAGE_PREFIX));
+  return sortOutfits(list, storyMode);
+}
+
+// ============ 排序：默认地图优先（新图在前）；剧情视角下阶段序 → 剧情地图序 ============
+// 顺序从词表动态读取：TAG_PRESETS 数组顺序即优先级，新地图加最前自动适配，无需改代码
+const MAP_ORDER = (window.YYSLS_TAG_PRESETS||{})['地图'] || [];
+const SCENE_ORDER = (window.YYSLS_TAG_PRESETS||{})['场景'] || [];
+// 剧情地图序 = STORY_MAP 定义顺序（第一章→第五章）：清河→开封→河西→不见山→江南
+const STORY_MAP_ORDER = Object.values(window.YYSLS_STORY_MAP || {});
+function tagRank(o, order){
+  const tags = o.tags || [];
+  for (let i = 0; i < order.length; i++){
+    if (tags.includes(order[i])) return i;
+  }
+  return order.length;   // 无对应标签排最后
+}
+// 剧情序 rank：tags 里阶段词在词表中的最小下标（粗词不参与——否则「主线」rank 恒 0 吞掉阶段序）
+function stageRank(o){
+  let best = Infinity;
+  for (const t of (o.tags || [])){
+    if (!isStageWord(t)) continue;
+    const i = SCENE_ORDER.indexOf(t);
+    if (i >= 0 && i < best) best = i;
+  }
+  return best;
+}
+function sortOutfits(list, storyMode){
+  return list.slice().sort((a,b) => {
+    if (storyMode){
+      const ra = stageRank(a), rb = stageRank(b);
+      if (ra !== rb) return ra - rb;
+      // 剧情视角：地图按章节序排（清河→开封→河西→不见山→江南），新图优先让位
+      const sma = tagRank(a, STORY_MAP_ORDER), smb = tagRank(b, STORY_MAP_ORDER);
+      if (sma !== smb) return sma - smb;
+    } else {
+      const ma = tagRank(a, MAP_ORDER), mb = tagRank(b, MAP_ORDER);
+      if (ma !== mb) return ma - mb;
+    }
+    const sa = tagRank(a, SCENE_ORDER), sb = tagRank(b, SCENE_ORDER);
+    if (sa !== sb) return sa - sb;
+    // 同地图同场景：创建时间新到旧，再按 id 兜底
+    return String(b.ctime||'').localeCompare(String(a.ctime||'')) || String(b.id).localeCompare(String(a.id));
+  });
+}
+
+// ============ 渲染 ============
+function paletteHtml(palette){
+  return (palette||[]).map(p =>
+    `<span class="sw" style="background:${p.color}" title="${p.name} · ${p.color}"></span>`
+  ).join('');
+}
+const WEAR_ICON = {hair:'💇', top:'👕', bottom:'👖', full:'👘'};
+function wearingHtml(o){
+  // 旧数据兼容：无 wearing 字段但有 itemIds 时按「整套」显示
+  const wearing = (o.wearing && o.wearing.length) ? o.wearing
+    : ((o.itemIds||[]).map(id => ({part:'full', name:itemName(id), itemId:id})));
+  return wearing.map(w => {
+    const icon = WEAR_ICON[w.part] || '👘';
+    const tname = w.itemId ? (styleTierCache().get(w.itemId) || '') : '';
+    const tCls = w.itemId ? styleTierCls(w.itemId) : '';
+    const tip = w.itemId
+      ? `外观图鉴有条目${tname ? ' · ' + tname : ''} · 点击搜已应用的穿搭`
+      : `手输 · 图鉴无此条 · 点击搜已应用的穿搭`;
+    return `<span class="witem ${tCls}" title="${tip}" onclick="event.stopPropagation();fillSearch('${esc(w.name)}')">${icon} ${esc(w.name)}</span>`;
+  }).join('');
+}
+function cardHtml(o){
+  const clothes = wearingHtml(o);
+  // 码只进详情页（lightbox），卡片不展示；备注只留图上半透明条；图片固定比例保证卡片大小一致
+  return `<div class="card" onclick="onCardClick('${o.id}')">
+    <div class="thumb">
+      <img src="${o.image}" loading="lazy" alt="${esc(o.name)}">
+      <span class="cover">${esc(o.note||'').slice(0,20)}</span>
+      <div class="thumbsw">${paletteHtml(o.palette)}</div>
+    </div>
+    <div class="body">
+      <div class="name" title="${esc(o.name)}">${esc(o.name)}</div>
+      <div class="foot">${clothes}</div>
+    </div>
+  </div>`;
+}
+function render(){
+  document.getElementById('btn-clear').style.visibility =
+    document.getElementById('search').value ? 'visible' : 'hidden';
+  buildTagChips();
+  buildStoryChips();
+  buildBaotaiChips();
+  buildSubChips();
+  buildColorChips();
+  const list = filtered();
+  // 总计数：仅无筛选/搜索时显示在标题旁，有筛选即隐藏
+  const hasFilter = activeColor || activeScene || activeMap || activeSub || document.getElementById('search').value.trim();
+  document.getElementById('totalcount-wrap').style.display = hasFilter ? 'none' : '';
+  document.getElementById('totalcount').textContent = outfits.length;
+  const grid = document.getElementById('grid');
+  if (list.length){
+    grid.innerHTML = list.map(cardHtml).join('');
+  } else {
+    const hasAny = outfits.length > 0;
+    const hasFilter = activeColor || activeScene || activeMap || activeSub || document.getElementById('search').value.trim();
+    grid.innerHTML = `<div class="empty"><span class="big">🏮</span>${
+      hasAny ? '没有符合当前搜索条件的穿搭' : '还没有录入任何穿搭'
+    }<br><span style="font-size:12px">${
+      hasFilter ? '<a href="javascript:void(0)" onclick="clearAllFilters()">✕ 清除所有筛选</a> · ' : ''
+    }${hasAny ? '换关键词试试' : '（内容会出现在这里）'}</span></div>`;
+  }
+  document.getElementById('footnote').textContent =
+    `数据更新 ${(STYLE.meta||{}).updatedAt||'—'} · 主题色提取 & 模糊检索 · 词典维护见 yysls-synonyms.js`;
+}
+
+// ============ 搜索 & chips 交互 ============
+function onSearch(){
+  // 手输与四组筛选解耦：不覆盖快捷词组状态，仅刷新结果
+  render();
+}
+function clearSearch(){
+  document.getElementById('search').value = '';
+  onSearch();
+}
+function setScene(w){
+  activeScene = (activeScene === w) ? '' : w;
+  render();
+}
+function setMap(w){
+  activeMap = (activeMap === w) ? '' : w;
+  if (!activeMap) activeSub = '';   // 取消地图筛选时连带清掉子区筛选，不留幽灵状态
+  render();
+}
+function setSub(w){
+  activeSub = (activeSub === w) ? '' : w;
+  render();
+}
+// 穿着 chip 点击：以穿着名填搜索框（搜索是独立条件，与四组筛选 AND）
+function fillSearch(name){
+  document.getElementById('search').value = name;
+  toast('已搜索：' + name);
+  render();
+}
+function clearAllFilters(){
+  activeColor = ''; activeScene = ''; activeMap = ''; activeSub = '';
+  document.getElementById('search').value = '';
+  render();
+}
+function buildColorChips(){
+  const colors = collectColors();
+  const wrap = document.getElementById('color-chips');
+  const chips = colors.map(c =>
+    `<button class="chip ${activeColor===c.name?'on':''}" onclick="setColor('${esc(c.name)}')">${esc(c.name)}<span style="opacity:.55;font-size:10px">×${c.n}</span></button>`
+  ).join('');
+  wrap.innerHTML = `<span class="lbl">色系</span>` + (chips || `<span style="font-size:11px;color:var(--mute)">（色卡自动归类彩虹七色+黑白）</span>`);
+}
+function setColor(c){
+  // 色系是独立筛选维度，与搜索叠加（复合查询：手输词 + 点色系）
+  activeColor = (activeColor === c) ? '' : c;
+  render();
+}
+
+// （套装反查：不再有独立筛选栏——点卡片上的穿着 chip 直接以名字搜索，见 wearingHtml）
+
+// ============ 大图 ============
+function openLb(id){
+  const o = outfits.find(x => x.id === id);
+  if (!o) return;
+  document.getElementById('lb-img').src = o.image;
+  const codes = (o.dyeCode ? `<span class="pill code" onclick="copyCode('${esc(o.dyeCode)}','染色码')">🎨 ${esc(o.dyeCode)}</span>` : '')
+    + (o.outfitCode ? `<span class="pill code" onclick="copyCode('${esc(o.outfitCode)}','搭配码')">📋 ${esc(o.outfitCode)}</span>` : '');
+  document.getElementById('lb-name').innerHTML = `${esc(o.name)}` + codes;
+  document.getElementById('lb-wear').innerHTML = wearingHtml(o);
+  document.getElementById('lb-palette').innerHTML =
+    (o.palette||[]).map(p =>
+      `<span class="sw" style="background:${p.color}" title="${p.name} · ${p.color}"></span><span style="font-size:12px;color:var(--ink-soft)">${esc(p.name)}</span>`
+    ).join('');
+  document.getElementById('lb-note').textContent = o.note || '';
+  document.getElementById('lightbox').classList.add('on');
+}
+function closeLb(){ document.getElementById('lightbox').classList.remove('on'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+// ============ 分享码复制 ============
+async function copyCode(code, label){
+  let ok = false;
+  try { await navigator.clipboard.writeText(code); ok = true; }
+  catch(e){
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = code; ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta); ta.select();
+      ok = document.execCommand('copy');
+      ta.remove();
+    } catch(e2){ ok = false; }
+  }
+  toast(ok ? `${label || '分享码'} ${code} 已复制 ✓` : '复制失败，请手动复制');
+}
+
+// ============ 跳图鉴 ============
+function openPedia(name){
+  window.open('index-pedia.html', '_self');
+  sessionStorage.setItem('yysls-pedia-kw', name);
+}
+
+// ============ 工具 ============
+function esc(s){
+  return String(s ?? '').replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+let _toastT = null;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('on');
+  clearTimeout(_toastT);
+  _toastT = setTimeout(() => t.classList.remove('on'), 1800);
+}
+
+// ============================================================
+// 编辑模式（?edit=1 隐藏入口：连接数据 → 点卡片直接改）
+// ============================================================
+const EDIT_MODE = new URLSearchParams(location.search).get('edit') === '1';
+let rootHandle = null;
+let curId = null, curImgFile = null, imgChanged = false, curImgW = 0, curImgH = 0;
+let palette = [], wearing = [], hueSel = null, tagSel = new Set();
+let pickMode = false, lastPickPos = null;
+
+function updateEditUI(){
+  document.getElementById('edit-tools').style.display = EDIT_MODE ? 'inline-flex' : 'none';
+  document.getElementById('fab-new').style.display = EDIT_MODE ? '' : 'none';
+  if (!EDIT_MODE) return;
+  document.getElementById('btn-conn').textContent = rootHandle ? '🔗 已连接：' + rootHandle.name : '🔗 连接数据';
+  document.getElementById('btn-mgr').style.display = rootHandle ? '' : 'none';
+  document.getElementById('connstate').textContent = rootHandle ? '' : '（编辑模式 · 需连接项目目录）';
+}
+function fabNew(){
+  if (!rootHandle){ toast('先点「🔗 连接数据」再新建'); return; }
+  openEdit(null);
+}
+// ---- 标签规则弹窗（展示版/编辑版均可查看） ----
+function openRules(){
+  document.getElementById('rulesmask').classList.add('on');
+}
+function closeRules(){
+  document.getElementById('rulesmask').classList.remove('on');
+}
+async function connectEdit(){
+  if (!window.showDirectoryPicker){ toast('请用 Edge/Chrome'); return; }
+  try{ rootHandle = await window.showDirectoryPicker({mode:'readwrite'}); }catch(e){ return; }
+  try{ await rootHandle.getFileHandle('yysls-style.js'); }
+  catch(e){ toast('目录里没找到 yysls-style.js，选错了吧'); rootHandle = null; updateEditUI(); return; }
+  toast('已连接：' + rootHandle.name);
+  updateEditUI();
+}
+function nowStamp(){
+  const d = new Date(), p = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+function today(){ return nowStamp().slice(0,10); }
+function nextId(){
+  let mx = 0;
+  for (const o of outfits){
+    const m = String(o.id||'').match(/^ot-(\d+)$/);
+    if (m) mx = Math.max(mx, parseInt(m[1],10));
+  }
+  return 'ot-' + String(mx+1).padStart(3,'0');
+}
+async function writeStyleFile(){
+  const style = {
+    meta: {...(STYLE.meta||{}), updatedAt: nowStamp()},
+    colors: STYLE.colors,
+    outfits: STYLE.outfits
+  };
+  const head = `// ============================================================\n// 燕云穿搭库数据 · window.YYSLS_STYLE\n// ------------------------------------------------------------\n// 写入方：index-style.html 编辑模式（?edit=1）自动写回本文件\n// 手动编辑：也可以，注意保持 JSON 合法、colors 色表勿删改\n// 字段说明：\n//   outfits[].id        "ot-" + 序号，唯一\n//   outfits[].name      穿搭名字（主色+场景+记忆点，如 月白·雪地）\n//   outfits[].image     assets/穿搭/ 下的截图路径\n//   outfits[].wearing   关联穿着（按部位，数组）：\n//                       [{part,name,itemId}] · part: hair|top|bottom|full\n//                       hair=头发 top=上衣 bottom=下装（上下拆分时） full=整套（无拆分时）\n//                       itemId 非空 = 外观图鉴有该条目（可跳转）；空 = 图鉴没有，仅记名字\n//   outfits[].palette   主题色卡 [{color:"#RRGGBB", name:"色名"}]\n//   outfits[].hues      色系桶手动覆盖（可选；缺省时展示版自动归类）\n//   outfits[].dyeCode   万象集染色码（发布过才填/空字符串）\n//   outfits[].outfitCode 万象集搭配分享码（发布过才填/空字符串）\n//   outfits[].note      备注，自由写（模糊检索 + 快捷词的数据源）\n//   outfits[].w / .h    图片原始宽高（自动填，用于卡片比例）\n//   outfits[].ctime     创建时间 YYYY-MM-DD\n// ============================================================\n`;
+  const fh = await rootHandle.getFileHandle('yysls-style.js', {create:true});
+  const w = await fh.createWritable();
+  await w.write(head + 'window.YYSLS_STYLE = ' + JSON.stringify(style, null, 2) + ';\n');
+  await w.close();
+}
+// ---- 词表写回 yysls-synonyms.js ----
+// 策略：读原文 → 正则定位各组的数组字面量 → 只替换数组内容，保留手写注释与格式。
+// 定位失败（文件被手改过格式）→ 抛错，调用方回滚内存并提示手动改。
+function escRe(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+async function persistPresets(){
+  if (!rootHandle) throw new Error('未连接数据');
+  const fh = await rootHandle.getFileHandle('yysls-synonyms.js');
+  const f = await fh.getFile();
+  const orig = await f.text();
+  let txt = orig;
+  for (const [group, words] of Object.entries(TAG_PRESETS)){
+    const re = new RegExp('("' + escRe(group) + '"\\s*:\\s*\\[)[^\\]]*(\\])');
+    if (!re.test(txt)) throw new Error('定位「' + group + '」词表失败，文件可能被手改过');
+    const json = JSON.stringify(words).slice(1, -1).replace(/","/g, '", "');   // 去外层括号（正则捕获组自带），保持原文件空格风格
+    txt = txt.replace(re, '$1' + json + '$2');
+  }
+  // SUBAREAS 整块替换（块内无手写注释价值，JSON 序列化重写）；文件里没有该块则文件尾追加
+  const reSub = /(window\.YYSLS_SUBAREAS\s*=\s*)\{[\s\S]*?\}(\s*;)/;
+  const subJson = JSON.stringify(SUBAREAS, null, 2);
+  if (reSub.test(txt)){
+    txt = txt.replace(reSub, '$1' + subJson + '$2');
+  } else {
+    txt += '\nwindow.YYSLS_SUBAREAS = ' + subJson + ';\n';
+  }
+  // 备份原文件（synonyms.js 不在 PreToolUse 自动备份范围内，写前手动备份）
+  try{
+    const buSub = await (await rootHandle.getDirectoryHandle('yysls-db')).getDirectoryHandle('backups', {create:true});
+    const buName = 'yysls-synonyms-' + nowStamp().replace(/[-:T]/g, '').slice(0, 12) + '.js';
+    const bw = await (await buSub.getFileHandle(buName, {create:true})).createWritable();
+    await bw.write(orig);
+    await bw.close();
+  }catch(e){
+    console.warn('词表备份失败（继续写回）', e);
+  }
+  const w = await fh.createWritable();
+  await w.write(txt);
+  await w.close();
+}
+
+// ---- 词表管理面板 ----
+// 打开时深拷贝快照；放弃改动=恢复快照；保存=persistPresets 统一写回 + 重建快照
+let mgrSnapshot = null;
+let mgrRename = null;   // {type:'scene'|'map'|'sub', idx, map}
+
+function tagUseCount(w){
+  return outfits.filter(o => (o.tags||[]).includes(w)).length;
+}
+function rebuildWordSnapshots(){
+  MAP_ORDER.splice(0, MAP_ORDER.length, ...(TAG_PRESETS['地图'] || []));
+  SCENE_ORDER.splice(0, SCENE_ORDER.length, ...(TAG_PRESETS['场景'] || []));
+  FIXED_TAGS.clear();
+  for (const g of FIXED_GROUPS) for (const w of (TAG_PRESETS[g] || [])) if (!isStageWord(w)) FIXED_TAGS.add(w);
+  SUBAREA_WORDS.clear();
+  for (const [m, ss] of Object.entries(SUBAREAS)) for (const s of ss) SUBAREA_WORDS.add(m + '·' + s);
+  TAGS.clear();
+  for (const ws of Object.values(TAG_PRESETS)) for (const w of ws) TAGS.add(w);
+}
+function openMgr(){
+  if (!rootHandle){ toast('先点「🔗 连接数据」'); return; }
+  mgrSnapshot = {
+    presets: Object.fromEntries(Object.entries(TAG_PRESETS).map(([g, ws]) => [g, ws.slice()])),
+    subareas: Object.fromEntries(Object.entries(SUBAREAS).map(([m, ss]) => [m, ss.slice()]))
+  };
+  mgrRename = null;
+  mrenderMgr();
+  document.getElementById('mgrmask').classList.add('on');
+}
+function closeMgr(){
+  document.getElementById('mgrmask').classList.remove('on');
+  if (mgrSnapshot){
+    // 未保存即关闭 → 恢复打开时的快照
+    for (const g of Object.keys(TAG_PRESETS)) delete TAG_PRESETS[g];
+    Object.assign(TAG_PRESETS, mgrSnapshot.presets);
+    for (const m of Object.keys(SUBAREAS)) delete SUBAREAS[m];
+    Object.assign(SUBAREAS, mgrSnapshot.subareas);
+    rebuildWordSnapshots();
+    mgrSnapshot = null;
+    render();
+  }
+}
+function mjson(v){ return JSON.stringify(v).replace(/"/g, '&quot;'); }   // 嵌入 onclick 属性安全的 JS 字面量
+function mgrRow(type, word, label, idx, map){
+  const renaming = mgrRename && mgrRename.type === type && mgrRename.idx === idx && mgrRename.map === map;
+  const n = tagUseCount(word);
+  if (renaming){
+    return `<div class="mgr-row"><input class="w rename" id="mgr-rename-input" value="${esc(word)}" onkeydown="monRenameKey(event)" onblur="mcloseRename()"><span class="mgr-hint" style="margin:0">回车确认 · Esc 取消</span></div>`;
+  }
+  return `<div class="mgr-row"><span class="w" title="${esc(word)}">${label}${n ? ` <span style="color:var(--mute);font-size:10px">×${n}</span>` : ''}</span>` +
+    `<button class="op" title="上移" onclick="mmove('${type}',${idx},${mjson(map)},-1)">↑</button>` +
+    `<button class="op" title="下移" onclick="mmove('${type}',${idx},${mjson(map)},1)">↓</button>` +
+    `<button class="op" title="改名" onclick="mrename('${type}',${idx},${mjson(map)})">✎</button>` +
+    `<button class="op del" title="删除" onclick="mdel('${type}',${idx},${mjson(map)})">🗑</button></div>`;
+}
+function mrenderMgr(){
+  const body = document.getElementById('mgrbody');
+  const sceneArr = TAG_PRESETS['场景'] || [];
+  const mapArr = TAG_PRESETS['地图'] || [];
+  let html = '';
+
+  // ---- 场景：粗词平铺 + 阶段词按章分组 + 江湖百态子标签分组（与编辑弹窗点选区同构） ----
+  html += `<div class="mgr-sec">场景（顺序 = 剧情先后；新增追加到末尾）</div><div class="mgr-list">`;
+  for (const w of sceneArr.filter(w => !w.includes('·'))){
+    html += mgrRow('scene', w, esc(w), sceneArr.indexOf(w), null);
+  }
+  const stageChapters = [];
+  for (const w of sceneArr.filter(isStageWord)){
+    const m = w.match(/^主线·([^·]+)·/);
+    const name = m ? m[1] : '其他';
+    let cur = stageChapters[stageChapters.length - 1];
+    if (!cur || cur.name !== name){ cur = {name, words: []}; stageChapters.push(cur); }
+    cur.words.push(w);
+  }
+  for (const ch of stageChapters){
+    html += `<div class="mgr-subsec">${esc(ch.name)}</div>`;
+    for (const w of ch.words){
+      html += mgrRow('scene', w, esc(w.slice(('主线·' + ch.name + '·').length)), sceneArr.indexOf(w), null);
+    }
+  }
+  const btWords = sceneArr.filter(w => w.startsWith('江湖百态·'));
+  if (btWords.length){
+    html += `<div class="mgr-subsec">江湖百态</div>`;
+    for (const w of btWords){
+      html += mgrRow('scene', w, esc(w.replace('江湖百态·', '')), sceneArr.indexOf(w), null);
+    }
+  }
+  html += mgrAddRowHtml('scene', null, '新增场景/阶段词（追加到末尾）');
+  html += `</div>`;
+
+  // ---- 地图 ----
+  html += `<div class="mgr-sec">地图（顺序 = 新图优先；新增插到最前）</div><div class="mgr-list">`;
+  for (const w of mapArr) html += mgrRow('map', w, esc(w), mapArr.indexOf(w), null);
+  html += mgrAddRowHtml('map', null, '新增地图（插到最前）');
+  html += `</div>`;
+
+  // ---- 子区（含空组，方便给新地图加子区） ----
+  html += `<div class="mgr-sec">子区（按父地图分组）</div>`;
+  for (const m of MAP_ORDER){
+    const subs = SUBAREAS[m] || [];
+    html += `<div class="mgr-subsec">${esc(m)}</div><div class="mgr-list">`;
+    subs.forEach((s, i) => { html += mgrRow('sub', m + '·' + s, esc(s), i, m); });
+    html += mgrAddRowHtml('sub', m, '新增子区到「' + m + '」');
+    html += `</div>`;
+  }
+  html += `<div class="mgr-hint">✎ 改名 / 🗑 删除只动词表：已点选旧词的历史穿搭会残留（编辑弹窗「⚠ 旧词」行可点掉）。改完点「💾 保存词表」一次写回并备份。</div>`;
+  body.innerHTML = html;
+  const rin = document.getElementById('mgr-rename-input');
+  if (rin){ rin.focus(); rin.select(); }
+  const ain = document.getElementById('mgr-add-input');
+  if (ain) ain.focus();
+}
+// ---- 词表新增（管理面板内） ----
+let mgrAdd = null;   // {type:'scene'|'map'|'sub', map}
+function mgrAddRowHtml(type, map, placeholder){
+  const adding = mgrAdd && mgrAdd.type === type && mgrAdd.map === map;
+  if (adding){
+    return `<div class="mgr-row"><input class="w rename" id="mgr-add-input" placeholder="${esc(placeholder)}" onkeydown="monAddKey(event)" onblur="mcloseAdd()"><span class="mgr-hint" style="margin:0">回车确认 · Esc 取消</span></div>`;
+  }
+  return `<div class="mgr-row" style="border-style:dashed;justify-content:center;"><button class="op" style="width:auto;padding:0 14px;" onclick="mopenAdd('${type}',${mjson(map)})">＋ 新增</button></div>`;
+}
+function mopenAdd(type, map){
+  mgrAdd = {type, map};
+  mgrRename = null;
+  mrenderMgr();
+}
+function mcloseAdd(){
+  mgrAdd = null;
+  mrenderMgr();
+}
+function monAddKey(e){
+  if (e.key === 'Enter'){ e.preventDefault(); mcommitAdd(); }
+  else if (e.key === 'Escape'){ mcloseAdd(); }
+}
+function mcommitAdd(){
+  const inp = document.getElementById('mgr-add-input');
+  if (!inp || !mgrAdd) return;
+  const w = inp.value.trim();
+  if (!w){ mcloseAdd(); return; }
+  const {type, map} = mgrAdd;
+  if (type === 'scene'){
+    const arr = TAG_PRESETS['场景'];
+    if (arr.includes(w)){ toast('词表里已有「' + w + '」'); mcloseAdd(); return; }
+    arr.push(w);
+  } else if (type === 'map'){
+    const arr = TAG_PRESETS['地图'];
+    if (arr.includes(w)){ toast('词表里已有「' + w + '」'); mcloseAdd(); return; }
+    arr.unshift(w);
+    SUBAREAS[w] = SUBAREAS[w] || [];   // 新地图同步建空子区组
+  } else {
+    const name = w.replace(/^.+?·/, '');
+    const arr = SUBAREAS[map] || (SUBAREAS[map] = []);
+    if (arr.includes(name)){ toast('「' + map + '」下已有子区「' + name + '」'); mcloseAdd(); return; }
+    arr.push(name);
+  }
+  mcloseAdd();
+  toast('已加入词表（点「💾 保存词表」后生效）');
+}
+function mmove(type, idx, map, dir){
+  const j = idx + dir;
+  if (type === 'sub'){
+    const arr = SUBAREAS[map] || [];
+    if (j < 0 || j >= arr.length) return;
+    [arr[idx], arr[j]] = [arr[j], arr[idx]];
+  } else {
+    const arr = TAG_PRESETS[type === 'scene' ? '场景' : '地图'];
+    if (j < 0 || j >= arr.length) return;
+    [arr[idx], arr[j]] = [arr[j], arr[idx]];
+  }
+  mrenderMgr();
+}
+function mrename(type, idx, map){
+  mgrRename = {type, idx, map};
+  mrenderMgr();
+}
+function mcloseRename(){
+  mgrRename = null;
+  mrenderMgr();
+}
+function monRenameKey(e){
+  if (e.key === 'Enter'){ e.preventDefault(); mcommitRename(); }
+  else if (e.key === 'Escape'){ mcloseRename(); }
+}
+function mcommitRename(){
+  const inp = document.getElementById('mgr-rename-input');
+  if (!inp || !mgrRename) return;
+  const nw = inp.value.trim();
+  if (!nw){ mcloseRename(); return; }
+  const {type, idx, map} = mgrRename;
+  if (type === 'sub'){
+    const arr = SUBAREAS[map] || [];
+    const name = nw.replace(/^.+?·/, '');
+    if (name === arr[idx]){ mcloseRename(); return; }
+    if (arr.includes(name)){ toast('同地图下已有子区「' + name + '」'); mcloseRename(); return; }
+    arr[idx] = name;
+  } else {
+    const group = type === 'scene' ? '场景' : '地图';
+    const arr = TAG_PRESETS[group];
+    if (nw === arr[idx]){ mcloseRename(); return; }
+    if (arr.includes(nw)){ toast('词表里已有「' + nw + '」'); mcloseRename(); return; }
+    arr[idx] = nw;
+  }
+  mcloseRename();
+  toast('已改名（点「💾 保存词表」后生效）');
+}
+function mdel(type, idx, map){
+  let w;
+  if (type === 'sub'){
+    const arr = SUBAREAS[map] || [];
+    w = map + '·' + arr[idx];
+    const n = tagUseCount(w);
+    if (!confirm(`删除子区「${w}」？（${n} 套穿搭点过它；删除后筛选行不再显示，历史 tags 残留可搜索命中）`)) return;
+    arr.splice(idx, 1);
+  } else {
+    const group = type === 'scene' ? '场景' : '地图';
+    const arr = TAG_PRESETS[group];
+    w = arr[idx];
+    const n = tagUseCount(w);
+    if (!confirm(`删除「${w}」？（${n} 套穿搭点过它；删除后筛选行不再显示，历史 tags 残留可搜索命中）`)) return;
+    arr.splice(idx, 1);
+  }
+  mrenderMgr();
+}
+async function msaveMgr(){
+  try{
+    await persistPresets();
+    rebuildWordSnapshots();
+    mgrSnapshot = null;
+    closeMgr();
+    render();
+    toast('词表已保存');
+  }catch(err){
+    toast('保存失败：' + err.message);
+  }
+}
+
+// ---- 取色/色名工具（与编辑版同源） ----
+function hex2(v){ return v.toString(16).padStart(2,'0').toUpperCase(); }
+function colorDist(hex, r, g, b){
+  const R = parseInt(hex.slice(1,3),16), G = parseInt(hex.slice(3,5),16), B = parseInt(hex.slice(5,7),16);
+  return (R-r)*(R-r) + (G-g)*(G-g) + (B-b)*(B-b);
+}
+function nearestColor(r, g, b){
+  const colors = STYLE.colors || [];
+  if (colors.length){
+    let best = null, bd = Infinity;
+    for (const c of colors){
+      const d = colorDist(c.hex, r, g, b);
+      if (d < bd){ bd = d; best = c.name; }
+    }
+    if (best) return best;
+  }
+  const mx = Math.max(r,g,b), mn = Math.min(r,g,b), dl = mx-mn;
+  if (dl < 24) return mx > 230 ? '白' : (mx < 60 ? '黑' : '灰');
+  let h;
+  if (mx === r) h = ((g-b)/dl + 6) % 6;
+  else if (mx === g) h = (b-r)/dl + 2;
+  else h = (r-g)/dl + 4;
+  const base = ['红','黄','绿','青','蓝','紫'][Math.min(5, Math.floor(h))];
+  return (mx > 200 ? '浅' : (mn < 60 ? '深' : '')) + base;
+}
+
+// ---- 打开/关闭编辑弹窗 ----
+function openEdit(id){
+  try{
+  if (!rootHandle){ toast('先点「🔗 连接数据」'); return; }
+  const o = id ? outfits.find(x => x.id === id) : null;
+  curId = id; curImgFile = null; imgChanged = false; pickMode = false; lastPickPos = null;
+  palette = o ? (o.palette||[]).map(p => ({...p})) : [];
+  wearing = o ? (o.wearing||[]).map(w => ({...w})) : [];
+  hueSel = o && o.hues && o.hues.length ? new Set(o.hues) : null;
+  tagSel = new Set(o ? (o.tags||[]) : []);
+  curImgW = o ? (o.w||0) : 0; curImgH = o ? (o.h||0) : 0;
+  document.getElementById('edit-title').textContent = o ? '✏️ 编辑：' + o.name : '＋ 新建穿搭';
+  document.getElementById('ef-name').value = o ? o.name : '';
+  document.getElementById('ef-dyecode').value = o ? (o.dyeCode||'') : '';
+  document.getElementById('ef-outfitcode').value = o ? (o.outfitCode||'') : '';
+  document.getElementById('ef-note').value = o ? (o.note||'') : '';
+  document.getElementById('ebtn-del').style.display = o ? '' : 'none';
+  ['hair','top','bottom','full'].forEach(p => document.getElementById('ef-link-' + p).value = '');
+  // 图片预览
+  const prev = document.getElementById('eimgprev');
+  prev.querySelectorAll('img').forEach(x => x.remove());
+  document.getElementById('eimgempty').style.display = o ? 'none' : '';
+  document.getElementById('ebtn-pick').disabled = !o;
+  if (o){
+    const img = new Image();
+    img.onload = () => { prev.prepend(img); curImgW = img.naturalWidth; curImgH = img.naturalHeight; };
+    img.src = o.image;
+    // 旧图经文件句柄读成 File，避免 file:// 下 canvas 污染（取色/提色可用）
+    eloadImageAsFile(o.image).then(file => {
+      if (file){ curImgFile = file; img.src = URL.createObjectURL(file); }
+    });
+  }
+  erenderPalette(); erenderWearTags(); erenderTagPicks();
+  document.getElementById('editmask').classList.add('on');
+  }catch(err){
+    toast('编辑窗打开失败：' + err.message);
+  }
+}
+function closeEdit(){
+  document.getElementById('editmask').classList.remove('on');
+  if (pickMode){ pickMode = false; ehideLoupe(); lastPickPos = null; }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape'){
+    if (document.getElementById('editmask').classList.contains('on')) closeEdit();
+    else if (document.getElementById('mgrmask').classList.contains('on')) closeMgr();
+    else if (document.getElementById('rulesmask').classList.contains('on')) closeRules();
+    else closeLb();
+    document.querySelectorAll('.link-cands').forEach(b => b.classList.remove('on'));
+  }
+});
+async function eloadImageAsFile(relPath){
+  if (!rootHandle || !relPath) return null;
+  try{
+    const parts = relPath.split('/');
+    let h = rootHandle;
+    for (let i = 0; i < parts.length - 1; i++) h = await h.getDirectoryHandle(parts[i]);
+    const fh = await h.getFileHandle(parts[parts.length - 1]);
+    return await fh.getFile();
+  }catch(e){ return null; }
+}
+
+// ---- 图片：选择 / 提色 ----
+async function epickImage(){
+  if (!window.showOpenFilePicker){ toast('请用 Edge/Chrome'); return; }
+  let fh;
+  try { [fh] = await window.showOpenFilePicker({types:[{description:'图片',accept:{'image/*':['.png','.jpg','.jpeg','.webp','.gif']}}]}); }
+  catch(e){ return; }
+  await eloadImageFile(await fh.getFile());
+}
+async function eloadImageFile(file){
+  curImgFile = file; imgChanged = true;
+  const prev = document.getElementById('eimgprev');
+  prev.querySelectorAll('img').forEach(x => x.remove());
+  document.getElementById('eimgempty').style.display = 'none';
+  const img = new Image();
+  img.src = URL.createObjectURL(file);
+  img.onload = async () => {
+    prev.prepend(img);
+    curImgW = img.naturalWidth; curImgH = img.naturalHeight;
+    document.getElementById('ebtn-pick').disabled = false;
+    await eautoExtract(img);
+    toast('已提取主题色，点色块可删除；点「取色」后点击图片可手动补色');
+  };
+  img.onerror = () => toast('图片读取失败');
+}
+async function eautoExtract(img){
+  const S = 96;
+  const c = document.createElement('canvas');
+  c.width = S; c.height = S;
+  const ctx = c.getContext('2d', {willReadFrequently:true});
+  try {
+    ctx.drawImage(img, 0, 0, S, S);
+    const d = ctx.getImageData(0, 0, S, S).data;
+    const hist = {};
+    const cx = (S-1)/2, cy = (S-1)/2, maxD2 = cx*cx + cy*cy;
+    const edgeSkip = Math.round(S * 0.08);
+    for (let y = 0; y < S; y++){
+      for (let x = 0; x < S; x++){
+        const i = (y*S + x) * 4;
+        if (d[i+3] < 128) continue;
+        if (x < edgeSkip || y < edgeSkip || x >= S-edgeSkip || y >= S-edgeSkip) continue;
+        const dx = x - cx, dy = y - cy;
+        const w = 1 - 0.65 * Math.sqrt((dx*dx + dy*dy) / maxD2);
+        const key = ((d[i]>>3)<<10) | ((d[i+1]>>3)<<5) | (d[i+2]>>3);
+        hist[key] = (hist[key]||0) + w;
+      }
+    }
+    const entries = Object.entries(hist).sort((a,b)=>b[1]-a[1]);
+    palette = [];
+    for (const [k] of entries){
+      const r = Math.round(((k>>10)&31) * 255 / 31);
+      const g = Math.round(((k>>5)&31) * 255 / 31);
+      const b = Math.round((k&31) * 255 / 31);
+      if (palette.some(p => colorDist(p.color, r, g, b) < 64)) continue;
+      palette.push({color:'#'+hex2(r)+hex2(g)+hex2(b), name: nearestColor(r,g,b)});
+      if (palette.length >= 6) break;
+    }
+    erenderPalette();
+  } catch(e){
+    palette = [];
+    erenderPalette();
+    toast('主题色提取失败（图片格式不支持？），可手动取色');
+  }
+}
+function erenderPalette(){
+  const wrap = document.getElementById('epal-edit');
+  wrap.innerHTML = palette.length
+    ? palette.map((p,i) =>
+        `<span class="pc" title="点击删除 ${p.name} ${p.color}" onclick="edelColor(${i})"><b style="background:${p.color}"></b>${esc(p.name)}</span>`).join('')
+    : '<span class="tip">主题色会出现在这里</span>';
+  erenderHueEdit();
+}
+function edelColor(i){
+  palette.splice(i,1);
+  erenderPalette();
+}
+
+// ---- 色系九桶（复用展示版 hueClass） ----
+function eautoHues(){
+  const s = new Set();
+  for (const p of palette) s.add(hueClass(p.color));
+  return s;
+}
+function erenderHueEdit(){
+  const wrap = document.getElementById('ehue-edit');
+  const cur = hueSel || eautoHues();
+  const chips = HUE_ORDER.map(h => {
+    const on = cur.has(h);
+    return `<span class="hc ${on?'on':''}" title="${on?'已归类 · 点击移除':'点击归入'}" onclick="etoggleHue('${h}')">${h}</span>`;
+  }).join('');
+  const hint = hueSel
+    ? '<span class="tip">手动模式 · 再点桶开关调整</span>'
+    : '<span class="tip">自动预填 · 点任一桶进入手动模式</span>';
+  wrap.innerHTML = chips + hint;
+}
+function etoggleHue(h){
+  if (!hueSel) hueSel = new Set(eautoHues());
+  if (hueSel.has(h)) hueSel.delete(h); else hueSel.add(h);
+  erenderHueEdit();
+}
+
+// ---- 放大镜取色 ----
+const LOUPE_SIZE = 96, LOUPE_ZOOM = 6;
+function etogglePick(){
+  pickMode = !pickMode;
+  document.getElementById('epick-hint').className = 'pick-hint' + (pickMode ? '' : ' off');
+  document.getElementById('ebtn-pick').textContent = pickMode ? '🛑 结束取色' : '🎯 取色';
+  document.getElementById('ebtn-pick').classList.toggle('ghost', !pickMode);
+  document.getElementById('eimgprev').style.borderColor = pickMode ? 'var(--gold)' : 'var(--line)';
+  if (!pickMode){ ehideLoupe(); lastPickPos = null; }
+}
+function eonImgMove(e){
+  if (!pickMode) return;
+  const img = document.querySelector('#eimgprev img');
+  if (!img) return;
+  const r = img.getBoundingClientRect();
+  const px = Math.floor((e.clientX - r.left) / r.width * img.naturalWidth);
+  const py = Math.floor((e.clientY - r.top) / r.height * img.naturalHeight);
+  if (px < 0 || py < 0 || px >= img.naturalWidth || py >= img.naturalHeight) return;
+  lastPickPos = {x: px, y: py};
+  edrawLoupe(img, px, py, e, r);
+}
+function edrawLoupe(img, px, py, e, r){
+  const loupe = document.getElementById('eloupe');
+  loupe.style.display = 'block';
+  loupe.style.left = Math.max(2, Math.min((e.clientX - r.left) + 18, r.width - LOUPE_SIZE - 6)) + 'px';
+  loupe.style.top = Math.max(2, Math.min((e.clientY - r.top) + 18, r.height - LOUPE_SIZE - 6)) + 'px';
+  const ctx = loupe.getContext('2d');
+  const half = LOUPE_SIZE / LOUPE_ZOOM / 2;
+  const sx = Math.max(0, Math.min(px - half, img.naturalWidth - LOUPE_SIZE/LOUPE_ZOOM));
+  const sy = Math.max(0, Math.min(py - half, img.naturalHeight - LOUPE_SIZE/LOUPE_ZOOM));
+  ctx.imageSmoothingEnabled = false;
+  ctx.clearRect(0, 0, LOUPE_SIZE, LOUPE_SIZE);
+  ctx.drawImage(img, sx, sy, LOUPE_SIZE/LOUPE_ZOOM, LOUPE_SIZE/LOUPE_ZOOM, 0, 0, LOUPE_SIZE, LOUPE_SIZE);
+  ctx.strokeStyle = 'rgba(255,255,255,.18)';
+  ctx.lineWidth = 1;
+  for (let i = 1; i < LOUPE_ZOOM; i++){
+    const p = i * (LOUPE_SIZE / LOUPE_ZOOM);
+    ctx.beginPath(); ctx.moveTo(p, 0); ctx.lineTo(p, LOUPE_SIZE); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, p); ctx.lineTo(LOUPE_SIZE, p); ctx.stroke();
+  }
+  ctx.strokeStyle = 'rgba(255,90,90,.95)';
+  ctx.beginPath();
+  ctx.moveTo(LOUPE_SIZE/2 - 6, LOUPE_SIZE/2); ctx.lineTo(LOUPE_SIZE/2 + 6, LOUPE_SIZE/2);
+  ctx.moveTo(LOUPE_SIZE/2, LOUPE_SIZE/2 - 6); ctx.lineTo(LOUPE_SIZE/2, LOUPE_SIZE/2 + 6);
+  ctx.stroke();
+}
+function ehideLoupe(){ document.getElementById('eloupe').style.display = 'none'; }
+function etryPickColor(e){
+  if (!pickMode) return;
+  const img = document.querySelector('#eimgprev img');
+  if (!img) return;
+  const r = img.getBoundingClientRect();
+  let px, py;
+  if (lastPickPos && e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom){
+    px = lastPickPos.x; py = lastPickPos.y;
+  } else {
+    px = Math.floor((e.clientX - r.left) / r.width * img.naturalWidth);
+    py = Math.floor((e.clientY - r.top) / r.height * img.naturalHeight);
+  }
+  if (px < 0 || py < 0 || px >= img.naturalWidth || py >= img.naturalHeight) return;
+  const c = document.createElement('canvas'); c.width = 1; c.height = 1;
+  const ctx = c.getContext('2d');
+  try {
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(img, px, py, 1, 1, 0, 0, 1, 1);
+    const d = ctx.getImageData(0,0,1,1).data;
+    const color = '#'+hex2(d[0])+hex2(d[1])+hex2(d[2]);
+    if (palette.some(p => p.color === color)){ toast('这个颜色已在色卡里'); return; }
+    palette.push({color, name: nearestColor(d[0], d[1], d[2])});
+    if (palette.length > 8) palette.shift();
+    erenderPalette();
+  } catch(err){
+    toast('取色失败：图片像素不可读，请重新连接数据后再试');
+  }
+}
+
+// ---- 关联穿着 ----
+function eonLinkInput(part, kw){
+  const box = document.getElementById('elink-cands-' + part);
+  kw = kw.trim();
+  if (!kw){ box.classList.remove('on'); return; }
+  const hits = DB.items
+    .filter(it => it.name && it.name.toLowerCase().includes(kw.toLowerCase()))
+    .slice(0, 6);
+  const free = `<div class="link-cand" onclick="eaddWear('${part}', null, '${esc(kw)}')">✍️ 手输：「${esc(kw)}」（图鉴没有这条）</div>`;
+  box.innerHTML = free + (hits.length
+    ? hits.map(it => `<div class="link-cand" onclick="eaddWear('${part}', '${it.id}', '${esc(it.name)}')">👘 ${esc(it.name)} <span style="color:var(--mute);font-size:11px">图鉴</span></div>`).join('')
+    : '');
+  box.classList.add('on');
+}
+function eonLinkKey(e, part){
+  if (e.key === 'Enter'){
+    e.preventDefault();
+    const kw = e.target.value.trim();
+    if (!kw) return;
+    // 名字与图鉴精确匹配 → 自动关联条目（治漏关联：手输名字导致 itemId 为空、利用率虚低）
+    const exact = DB.items.find(it => it.name === kw);
+    if (exact){
+      eaddWear(part, exact.id, exact.name);
+      toast('已自动关联图鉴条目：' + exact.name);
+    } else {
+      eaddWear(part, null, kw);
+    }
+  }
+}
+function eaddWear(part, itemId, name){
+  wearing = wearing.filter(w => w.part !== part);
+  wearing.push({part, name, itemId});
+  document.getElementById('ef-link-' + part).value = '';
+  document.getElementById('elink-cands-' + part).classList.remove('on');
+  erenderWearTags();
+}
+function eremoveWear(part){
+  wearing = wearing.filter(w => w.part !== part);
+  erenderWearTags();
+}
+function erenderWearTags(){
+  const box = document.getElementById('esel-tags');
+  box.innerHTML = wearing.length
+    ? wearing.map(w => {
+        const it = w.itemId ? DB.items.find(x => x.id === w.itemId) : null;
+        const tip = it ? '外观图鉴：' + it.name : '手输（图鉴无此条）';
+        return `<span class="sel-tag" title="${esc(tip)} · 点击移除" onclick="eremoveWear('${w.part}')">${WEAR_ICON[w.part]} ${esc(w.name)}<b>✕</b></span>`;
+      }).join('')
+    : '';
+}
+
+// ---- 顺手点选标签（渐进披露：点「主线」展开阶段词；点地图展开其子区。新增词统一走「🗂 词表」面板） ----
+function hcHtml(word, label, title){
+  return `<span class="hc ${tagSel.has(word)?'on':''}" title="${esc(title || word)}" onclick="etoggleTag('${esc(word)}')">${esc(label)}</span>`;
+}
+function erenderTagPicks(){
+  const wrap = document.getElementById('etag-picks');
+  // 孤儿词：tagSel 里词表已没有的词（改名/删除残留），可点掉
+  const allWords = new Set(Object.values(TAG_PRESETS).flat());
+  for (const w of SUBAREA_WORDS) allWords.add(w);
+  const orphan = [...tagSel].filter(w => !allWords.has(w));
+
+  // 场景组：粗词一行全显；点选了「主线」才展开阶段词（每章独立一行）
+  const sceneWords = TAG_PRESETS['场景'] || [];
+  const coarse = sceneWords.filter(w => !w.includes('·'));
+  let sceneHtml = `<div class="tag-group"><span class="gl">场景</span>` +
+    coarse.map(w => hcHtml(w, w)).join('') + '</div>';
+  // 点选「江湖百态」或已有任一子标签 → 展开子标签（互斥单选，照子区逻辑自动带粗词）
+  if (tagSel.has('江湖百态') || [...tagSel].some(t => t.startsWith('江湖百态·'))){
+    const btWords = sceneWords.filter(w => w.startsWith('江湖百态·'));
+    if (btWords.length){
+      sceneHtml += `<div class="tag-group"><span class="e-chl">百态</span>` +
+        btWords.map(w => hcHtml(w, w.replace('江湖百态·', ''))).join('') + '</div>';
+    }
+  }
+  if (tagSel.has('主线') || [...tagSel].some(t => isStageWord(t))){
+    const stageChapters = [];
+    for (const w of sceneWords.filter(isStageWord)){
+      const m = w.match(/^主线·([^·]+)·/);
+      const name = m ? m[1] : '其他';
+      let cur = stageChapters[stageChapters.length - 1];
+      if (!cur || cur.name !== name){ cur = {name, words: []}; stageChapters.push(cur); }
+      cur.words.push(w);
+    }
+    // 已点选地图时，只展开对应章节（主线章节与地图对应）；未点地图 → 全量展开
+    const pickedMaps = (TAG_PRESETS['地图'] || []).filter(m => tagSel.has(m));
+    const pickedChs = pickedMaps.length
+      ? new Set(pickedMaps.map(m => Object.keys(STORY_MAP).find(k => STORY_MAP[k] === m)).filter(Boolean))
+      : null;
+    sceneHtml += stageChapters
+      .filter(ch => !pickedChs || pickedChs.has(ch.name))
+      .map(ch =>
+        `<div class="tag-group"><span class="e-chl">${esc(ch.name)}</span>` +
+        ch.words.map(w => hcHtml(w, w.slice(('主线·' + ch.name + '·').length), w)).join('') + '</div>'
+      ).join('');
+  }
+
+  // 地图组：地图词一行全显；点选了某地图才展开该图子区（每图独立一行）
+  const maps = TAG_PRESETS['地图'] || [];
+  let mapHtml = `<div class="tag-group"><span class="gl">地图</span>` +
+    maps.map(w => hcHtml(w, w)).join('') + '</div>';
+  for (const m of maps){
+    if (!tagSel.has(m)) continue;
+    const subs = SUBAREAS[m] || [];
+    if (subs.length) mapHtml += `<div class="tag-group"><span class="e-chl">${esc(m)}</span>` + subs.map(s => hcHtml(m + '·' + s, s)).join('') + '</div>';
+  }
+
+  // 孤儿词行
+  const orphanHtml = orphan.length
+    ? `<div class="tag-group"><span class="gl" title="词表里已没有这些词（改名/删除残留），点击移除">⚠ 旧词</span>` +
+      orphan.map(w => `<span class="hc on" onclick="etoggleTag('${esc(w)}')">${esc(w)}</span>`).join('') + '</div>'
+    : '';
+
+  wrap.innerHTML = sceneHtml + mapHtml + orphanHtml;
+}
+function etoggleTag(t){
+  if (tagSel.has(t)){
+    tagSel.delete(t);
+  } else {
+    // 江湖百态子标签互斥（配色COS / 角色同款 / 行当职业单选）
+    if (t.startsWith('江湖百态·')){
+      for (const x of [...tagSel]) if (x.startsWith('江湖百态·')) tagSel.delete(x);
+    }
+    tagSel.add(t);
+  }
+  erenderTagPicks();
+}
+
+// ---- 保存 / 删除 ----
+async function epersistImage(){
+  if (!curImgFile) return null;
+  try {
+    const as = await rootHandle.getDirectoryHandle('assets');
+    const dir = await as.getDirectoryHandle('穿搭', {create:true});
+    const stamp = nowStamp().replace(/[-:T]/g,'').slice(0,12);
+    const name = 'ot-' + stamp + '-' + curImgFile.name.replace(/[\\/:*?"<>|]/g,'_');
+    const fh = await dir.getFileHandle(name, {create:true});
+    const w = await fh.createWritable();
+    await w.write(curImgFile);
+    await w.close();
+    return 'assets/穿搭/' + name;
+  } catch(e){
+    toast('图片写入 assets/穿搭/ 失败：' + e.message);
+    return null;
+  }
+}
+async function esaveOutfit(){
+  if (!rootHandle){ toast('先点「🔗 连接数据」'); return; }
+  const name = document.getElementById('ef-name').value.trim();
+  if (!name){ toast('名字还没填'); return; }
+  // 防重名：与已有条目重名则阻止保存（编辑时排除自己）
+  const dup = outfits.find(x => x.name === name && x.id !== curId);
+  if (dup){ toast('名字「' + name + '」已被占用，换一个吧'); return; }
+  if (!curId && !curImgFile){ toast('还没有选截图'); return; }
+  const old = curId ? outfits.find(o => o.id === curId) : null;
+  const image = (curImgFile && imgChanged) ? await epersistImage() : (old ? old.image : null);
+  if (!image){ toast('图片入库失败，未保存'); return; }
+  // 带 · 的词自动补第一段粗词/父地图：子区→父地图、江湖百态子标签→「江湖百态」、主线阶段词→「主线」
+  const finalTags = [...tagSel];
+  for (const t of finalTags){
+    if (t.includes('·')){
+      const head = t.split('·')[0];
+      if (FIXED_TAGS.has(head)) finalTags.push(head);
+    }
+  }
+  const rec = {
+    id: curId || nextId(),
+    name,
+    image,
+    wearing: wearing.slice(),
+    tags: [...new Set(finalTags)],
+    palette: palette.slice(),
+    hues: hueSel ? [...hueSel].sort((a,b) => HUE_ORDER.indexOf(a)-HUE_ORDER.indexOf(b)) : undefined,
+    dyeCode: document.getElementById('ef-dyecode').value.trim(),
+    outfitCode: document.getElementById('ef-outfitcode').value.trim(),
+    note: document.getElementById('ef-note').value.trim(),
+    w: curImgW || (old ? old.w : null) || null,
+    h: curImgH || (old ? old.h : null) || null,
+    ctime: old ? old.ctime : today()
+  };
+  if (old){
+    const i = outfits.findIndex(o => o.id === curId);
+    if (i >= 0) outfits[i] = rec;
+  } else {
+    outfits.push(rec);
+  }
+  await writeStyleFile();
+  clearTierCache();   // 穿搭数据已变，利用率分层缓存失效
+  closeEdit(); render();
+  toast('已保存：' + rec.name);
+}
+async function edeleteOutfit(){
+  if (!curId) return;
+  const o = outfits.find(x => x.id === curId);
+  if (!o) return;
+  if (!confirm('删除「' + o.name + '」？（图片文件保留不删）')) return;
+  outfits.splice(outfits.indexOf(o), 1);
+  await writeStyleFile();
+  clearTierCache();
+  closeEdit(); render();
+  toast('已删除：' + o.name);
+}
+
+// ---- 卡片点击分流 ----
+function onCardClick(id){
+  try{
+    if (EDIT_MODE) openEdit(id);
+    else openLb(id);
+  }catch(err){
+    toast('点击处理失败：' + err.message);
+  }
+}
+
+// ============ 启动 ============
+updateEditUI();
+render();
+</script>
+</body>
+</html>

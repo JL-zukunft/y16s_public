@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>燕云外观图鉴</title>
+<script src="yysls-db/yysls-data.js"></script>
+<script src="yysls-db/yysls-mine.js" onerror="window.__noMine=1"></script>
+<script src="yysls-style.js" onerror="window.__noStyle=1"></script>
+<script src="yysls-usage.js"></script>
+<style>
+/* ============ 主题变量 ============ */
+:root{
+  --paper:#F6F2EA;
+  --card:#FFFFFF;
+  --ink:#3A3028;
+  --ink-soft:#6E6356;
+  --mute:#A79C8D;
+  --line:#E9E1D4;
+  --gold:#B97F33;
+  --gold-light:#C4883C;
+  --gold-2:#D4A746;
+  --gold-bg:#FFF7E8;
+  --teal:#3B9B8F;
+  --red:#CC4444;
+  --radius:14px;
+  --shadow-sm:0 1px 3px rgba(60,45,20,.05);
+  --shadow-md:0 6px 20px rgba(60,45,20,.10);
+  --shadow-gold:0 10px 28px rgba(185,127,51,.20);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  padding:0 14px 48px;
+  max-width:1120px;
+  margin:0 auto;
+  background-color:var(--paper);
+  background-image:
+    radial-gradient(1100px 480px at 88% -8%, rgba(196,136,60,.09), transparent 60%),
+    radial-gradient(900px 400px at -5% 0%, rgba(59,155,143,.07), transparent 55%);
+  color:var(--ink);
+  font-family:'PingFang SC','HarmonyOS Sans SC','Microsoft YaHei','Noto Sans CJK SC',sans-serif;
+  font-size:14px;
+  line-height:1.5;
+}
+::selection{background:rgba(196,136,60,.25);}
+a{color:var(--gold);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* ============ 头部 ============ */
+.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:28px 4px 16px;position:relative;}
+.hero::after{content:'';position:absolute;left:4px;right:4px;bottom:0;height:1px;background:linear-gradient(90deg,var(--gold),rgba(185,127,51,.15) 55%,transparent);}
+.eyebrow{font-size:11px;color:var(--mute);letter-spacing:.3em;margin-bottom:6px;}
+h1{display:flex;align-items:center;gap:12px;margin:0;font-size:28px;color:var(--ink);font-family:Georgia,'Noto Serif SC','Songti SC','SimSun',serif;font-weight:700;letter-spacing:.02em;animation:heroIn .5s both;}
+@keyframes heroIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+h1 .seal{
+  flex:none;font-size:13px;line-height:1.15;color:#FDF3E0;font-weight:600;
+  background:linear-gradient(135deg,#B23A2F,#8E2E25);
+  border-radius:6px;padding:8px 5px;writing-mode:vertical-rl;letter-spacing:.18em;
+  transform:rotate(-6deg);box-shadow:0 3px 8px rgba(178,58,47,.35);font-family:'PingFang SC','Microsoft YaHei',sans-serif;
+}
+.sub{margin:8px 0 0;color:var(--mute);font-size:12px;}
+.sub a{font-weight:600;}
+.hero-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;animation:heroIn .5s .1s both;}
+#stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+.stat-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--card);border:1px solid var(--line);border-radius:999px;
+  padding:6px 14px;font-size:12px;color:var(--ink-soft);box-shadow:var(--shadow-sm);
+}
+.stat-chip b{color:var(--teal);font-size:15px;font-weight:700;}
+.stat-chip{cursor:pointer;user-select:none;transition:border-color .15s,color .15s,background .15s;}
+.stat-chip:hover{border-color:var(--teal);}
+.stat-chip.on{border-color:var(--teal);color:var(--teal);background:rgba(63,185,180,.08);}
+.stat-chip.stat-warn.on{border-color:#E2A64A;color:#C78A2C;background:rgba(226,166,74,.1);}
+#data-time{font-size:11px;color:var(--mute);}
+
+/* ============ 工具栏 ============ */
+.bar{
+  position:sticky;top:10px;z-index:60;
+  display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:12px 14px;margin-top:16px;box-shadow:var(--shadow-md);
+}
+.tabs{display:flex;gap:4px;background:#F3EDE1;padding:4px;border-radius:999px;}
+.tab-btn{
+  background:transparent;border:none;border-radius:999px;padding:6px 16px;cursor:pointer;
+  color:var(--ink-soft);font-weight:500;font-size:13px;transition:all .18s;
+}
+.tab-btn:hover{color:var(--gold);}
+.tab-btn.active{
+  background:linear-gradient(135deg,var(--gold-light),var(--gold-2));color:#fff;font-weight:600;
+  box-shadow:0 3px 10px rgba(196,136,60,.35);
+}
+.tab-btn em{font-style:normal;font-size:10px;background:rgba(58,48,40,.08);border-radius:999px;padding:1px 6px;margin-left:4px;transition:all .18s;}
+.tab-btn.active em{background:rgba(255,255,255,.28);color:#fff;}
+.f-sep{width:1px;height:32px;background:var(--line);flex:none;}
+.bar-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;width:100%;}
+.bar-row+.bar-row{margin-top:9px;padding-top:10px;border-top:1px solid var(--line);}
+/* 筛选控件视觉统一：定宽下拉 + 标签弱化 + 搜索加宽 */
+.bar .f-group select{width:128px;}
+#f-origin{width:138px;}
+#f-tier,#f-sort{width:158px;}
+.more-filters{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;flex:1;min-width:200px;}
+.chip-filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center;min-height:34px;}
+.f-group{display:flex;flex-direction:column;gap:4px;}
+.f-group>span{font-size:10px;color:var(--mute);letter-spacing:.08em;padding-left:2px;user-select:none;}
+select,input[type=text],input[type=number],input[type=date],textarea{
+  background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:7px 28px 7px 11px;
+  font-size:13px;color:var(--ink);font-family:inherit;transition:border-color .15s,box-shadow .15s;
+}
+select{
+  appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A79C8D' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
+  background-repeat:no-repeat;background-position:right 10px center;
+}
+select:hover{border-color:#D8CDBB;}
+select:focus,input:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(196,136,60,.14);outline:none;}
+.bar .f-search{flex:1;max-width:480px;min-width:200px;}
+.f-search input{
+  width:100%;padding-left:32px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%23B5A995' stroke-width='2' stroke-linecap='round'><circle cx='11' cy='11' r='7'/><path d='m21 21-4.3-4.3'/></svg>");
+  background-repeat:no-repeat;background-position:left 11px center;
+}
+input::placeholder{color:#C4B9A6;}
+button{
+  background:linear-gradient(135deg,var(--gold-light),var(--gold-2));color:#fff;font-weight:600;
+  border:none;border-radius:9px;padding:8px 18px;cursor:pointer;font-size:13px;font-family:inherit;
+  box-shadow:0 3px 10px rgba(196,136,60,.25);transition:transform .15s,box-shadow .15s,filter .15s;
+}
+button:hover{filter:brightness(1.06);transform:translateY(-1px);box-shadow:0 5px 16px rgba(196,136,60,.38);}
+button:active{transform:translateY(0);}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+button.ghost{background:#fff;border:1.5px solid var(--line);color:var(--gold);box-shadow:none;}
+button.ghost:hover{background:var(--gold-bg);border-color:var(--gold);transform:none;box-shadow:none;filter:none;}
+button.ghost.on{background:var(--gold-bg);border-color:var(--gold);font-weight:700;}
+/* 第一行按钮与输入框同高对齐（f-group 内直排按钮） */
+.f-group>button{width:100%;padding:7px 16px;font-size:13px;border-radius:9px;height:37px;}
+/* 衣柜统计条：与「我的衣柜」按钮同处第一行，无边框纯数据行。数据优先——大数字在前、小标签在后；
+   计数靠左，指标组经竖线分隔后靠右。默认隐藏，衣柜视图下显示 */
+.w-stats-bar{
+  display:none;flex:1;min-width:0;align-items:baseline;gap:16px;flex-wrap:wrap;
+  background:none;border:none;border-radius:0;
+  padding:4px 6px;margin-left:10px;
+}
+.w-stats-bar.on{display:flex;}
+.wstat{
+  display:inline-flex;align-items:baseline;gap:7px;background:none;border:none;padding:0;
+  cursor:default;user-select:none;white-space:nowrap;
+}
+.wstat b{font-size:24px;font-weight:700;color:var(--teal);line-height:1;}
+.wstat .wl{font-size:11px;color:var(--mute);}
+.w-vsep{width:1px;height:26px;background:var(--line);flex:none;margin-left:auto;}
+.wstat.metric{cursor:help;}
+.wstat.metric b{
+  color:var(--gold);font-size:27px;
+  text-decoration:underline dotted rgba(185,127,51,.5);text-underline-offset:4px;
+}
+.wstat.metric:hover b{text-decoration-color:var(--gold);}
+.wstat.metric .wl{color:var(--ink-soft);}
+/* 指标公式说明弹窗 */
+.metric-formula{
+  background:var(--gold-bg);border:1px solid rgba(185,127,51,.35);border-radius:9px;
+  padding:10px 14px;font-size:13.5px;color:var(--ink);text-align:center;margin-bottom:4px;
+}
+.metric-calc{text-align:center;font-size:14px;margin:6px 0 12px;color:var(--ink-soft);}
+.metric-calc b{color:var(--gold);font-size:22px;margin:0 4px;}
+
+/* ============ 卡片画廊（瀑布流拼图） ============ */
+/* --u = 竖卡宽；宽卡 = 2×--u（16:9），两张竖卡并排 = 一张宽卡宽，行内互锁。
+   桌面容器 1092px 时 --u=172 → 每行恰好 6 单元，行尾满格零锯齿；窄屏自动降单元数。
+   行高随行内「是否含竖卡」自然起伏（纯宽卡行矮 / 含竖卡行高），形成错落。 */
+.grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;align-items:flex-start;justify-content:center;--u:clamp(110px,15vw,172px);}
+.card{
+  position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:9px;cursor:pointer;display:flex;flex-direction:column;width:var(--u);
+  box-shadow:var(--shadow-sm);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+  animation:cardIn .4s both;
+}
+.card.wide{width:calc(var(--u)*2);}
+@keyframes cardIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+.card:hover{border-color:rgba(196,136,60,.55);transform:translateY(-3px);box-shadow:var(--shadow-gold);}
+.card:active{transform:scale(.98);}
+.thumb{
+  position:relative;aspect-ratio:9/16;overflow:hidden;border-radius:9px;
+  background:linear-gradient(135deg,#F0EAE0,#E7DECE);
+}
+.card.wide .thumb{aspect-ratio:16/9;}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.22,.65,.3,1);}
+.card:hover .thumb img{transform:scale(1.07);}
+.thumb:empty::after{content:'🎐';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px;opacity:.4;}
+.cinfo{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:3px;padding:2px 2px 2px 0;}
+.cname{font-weight:600;color:var(--ink);font-size:13px;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ctype{font-size:10px;color:var(--mute);background:#F0EBE1;border-radius:4px;padding:1px 6px;margin-left:5px;}
+.cprice{font-size:12px;color:var(--gold);font-weight:600;margin-top:3px;}
+.cprice s{color:#BFB5A4;margin-left:3px;font-size:10px;font-weight:400;}
+.badge{font-size:9px;border-radius:5px;padding:1px 6px;margin-left:4px;font-weight:600;vertical-align:1px;}
+.b-disc{background:#FDECEC;color:#CC4444;}
+.b-off{background:#F0EBE1;color:var(--mute);}
+.b-l1{background:#F0EBE1;color:var(--mute);font-weight:normal;}
+.b-soon{background:#FDF3E0;color:#C4883C;}
+.b-disc-end{background:#FDECEC;color:#CC4444;font-weight:700;}
+.b-perm{background:#EFF3F0;color:#4A7C68;}
+.b-event{background:#FDF3E0;color:#C4883C;}
+.b-bp{background:#EAF2EE;color:#3B9B8F;}
+.c-tags{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;}
+.ctag{font-size:9.5px;color:var(--mute);background:#F5F1E9;border-radius:4px;padding:1px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+.free-hint{margin-top:8px;padding:8px 12px;font-size:12px;color:#8B6A3C;background:var(--gold-bg);border:1px dashed rgba(185,127,51,.4);border-radius:9px;}
+.corner{
+  position:absolute;top:7px;right:7px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px;
+  box-shadow:0 2px 8px rgba(0,0,0,.18);backdrop-filter:blur(4px);
+}
+.c-miss{background:#E8A23D;color:#fff;cursor:help;right:auto;left:7px;}
+.c-act{background:linear-gradient(135deg,#D9534F,#B23A30);color:#fff;}
+.c-rerun{background:linear-gradient(135deg,#8E5BC0,#6F3FA0);color:#fff;}
+.stat-warn{border-color:#E8A23D;cursor:pointer;}
+.stat-warn b{color:#E8A23D;}
+.empty{width:100%;padding:70px 20px;text-align:center;color:var(--mute);font-size:14px;}
+.empty .big{display:block;font-size:42px;margin-bottom:12px;opacity:.8;}
+
+/* ============ 弹窗 ============ */
+.modal-bg{
+  display:none;position:fixed;inset:0;background:rgba(43,35,25,.5);
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  z-index:999;align-items:center;justify-content:center;padding:16px;
+}
+.modal-bg.show{display:flex;animation:fadeIn .2s both;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.modal{
+  position:relative;background:#FDFBF7;border-radius:18px;padding:18px 28px 20px;   /* 左右外距放宽：信息与图片向中间靠拢 */
+  max-width:860px;width:100%;max-height:90vh;overflow-y:auto;
+  box-shadow:0 24px 64px rgba(0,0,0,.28);animation:popIn .28s cubic-bezier(.2,.9,.3,1.15) both;
+}
+@keyframes popIn{from{opacity:0;transform:scale(.94) translateY(12px);}to{opacity:1;transform:none;}}
+.modal::-webkit-scrollbar{width:8px;}
+.modal::-webkit-scrollbar-thumb{background:#DDD2BF;border-radius:99px;}
+.modal::-webkit-scrollbar-track{background:transparent;}
+.m-close{
+  position:sticky;top:10px;float:right;z-index:5;margin:0 0 8px 10px;
+  width:30px;height:30px;border-radius:999px;background:#fff;border:1px solid var(--line);
+  color:var(--ink-soft);cursor:pointer;font-size:13px;line-height:1;padding:0;
+  display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm);
+  transition:all .15s;
+}
+.m-close:hover{background:var(--red);border-color:var(--red);color:#fff;transform:none;filter:none;box-shadow:0 3px 10px rgba(204,68,68,.35);}
+.m-body{display:flex;gap:12px;clear:both;}   /* 图与信息间距收紧 */
+.m-left{flex:0 0 44%;min-width:0;}   /* 44% ≈ 竖图高度上限下的自然宽度，图片填满列不留侧隙 */
+.m-right{flex:1;min-width:0;display:flex;flex-direction:column;}
+/* 横图（16:9 等宽>高）改上下构图：图片在上，下方名称+记录/信息双栏。
+   图片宽度驱动（100% 内容宽 → 高度 = 宽/比例），与下方信息左右边缘直接对齐；
+   46vh 仅作矮屏兜底，不破形不滚动。 */
+.m-body.col{flex-direction:column;gap:12px;}
+.m-body.col .m-left{flex:none;width:100%;}
+.m-body.col .m-imgwrap{max-height:46vh;max-width:calc(46vh*var(--m-ar,.5625));}
+.m-body.col .m-name{margin-top:0;}
+.m-wide-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin-top:2px;}
+.m-wide-grid .m-rec{margin-top:0;}
+.m-wide-grid .m-info{margin-top:0;}
+/* 图片框：按 meta 实际横竖比例自适应（--m-ar = 宽/高），不再固定框高留白 */
+.m-imgwrap{
+  aspect-ratio:var(--m-ar,.5625);
+  max-height:62vh;max-width:calc(62vh*var(--m-ar,.5625));
+  width:100%;margin:0 auto;border-radius:12px;overflow:hidden;
+  background:linear-gradient(135deg,#F2ECDF,#E7DECC);display:flex;align-items:center;justify-content:center;
+}
+.m-imgwrap img{width:100%;height:100%;object-fit:contain;display:block;}   /* 详情 + 编辑弹窗图片统一 contain，原始尺寸不再溢出被裁 */
+.m-strip{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.m-strip img{width:52px;height:52px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:border-color .15s,transform .15s;}
+.m-strip img:hover{transform:translateY(-2px);}
+.m-strip img.sel{border-color:var(--gold);}
+.m-name{font-size:24px;font-weight:700;color:var(--ink);margin:2px 0 0;display:flex;align-items:center;flex-wrap:wrap;gap:6px;}
+.m-poem{
+  margin:10px 0 4px;padding:0;text-align:left;font-style:italic;
+  font-family:Georgia,'KaiTi','Songti SC','SimSun',serif;font-size:14px;color:#8B5E3C;
+}
+/* 信息行弱化：重点留给名称/图片/评论 */
+.m-info{display:flex;flex-direction:column;margin-top:6px;opacity:.88;}
+.m-info .row{display:flex;gap:10px;padding:5px 2px;border-bottom:1px dashed var(--line);font-size:12.5px;color:var(--ink-soft);line-height:1.6;}
+.m-info .row:last-child{border-bottom:none;}
+.m-info .row>span:last-child{flex:1;min-width:0;}
+.m-info .k{color:var(--mute);font-size:11px;flex:0 0 48px;padding-top:1px;user-select:none;}
+/* 我的记录：重点区块，金色强调 */
+.m-rec{
+  background:var(--gold-bg);border:1px solid rgba(185,127,51,.28);border-radius:12px;
+  padding:13px 15px 15px;margin-top:12px;
+}
+.m-rec h3{font-size:14px;color:var(--ink);margin:0;}
+.m-rec-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.m-rec-head h3{flex:1;}
+.rec-pill{display:inline-flex;align-items:center;font-size:12px;font-weight:600;padding:3px 12px;border-radius:999px;border:1.5px solid var(--line);color:var(--mute);background:#fff;white-space:nowrap;}
+.rec-pill.on{background:var(--teal);border-color:var(--teal);color:#fff;}
+.rec-pill.free{background:#4A90D9;border-color:#4A90D9;color:#fff;}
+.m-rec-edit{padding:4px 12px;font-size:12px;height:auto;border-radius:999px;}
+.e-listing{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;color:var(--ink-soft);background:var(--gold-bg);border:1px solid rgba(185,127,51,.28);border-radius:999px;padding:4px 12px;}
+.e-listing-del{cursor:pointer;color:var(--red);font-style:normal;padding:0 2px;}
+.e-listing-del:hover{font-weight:700;}
+.m-rec .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px;}
+.m-rec textarea{
+  width:100%;min-height:64px;margin-bottom:8px;resize:vertical;
+  background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:8px 11px;
+}
+.rec-comment{
+  margin-top:8px;font-size:13px;line-height:1.8;color:#5A4A3A;white-space:pre-wrap;
+  border-left:3px solid rgba(185,127,51,.45);padding:2px 0 2px 12px;
+}
+
+/* ============ 穿搭利用率（三档徽标 + 详情区块 + 衣柜视图） ============ */
+.u-tier{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:2px 10px;border-radius:999px;white-space:nowrap;border:1.5px solid transparent;}
+.u-tier.t-best{background:linear-gradient(135deg,var(--gold-light),var(--gold-2));color:#fff;box-shadow:0 2px 6px rgba(196,136,60,.3);}
+.u-tier.t-good{background:rgba(63,185,180,.12);border-color:var(--teal);color:var(--teal);}
+.u-tier.t-boxed{background:#F0ECE4;border-color:var(--line);color:var(--mute);}
+.m-usage{
+  background:#F7FAF8;border:1px solid rgba(59,155,143,.25);border-radius:12px;
+  padding:11px 15px 12px;margin-top:10px;
+}
+.m-usage-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.m-usage-head h3{font-size:13px;color:var(--ink);margin:0;flex:1;}
+.m-usage-decomp{margin-top:6px;font-size:12px;color:var(--ink-soft);line-height:1.7;}
+/* 衣柜视图：紧凑网格（分组标题 + 卡片流，避免长列表） */
+.w-group-title{
+  width:100%;margin:12px 0 2px;display:flex;align-items:center;gap:10px;
+  font-size:13px;font-weight:600;color:var(--ink);letter-spacing:.06em;
+}
+.w-group-title::after{content:'';flex:1;height:1px;background:var(--line);}
+.w-grid{width:100%;display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:10px;margin-top:8px;}
+.w-card{
+  background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;
+  box-shadow:var(--shadow-sm);transition:transform .15s,box-shadow .15s,border-color .15s;
+  display:flex;flex-direction:column;animation:cardIn .35s both;
+}
+.w-card:hover{border-color:rgba(196,136,60,.55);transform:translateY(-3px);box-shadow:var(--shadow-gold);}
+.w-thumb{position:relative;aspect-ratio:3/4;overflow:hidden;background:linear-gradient(135deg,#F0EAE0,#E7DECE);}
+.w-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;}
+.w-card:hover .w-thumb img{transform:scale(1.06);}
+.w-cost-badge{
+  position:absolute;top:6px;left:6px;background:rgba(255,255,255,.93);color:var(--ink-soft);
+  font-size:10px;font-weight:600;padding:1px 8px;border-radius:999px;box-shadow:0 1px 4px rgba(0,0,0,.15);
+}
+.w-cost-badge b{color:var(--gold);}
+.w-cinfo{padding:7px 9px 8px;}
+.w-cname{font-size:12.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.w-empty{padding:40px 10px;color:var(--mute);font-size:13px;text-align:center;}
+/* 衣柜视图切换：三档分层 / 性价比榜 */
+.w-viewbar{width:100%;display:flex;gap:8px;margin-top:10px;}
+.w-viewbar .vchip{
+  background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:5px 14px;
+  font-size:12px;color:var(--ink-soft);cursor:pointer;user-select:none;transition:all .15s;
+}
+.w-viewbar .vchip:hover{border-color:var(--gold);color:var(--gold);}
+.w-viewbar .vchip.on{
+  background:linear-gradient(135deg,var(--gold-light),var(--gold-2));color:#fff;border-color:transparent;
+  font-weight:600;box-shadow:0 2px 8px rgba(196,136,60,.3);
+}
+/* 性价比榜行 */
+.v-row{
+  width:100%;display:flex;align-items:center;gap:12px;background:var(--card);
+  border:1px solid var(--line);border-radius:12px;padding:7px 14px 7px 8px;cursor:pointer;
+  box-shadow:var(--shadow-sm);transition:transform .15s,box-shadow .15s,border-color .15s;
+}
+.v-row:hover{border-color:rgba(196,136,60,.55);transform:translateY(-2px);box-shadow:var(--shadow-md);}
+.v-rank{
+  flex:none;width:26px;text-align:center;font-size:13px;font-weight:700;color:var(--mute);
+  font-family:Georgia,serif;
+}
+.v-rank.r1{color:#D4A017;font-size:16px;}
+.v-rank.r2{color:#9AA5B1;font-size:15px;}
+.v-rank.r3{color:#B87333;font-size:15px;}
+.v-row img{width:40px;height:53px;object-fit:cover;border-radius:7px;background:linear-gradient(135deg,#F0EAE0,#E7DECE);flex:none;}
+.v-info{flex:1;min-width:0;}
+.v-name{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.v-sub{font-size:11px;color:var(--mute);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.v-idx{flex:none;text-align:right;}
+.v-idx b{font-size:20px;font-weight:700;color:var(--gold);}
+.v-idx .vl{display:block;font-size:10px;color:var(--mute);}
+
+/* ============ 卡片编辑按钮（owner 模式） ============ */
+.card-edit{
+  position:absolute;top:7px;left:7px;z-index:3;width:26px;height:26px;border-radius:999px;
+  border:none;background:rgba(255,255,255,.92);color:var(--gold);font-size:13px;cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.18);opacity:0;transition:opacity .15s,transform .15s;
+  display:flex;align-items:center;justify-content:center;padding:0;line-height:1;
+}
+.card:hover .card-edit{opacity:1;}
+.card-edit:hover{transform:scale(1.12);color:var(--gold-2);}
+
+/* ============ 编辑弹层（所见即所得，紧凑免滚动） ============ */
+#edit-modal{padding:14px 18px 16px;max-width:960px;}
+.e-title{font-size:15px;font-weight:700;color:#6B4A2B;margin:0 0 12px;}
+#edit-modal .m-body{gap:16px;}
+#edit-modal .m-left{flex:0 0 34%;}
+#edit-modal .e-grid{grid-template-columns:1fr 1fr;}
+#edit-modal .m-imgwrap{max-height:50vh;max-width:calc(50vh*var(--m-ar,.5625));}
+.e-imgwrap{margin-bottom:8px;}
+.e-empty{color:var(--mute);font-size:13px;}
+.e-file{
+  display:flex;align-items:center;justify-content:center;gap:5px;width:100%;
+  background:#fff;border:1.5px dashed #D8CBB8;color:var(--gold);border-radius:9px;
+  padding:8px 12px;cursor:pointer;font-size:12.5px;transition:background .15s,border-color .15s;
+}
+.e-file:hover{background:var(--gold-bg);border-color:var(--gold);}
+.e-file input{display:none;}
+.e-hint{font-size:10.5px;color:var(--mute);margin:6px 2px 0;line-height:1.4;}
+/* 右侧双列紧凑网格 */
+.e-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;}
+.e-grid .full{grid-column:1/-1;}
+.e-row{display:flex;align-items:center;gap:8px;min-width:0;}
+.e-row>span:first-child{flex:0 0 44px;font-size:11px;color:var(--mute);letter-spacing:.04em;user-select:none;text-align:right;}
+.e-row input,.e-row select,.e-row textarea{
+  flex:1;min-width:0;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:8px;
+  padding:6px 9px;font-size:12.5px;color:var(--ink);font-family:inherit;transition:border-color .15s,box-shadow .15s;
+}
+.e-row textarea{min-height:44px;resize:none;line-height:1.55;}
+.e-row input:focus,.e-row select:focus,.e-row textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(196,136,60,.12);outline:none;}
+#edit-modal input[readonly]{background:#F5F0E6;color:#8B6A45;}
+/* 时间三列紧凑布局 */
+.e-time-grid{flex:1;display:grid;grid-template-columns:1fr 84px 1fr;gap:8px;}
+.e-tg{display:flex;flex-direction:column;gap:3px;min-width:0;}
+.e-tg i{font-style:normal;font-size:10px;color:var(--mute);white-space:nowrap;}
+.e-tg input{width:100%;padding:6px 8px;}
+.e-inline{display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex:1;min-width:0;}
+.e-pw{flex:1 1 100%;display:flex;flex-direction:column;gap:5px;}   /* 价格区两行：现价/原价 + 折扣/截止 */
+.e-inline input[type=number],.e-inline input[type=date]{width:86px;flex:none;padding:6px 8px;}
+.e-inline input[type=date]{width:108px;}
+.e-inline select{width:auto;flex:none;}
+.e-pill{
+  display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border:1.5px solid var(--line);
+  border-radius:999px;cursor:pointer;font-size:12px;color:var(--ink-soft);background:#fff;
+  user-select:none;transition:all .15s;
+}
+.e-pill input{display:none;}
+.e-pill.on,.e-pill:has(input:checked){border-color:var(--gold);background:var(--gold-bg);color:var(--gold);font-weight:600;box-shadow:0 2px 8px rgba(185,127,51,.15);}
+.e-check{
+  display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border:1.5px solid var(--line);
+  border-radius:999px;cursor:pointer;font-size:12px;color:var(--ink-soft);background:#fff;user-select:none;transition:all .15s;
+}
+.e-check input{accent-color:var(--gold);margin:0;}
+.e-check:has(input:checked){border-color:var(--gold);background:var(--gold-bg);color:var(--gold);font-weight:600;}
+#edit-modal .m-rec{padding:10px 13px 11px;margin-top:10px;}
+#edit-modal .m-rec h3{font-size:13px;margin-bottom:7px;}
+#edit-modal .m-rec textarea{min-height:44px;resize:none;margin-bottom:0;}
+.e-rads{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:7px;}
+.e-rads .rad input{display:none;}
+.e-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);}
+.e-actions .ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink-soft);}
+.e-actions .ghost:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-bg);}
+.e-actions .e-del{color:var(--red);border-color:#E8C9C2;}
+.e-actions .e-del:hover{border-color:var(--red);color:var(--red);background:#FDECEC;}
+.rad{
+  display:inline-flex;align-items:center;gap:4px;padding:5px 13px;
+  border:1.5px solid var(--line);border-radius:999px;cursor:pointer;font-size:12px;
+  color:var(--ink-soft);background:#fff;transition:all .15s;user-select:none;
+}
+.rad:hover{border-color:var(--gold);color:var(--gold);}
+.rad.on,.rad:has(input:checked){border-color:var(--gold);background:var(--gold-bg);color:var(--gold);font-weight:600;box-shadow:0 2px 8px rgba(185,127,51,.15);}
+
+/* ============ Toast ============ */
+.toast{
+  position:fixed;top:14px;left:50%;transform:translateX(-50%);
+  background:var(--teal);color:#fff;padding:10px 20px;border-radius:10px;
+  display:none;z-index:1001;font-size:13px;max-width:90%;
+  box-shadow:0 10px 30px rgba(0,0,0,.22);animation:toastIn .3s cubic-bezier(.2,.9,.3,1.2);
+}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,-10px);}to{opacity:1;transform:translate(-50%,0);}}
+.toast.err{background:var(--red);}
+
+/* ============ 响应式 ============ */
+@media(max-width:760px){
+  h1{font-size:24px;}
+  .m-body{flex-direction:column;}
+  .m-body .m-left{flex:none;width:100%;}
+  .m-imgwrap{max-height:46vh;max-width:calc(46vh*var(--m-ar,.5625));}
+  .m-imgwrap img{max-height:46vh;}
+  .m-wide-grid{grid-template-columns:1fr;}
+  .hero-right{align-items:flex-start;}
+  #stats{justify-content:flex-start;}
+}
+@media(max-width:640px){
+  .bar{gap:8px;}
+  .f-sep{display:none;}
+  .tabs{width:100%;}
+  .tab-btn{flex:1;text-align:center;padding:6px 8px;}
+  .f-search{flex:1 1 100%;}
+  .f-search input{width:100%;}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-left">
+    <div class="eyebrow">燕云十六声 · 外观收藏档案</div>
+    <h1><span class="seal">图鉴</span>燕云外观图鉴</h1>
+    <p class="sub">默认只看套装 · 双击即用，只读浏览 · 数据源 yysls-db · <a href="index.html">🧮 计算器</a> · <a href="index-style.html">👗 穿搭库</a> · <a href="capture/index.html" id="cap-link">🎣 采集录入</a></p>
+  </div>
+  <div class="hero-right">
+    <div class="stats" id="stats"></div>
+    <span id="data-time"></span>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="bar-row" id="bar1">
+    <label class="f-group" id="grp-wardrobe"><span>衣柜</span>
+      <button class="ghost" id="btn-wardrobe" onclick="toggleWardrobe()">🧺 我的衣柜</button>
+    </label>
+    <div class="w-stats-bar" id="wardrobe-stats-bar"></div>
+    <button class="ghost" id="btn-conn" onclick="connect()" style="display:none;padding:6px 14px;font-size:12px">🔗 连接（记收藏）</button>
+    <button class="ghost" id="btn-new" onclick="openCreate()" style="display:none;padding:6px 14px;font-size:12px">＋ 新建外观</button>
+    <div class="f-sep"></div>
+    <label class="f-group f-search"><span>搜索</span>
+      <input type="text" id="f-search" placeholder="名称 / 俗名 / 系列 / 主题…" oninput="render()">
+    </label>
+  </div>
+  <div class="bar-row" id="bar2">
+    <div class="tabs" id="tabs"></div>
+    <div class="f-sep"></div>
+    <label class="f-group"><span>排序</span>
+      <select id="f-sort" onchange="render()">
+        <option value="time_desc">上架时间 · 新→旧</option>
+        <option value="time_asc">上架时间 · 旧→新</option>
+        <option value="price_desc">价格 · 高→低</option>
+        <option value="price_asc">价格 · 低→高</option>
+      </select>
+    </label>
+    <label class="f-group"><span>上架年份</span>
+      <select id="f-year" onchange="render()"><option value="all">全部年份</option></select>
+    </label>
+    <label class="f-group"><span>获取状态</span>
+      <select id="f-status" onchange="render()">
+        <option value="all">全部</option>
+        <option value="ever">常驻</option>
+        <option value="on">限时</option>
+        <option value="off">已下架</option>
+        <option value="extinct">绝版</option>
+        <option value="soon">即将上架</option>
+      </select>
+    </label>
+    <label class="f-group"><span>折扣/活动</span>
+      <select id="f-disc" onchange="render()">
+        <option value="all">全部</option>
+        <option value="on">折扣中</option>
+        <option value="active">活动进行中</option>
+        <option value="plain">常规</option>
+      </select>
+    </label>
+    <label class="f-group"><span>价格</span>
+      <select id="f-pay" onchange="onPayChange()">
+        <option value="all">全部</option>
+        <option value="paid">付费</option>
+        <option value="free">免费</option>
+      </select>
+    </label>
+    <label class="f-group"><span>来源</span>
+      <select id="f-origin" onchange="onOriginChange()"><option value="all">全部来源</option></select>
+    </label>
+    <label class="f-group"><span>价格挡位</span>
+      <select id="f-tier" onchange="render()"><option value="all">全部价格</option></select>
+    </label>
+    <label class="f-group" id="f-weaponwrap" style="display:none"><span>武器类型</span><select id="f-weapon" onchange="render()"><option value="all">全部类型</option></select></label>
+    <label class="f-group" id="f-serieswrap"><span>套装品牌</span><select id="f-series" onchange="render()"><option value="all">全部系列</option></select></label>
+    <label class="f-group"><span>主题系列</span><select id="f-theme" onchange="render()"><option value="all">全部主题</option></select></label>
+    <label class="f-group" id="grp-usage"><span>穿搭利用率</span>
+      <select id="f-usage" onchange="render()">
+        <option value="all">全部</option>
+        <option value="百搭棒">💪 百搭棒</option>
+        <option value="可食">👌 可食</option>
+        <option value="压箱底">🧳 压箱底</option>
+      </select>
+    </label>
+    <div class="f-group"><span>属性</span>
+      <div class="chip-filters" id="f-feats">
+        <label class="e-check"><input type="checkbox" value="染色" onchange="render()">染色</label>
+        <label class="e-check"><input type="checkbox" value="裁造" onchange="render()">裁造</label>
+        <label class="e-check"><input type="checkbox" value="上下拆分" onchange="render()">上下拆分</label>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="grid" id="grid"></div>
+<div class="toast" id="toast"></div>
+
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+<div class="modal" id="modal"></div>
+</div>
+
+<div class="modal-bg" id="edit-bg" onclick="if(event.target===this)closeEdit()">
+<div class="modal" id="edit-modal"></div>
+</div>
+
+<script>
+// ============ 状态 ============
+let DB=window.YYSLS_DB;
+const OWNER=new URLSearchParams(location.search).get('owner')==='1';   // 本机管理模式：?owner=1 才显示连接/采集/编辑入口
+let tab='套装', curId=null, rootHandle=null, mine=window.YYSLS_MINE||{records:{}};
+let db=null, editCurId=null, editImgFile=null;   // db = FSA 读取的可写副本（owner 连接后）
+if(OWNER){document.getElementById('btn-conn').style.display='inline-block';document.getElementById('btn-new').style.display='inline-block';}
+else document.getElementById('cap-link').style.display='none';
+// 公开部署（无私有 mine 数据文件）：隐藏衣柜入口/利用率筛选/状态胶囊——评价仍公开显示
+const NO_MINE=!!window.__noMine;
+if(NO_MINE){
+  const _gw=document.getElementById('grp-wardrobe');if(_gw)_gw.style.display='none';
+  const _gu=document.getElementById('grp-usage');if(_gu)_gu.style.display='none';
+}
+function toast(msg,err){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(err?' err':'');t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',5000);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeEdit();}});
+
+// ============ 工具函数 ============
+function discountActive(it){return !!it.discount&&(!it.discountEndsAt||new Date(it.discountEndsAt).getTime()>=Date.now());}
+function effPrice(it){
+  if(!it.price)return null;
+  if(it.discount&&it.discountEndsAt&&new Date(it.discountEndsAt).getTime()<Date.now()&&it.regularPrice)return it.regularPrice;
+  return it.price;
+}
+function curName(id){return DB.currencies[id]?DB.currencies[id].name:id;}
+// 获取状态六态：绝版（extinct 点选）> 即将上架 > 已下架 > 常驻/限时
+const PERMANENT_ORIGINS=['商城直售','和鸣','战令','和鸣玉池','充值回馈','其它'];
+function itemStatus(it){
+  const now=Date.now();
+  const s=it.window.start?new Date(it.window.start).getTime():0;
+  const e=it.window.end?new Date(it.window.end).getTime():0;
+  if(it.extinct)return 'extinct';   // 绝版（录入/编辑时人工点选）
+  if(s&&s>now)return 'soon';        // 即将上架
+  if(e&&e<now)return 'off';         // 已下架
+  if(!e){
+    // 无下架时间：常驻语义来源 → 常驻；限时语义来源 → 按限时展示（end 缺失待补）
+    return PERMANENT_ORIGINS.includes(it.origin)?'ever':'on';
+  }
+  return 'on';                      // 窗口内 = 限时
+}
+// 首次上架时间：当前 window 与返场史 listings 中最早的 start（ISO 串字典序=时间序）；全无时间 → null（开服即有）
+function firstStart(it){
+  const ss=[it.window&&it.window.start,...(it.listings||[]).map(l=>l.window&&l.window.start)].filter(Boolean);
+  return ss.length?ss.sort()[0]:null;
+}
+// 活动进行中判定：活动类来源且处于窗口内（end 缺失视为进行中，由数据完整筛选兜底）
+const ACTIVITY_ORIGINS=['聆音','转盘','限时联动','节日限定','周年庆','地图纪念'];
+function activityActive(it){
+  if(!ACTIVITY_ORIGINS.includes(it.origin))return false;
+  const now=Date.now();
+  const s=it.window.start?new Date(it.window.start).getTime():0;
+  const e=it.window.end?new Date(it.window.end).getTime():0;
+  if(s&&s>now)return false;
+  if(e&&e<now)return false;
+  return true;
+}
+function discCountdown(it){
+  // 折扣倒计时：≤1天「今天截止」，≤7天「剩X天」
+  if(!discountActive(it)||!it.discountEndsAt)return null;
+  const ms=new Date(it.discountEndsAt).getTime()-Date.now();
+  if(ms<=0)return null;
+  const d=ms/86400000;
+  if(d<=1)return '今天截止';
+  if(d<=7)return '剩'+Math.ceil(d)+'天';
+  return null;
+}
+function srcLink(it){
+  if(it.source&&it.source.url)return it.source.url;
+  if(it.source&&it.source.articleId&&it.source.publishedAt){
+    const cat=it.source.kind==='update'?'update':'official';
+    return `https://www.yysls.cn/news/${cat}/${String(it.source.publishedAt).replace(/-/g,'')}/${it.source.articleId}.html`;
+  }
+  return null;
+}
+
+// ============ 个人记录 ============
+async function connect(){
+  if(!window.showDirectoryPicker){toast('请用 Edge/Chrome 打开',1);return;}
+  try{
+    rootHandle=await window.showDirectoryPicker({mode:'readwrite'});
+    const dh=await rootHandle.getDirectoryHandle('yysls-db');
+    try{
+      const fh=await dh.getFileHandle('yysls-db.json');
+      db=JSON.parse(await (await fh.getFile()).text());
+      DB=db;window.YYSLS_DB=db;   // 编辑直接改这份可写副本
+    }catch(e){db=null;toast('未读到 yysls-db.json，编辑不可用',1);}
+    try{
+      const fh=await dh.getFileHandle('yysls-mine.json');
+      mine=JSON.parse(await (await fh.getFile()).text());
+      mine.records=mine.records||{};
+    }catch(e){mine={records:{}};}
+    document.getElementById('btn-conn').textContent='🔗 已连接（可编辑）';
+    fillTabs();updateStats();render();
+    toast(db?'已连接，可编辑资料与记录':'已连接，收藏记录已载入');
+  }catch(e){if(e.name!=='AbortError')toast('连接失败: '+e.message,1);}
+}
+// ============ 视图 ============
+function setTab(t){
+  tab=t;
+  // 切换 tab 时重置该 tab 下不适用的筛选（隐藏筛选器的残留值会继续过滤、把列表滤空）
+  if(tab==='武器外观'){document.getElementById('f-series').value='all';document.querySelectorAll('#f-feats input:checked').forEach(c=>c.checked=false);}
+  else if(tab==='套装')document.getElementById('f-weapon').value='all';
+  syncWardrobeBtn();
+  render();
+}
+// 我的衣柜：独立视图 toggle（与类型 Tab 分离，入口在第一行），记住离开前的 Tab
+let wardrobePrevTab='套装';
+function toggleWardrobe(){
+  if(tab==='🧺 衣柜'){ tab=wardrobePrevTab; }
+  else{ wardrobePrevTab=tab; tab='🧺 衣柜'; }
+  syncWardrobeBtn();
+  render();
+}
+function syncWardrobeBtn(){
+  document.getElementById('btn-wardrobe').classList.toggle('on',tab==='🧺 衣柜');
+}
+function fillTabs(){
+  // Tab 按数据动态生成（发型已移除，有数据才显示对应 Tab）
+  const c={};
+  DB.items.forEach(it=>{c[it.type]=(c[it.type]||0)+1;});
+  const types=Object.keys(c).sort();
+  document.getElementById('tabs').innerHTML=types.map(t=>`<button class="tab-btn ${tab===t?'active':''}" onclick="setTab('${t}')">${t} <em>${c[t]}</em></button>`).join('')
+    +`<button class="tab-btn ${tab==='全部'?'active':''}" onclick="setTab('全部')">全部 <em>${DB.items.length}</em></button>`;
+  fillWeaponSel();
+  syncFilterVis();
+}
+// 与采集工具同源：来源 → 付费/免费 语义对齐（12 类，免费组在前与录入工具顺序一致）
+const ORIGINS_FREE=['和鸣玉池','其它'];
+const ORIGINS_PAID=['商城直售','战令','和鸣','聆音','转盘','节日限定','限时联动','地图纪念','周年庆','充值回馈'];
+// 与采集工具同源：武器类型（新增类型改这里，数据中未收录的旧值自动兜底进选项）
+const WEAPON_TYPES=['剑','枪','双刀','伞','绳镖','横刀','陌刀','弓','拳甲','扇','鼓'];
+const ORIGINS=[...ORIGINS_PAID,...ORIGINS_FREE];
+function originOf(it){
+  if(it.origin)return it.origin;   // 存量已全量迁移至 12 类新枚举
+  // 降级推导：channel → 来源（origin 为空时的保险路径，正常数据走不到这里）
+  const c=it.channel;
+  if(c==='zhanling')return '战令';
+  if(c==='heming'||c==='heming_wenyin')return '和鸣';
+  if(c==='lingyin_shop'||c==='lingyin_gacha')return '聆音';
+  if(c==='zhuanpan')return '转盘';
+  if(c==='heming_yuchi')return '和鸣玉池';
+  if(c==='free_exchange')return '其它';
+  if(c==='map_limit')return '地图纪念';
+  if(c==='jieri')return '节日限定';
+  if(c==='liandong')return '限时联动';
+  if(c==='zhounian')return '周年庆';
+  if(c==='recharge_gift')return '充值回馈';
+  if(c==='event_task'){
+    const txt=(it.note||'');
+    if(/节日|新春|七夕/.test(txt))return '节日限定';
+    return '其它';
+  }
+  if(c==='event_limited')return '其它';   // 旧渠道兜底
+  // 其余渠道均为商店直售类：按名称/备注关键词细分节日
+  const txt=(it.name+' '+(it.note||''));
+  if(/节日|七夕|新春|乞巧|庆典|纪念|限定/.test(txt))return '节日限定';
+  return '商城直售';
+}
+function payMode(it){
+  // 付费/免费判定：来源优先，价格/货币降级兜底（与采集工具语义一致）
+  const o=originOf(it);
+  if(ORIGINS_FREE.includes(o))return 'free';
+  if(ORIGINS_PAID.includes(o))return 'paid';
+  if(!it.price)return 'free';
+  return ['changming_zhu','rmb','bayinqiao','yinyu'].includes(it.price.currency)?'paid':'free';
+}
+function fillOrigin(){
+  // 来源选项随价格筛选联动：全部→免费组+付费组；付费→仅付费组；免费→仅免费组
+  const pay=document.getElementById('f-pay').value||'all';
+  let cur=document.getElementById('f-origin').value||'all';
+  const freeGroup=pay!=='paid';
+  const paidGroup=pay!=='free';
+  const freeOpts=freeGroup?ORIGINS_FREE:null;
+  const paidOpts=paidGroup?ORIGINS_PAID:null;
+  const allOpts=[...(freeOpts||[]),...(paidOpts||[])];
+  if(!allOpts.includes(cur))cur='all';   // 当前选择在新列表中不存在 → 重置
+  const opt=(o)=>`<option ${o===cur?'selected':''}>${o}</option>`;
+  document.getElementById('f-origin').innerHTML='<option value="all">全部来源</option>'
+    +(freeOpts?`<optgroup label="免费">${freeOpts.map(opt).join('')}</optgroup>`:'')
+    +(paidOpts?`<optgroup label="付费">${paidOpts.map(opt).join('')}</optgroup>`:'');
+}
+function onPayChange(){fillOrigin();fillThemeSel();render();}
+function onOriginChange(){fillThemeSel();render();}
+function fillSeriesSel(){
+  const cur=document.getElementById('f-series').value;
+  const count={};
+  DB.items.forEach(i=>{if(i.series)count[i.series]=(count[i.series]||0)+1;});
+  const sels=Object.keys(count).sort();
+  document.getElementById('f-series').innerHTML='<option value="all">全部</option>'
+    +sels.map(s=>`<option value="${esc(s)}" ${s===cur?'selected':''}>${esc(s)}（${count[s]}）</option>`).join('');
+}
+function fillYearSel(){
+  // 年份聚合：首次上架时间（window.start 与返场史 listings 取最早）的年份，降序；无时间条目归「开服即有」
+  const cur=document.getElementById('f-year').value||'all';
+  const years={};
+  DB.items.forEach(it=>{
+    const s=firstStart(it);
+    if(!s)return;
+    years[s.slice(0,4)]=(years[s.slice(0,4)]||0)+1;
+  });
+  const sels=Object.keys(years).sort((a,b)=>b.localeCompare(a));
+  document.getElementById('f-year').innerHTML='<option value="all">全部年份</option>'
+    +sels.map(y=>`<option value="${y}" ${y===cur?'selected':''}>${y}</option>`).join('')
+    +`<option value="none" ${cur==='none'?'selected':''}>开服即有</option>`;
+}
+function fillThemeSel(){
+  // 主题按类型呈现；来源联动：同主题系列同来源 → 选定来源后只显示该来源下的主题系列
+  let cur=document.getElementById('f-theme').value||'all';
+  const og=document.getElementById('f-origin').value||'all';
+  const base=tab==='全部'?DB.items:DB.items.filter(i=>i.type===tab);
+  const src=og==='all'?base:base.filter(i=>originOf(i)===og);
+  const sels=[...new Set(src.map(i=>i.themeSeries).filter(Boolean))].sort();
+  if(cur!=='all'&&!sels.includes(cur))cur='all';
+  document.getElementById('f-theme').innerHTML='<option value="all">全部主题</option>'+sels.map(s=>`<option ${s===cur?'selected':''}>${s}</option>`).join('');
+}
+// ===== 价格档位：数据驱动聚合 + 规格预设合并（与来源/Tab/价格联动） =====
+const CUR_ORDER=['changming_zhu','rmb','bayinqiao','yinyu'];
+const CUR_LABEL={changming_zhu:'珠',rmb:'元',bayinqiao:'八音窍',yinyu:'音玉'};
+// 规格预设档（官方已知档位；数据中出现新价格会自动聚合进档位，新官方档可手动补这里）
+const TIER_PRESETS={
+  '商城直售':{changming_zhu:[60,300,680,1280,2580]},
+  '限时联动':{changming_zhu:[60,300,680,1280,2580],rmb:[]},   // 联动双货币：长鸣珠直售 + 元（CDK/套餐类），元档无固定档位、数据驱动聚合
+  '节日限定':{changming_zhu:[60,300,680,1280,2580]},
+  '地图纪念':{changming_zhu:[60,300,680,1280,2580]},
+  '周年庆':{changming_zhu:[60,300,680,1280,2580]},
+  '战令':{rmb:[68,98]},
+};
+function buildTierGroups(pool,presets){
+  // 数据聚合：实际出现的价格（金额升序）；预设档并入同货币组
+  const agg={};
+  pool.forEach(it=>{const p=it.price;if(p&&p.amount!=null){(agg[p.currency]||(agg[p.currency]=new Set())).add(p.amount);}});
+  const groups=[];
+  for(const c of [...new Set([...CUR_ORDER,...Object.keys(agg)])]){
+    const s=new Set([...(presets[c]||[]),...(agg[c]||[])]);
+    if(!s.size)continue;
+    const label=CUR_LABEL[c]||curName(c);
+    groups.push([label,[...s].sort((a,b)=>a-b).map(a=>[c+'_'+a,a+' '+label])]);
+  }
+  return groups;
+}
+function fillTier(){
+  // 灰掉：价格=免费 或 付费+无价来源（聆音/转盘/充值回馈）；和鸣按 Tab 分列（套装→八音窍、武器→音玉）
+  const tierEl=document.getElementById('f-tier');
+  const pay=document.getElementById('f-pay').value||'all';
+  const og=document.getElementById('f-origin').value||'all';
+  let cur=tierEl.value||'all';
+  let disabled=false,groups=[];
+  const typePool=tab==='全部'?DB.items:DB.items.filter(i=>i.type===tab);
+  if(pay==='free')disabled=true;
+  else if(pay==='paid'&&['聆音','转盘','充值回馈'].includes(og))disabled=true;
+  else{
+    let pool=typePool;
+    if(pay==='paid')pool=pool.filter(i=>payMode(i)==='paid');
+    if(og==='和鸣'){
+      pool=pool.filter(i=>i.origin==='和鸣');
+      if(tab==='套装')pool=pool.filter(i=>i.type==='套装');
+      else if(tab==='武器外观')pool=pool.filter(i=>i.type==='武器外观');
+    }else if(og!=='all')pool=pool.filter(i=>i.origin===og);
+    let presets={};
+    if(og!=='all')presets=TIER_PRESETS[og]||{};
+    else Object.values(TIER_PRESETS).forEach(p=>Object.entries(p).forEach(([c,a])=>{(presets[c]||(presets[c]=[])).push(...a);}));
+    groups=buildTierGroups(pool,presets);
+  }
+  if(disabled){
+    tierEl.disabled=true;
+    tierEl.innerHTML='<option value="all">全部价格</option>';
+  }else{
+    tierEl.disabled=false;
+    const valid=['all',...groups.flatMap(g=>g[1].map(o=>o[0]))];
+    if(!valid.includes(cur))cur='all';
+    tierEl.innerHTML='<option value="all">全部价格</option>'
+      +groups.map(([l,opts])=>`<optgroup label="${l}">${opts.map(([v,t])=>`<option value="${v}" ${v===cur?'selected':''}>${t}</option>`).join('')}</optgroup>`).join('');
+  }
+}
+function fillWeaponSel(){
+  // 固定列表 + 数据中出现的旧值兜底（未来新增类型改 WEAPON_TYPES）
+  const cur=document.getElementById('f-weapon').value;
+  const extra=[...new Set(DB.items.map(i=>i.weapon).filter(Boolean))].filter(w=>!WEAPON_TYPES.includes(w));
+  document.getElementById('f-weapon').innerHTML='<option value="all">全部类型</option>'+[...WEAPON_TYPES,...extra].map(s=>`<option ${s===cur?'selected':''}>${s}</option>`).join('');
+}
+function syncFilterVis(){
+  // 武器外观不涉及品牌系列与特性；套装不涉及武器类型（与录入工具、编辑窗口一致）
+  // 衣柜视图：整个筛选行（含类型 Tab）隐藏、搜索隐藏（衣柜不参与搜索过滤），只留衣柜榜单与按钮旁统计
+  const isW=tab==='🧺 衣柜';
+  const showW=!isW&&(tab==='武器外观'||tab==='全部');
+  const showS=!isW&&(tab==='套装'||tab==='全部');
+  document.getElementById('bar2').style.display=isW?'none':'';
+  document.getElementById('wardrobe-stats-bar').classList.toggle('on',isW);
+  document.querySelector('#bar1 .f-search').style.display=isW?'none':'';
+  document.querySelector('#bar1 .f-sep').style.display=isW?'none':'';
+  document.getElementById('f-weaponwrap').style.display=showW?'':'none';
+  document.getElementById('f-serieswrap').style.display=showS?'':'none';
+  document.getElementById('f-feats').style.display=showS?'':'none';
+}
+function filteredItems(){
+  const st=document.getElementById('f-status').value||'all';
+  const pf=document.getElementById('f-pay').value||'all';
+  const og=document.getElementById('f-origin').value||'all';
+  const se=document.getElementById('f-series').value||'all';
+  const th=document.getElementById('f-theme').value||'all';
+  const yr=document.getElementById('f-year').value||'all';
+  const wt=document.getElementById('f-weapon').value||'all';
+  const disc=document.getElementById('f-disc').value||'all';
+  const tier=document.getElementById('f-tier').value||'all';
+  const fs=[...document.querySelectorAll('#f-feats input:checked')].map(c=>c.value);
+  const kw=document.getElementById('f-search').value.trim().toLowerCase();
+  let list=DB.items.slice();
+  if(tab!=='全部')list=list.filter(it=>it.type===tab);
+  if(st!=='all')list=list.filter(it=>itemStatus(it)===st);
+  if(pf!=='all')list=list.filter(it=>payMode(it)===pf);
+  if(og!=='all')list=list.filter(it=>originOf(it)===og);
+  if(se!=='all')list=list.filter(it=>it.series===se);
+  if(th!=='all')list=list.filter(it=>it.themeSeries===th);
+  if(wt!=='all')list=list.filter(it=>it.weapon===wt);
+  // 年份：按首次上架时间筛（返场年不计）；none=无时间（开服即有）
+  if(yr!=='all')list=list.filter(it=>{const s=firstStart(it);return yr==='none'?!s:!!s&&s.slice(0,4)===yr;});
+  if(fs.length)list=list.filter(it=>fs.every(f=>(it.features||[]).includes(f)));
+  if(disc==='on')list=list.filter(it=>discountActive(it));
+  if(disc==='active')list=list.filter(it=>activityActive(it));
+  if(disc==='plain')list=list.filter(it=>!discountActive(it)&&!activityActive(it));
+  if(tier!=='all'){
+    // 档位值格式 货币_金额（如 changming_zhu_680 / rmb_68 / bayinqiao_2 / yinyu_1）
+    const i=tier.lastIndexOf('_');
+    const c=tier.slice(0,i),amt=tier.slice(i+1);
+    list=list.filter(it=>{const p=effPrice(it);return p&&p.currency===c&&String(p.amount)===amt;});
+  }
+  if(missFilter)list=list.filter(it=>missingFlags(it).length>0);
+  if(limFilter)list=list.filter(it=>itemStatus(it)==='on');
+  // 利用率筛选隐含「已拥有」前提：未拥有条目不在分层表内，自动被排除
+  const uf=document.getElementById('f-usage').value||'all';
+  if(uf!=='all'){
+    const tMap=tierMap();
+    list=list.filter(it=>tMap.get(it.id)===uf);
+  }
+  if(kw){
+    // 检索范围收紧：名称/别名/品牌系列/主题系列/来源（不含备注与定场诗）；多关键词空格分隔 = 全部命中
+    const terms=kw.split(/\s+/).filter(Boolean).map(t=>t.toLowerCase());
+    list=list.filter(it=>{
+      const blob=[it.name,it.series,it.themeSeries,it.weapon,originOf(it),...(it.alias||[])].filter(Boolean).join(' ').toLowerCase();
+      return terms.every(t=>blob.includes(t));
+    });
+  }
+  // 排序：上架时间 / 价格 × 升序 / 降序。无价格条目（免费/抽卡）无论升降一律排最后；同值按 id 稳定
+  const [sk,sd]=(document.getElementById('f-sort').value||'time_desc').split('_');
+  list.sort((a,b)=>{
+    let va,vb;
+    if(sk==='price'){
+      const pa=effPrice(a),pb=effPrice(b);
+      va=pa?pa.amount:(sd==='asc'?Infinity:-Infinity);
+      vb=pb?pb.amount:(sd==='asc'?Infinity:-Infinity);
+    }else{
+      va=a.window.start?new Date(a.window.start).getTime():0;
+      vb=b.window.start?new Date(b.window.start).getTime():0;
+    }
+    return (sd==='asc'?va-vb:vb-va)||String(a.id).localeCompare(String(b.id));
+  });
+  return list;
+}
+function ownStatus(it){
+  const r=mine.records&&mine.records[it.id];
+  return r&&r.status==='owned'?'owned':(r&&r.status==='free'?'free':'none');
+}
+// ============ 穿搭利用率（共享计算，见 yysls-usage.js） ============
+function usageMap(){return window.YYSLS_USAGE.computeUsage((window.YYSLS_STYLE||{}).outfits||[]);}
+function tierMap(){
+  const ownedIds=DB.items.filter(it=>ownStatus(it)==='owned').map(it=>it.id);
+  return window.YYSLS_USAGE.assignTiers(ownedIds,usageMap());
+}
+function usageTierHtml(id){
+  // 三档徽标（含 emoji）；未拥有/无记录返回空串
+  const t=tierMap().get(id);
+  if(!t)return '';
+  const cls=t==='百搭棒'?'t-best':t==='可食'?'t-good':'t-boxed';
+  const icon=t==='百搭棒'?'💪':t==='可食'?'👌':'🧳';
+  return `<span class="u-tier ${cls}">${icon} ${t}</span>`;
+}
+function costRank(it){const eff=effPrice(it);return eff?eff.amount:-1;}
+// 数据缺失判定：武器外观 = 缺图/缺武器类型（主题系列非必备）；套装 = 缺图
+function missingFlags(it){
+  const m=[];
+  if(!(it.images&&it.images.length))m.push('缺图');
+  if(it.type==='武器外观'&&!it.weapon)m.push('缺武器类型');
+  return m;
+}
+// 芯片 toggle 筛选状态：单击筛选，再次单击恢复全部
+let missFilter=false, limFilter=false;
+function toggleMiss(){missFilter=!missFilter;updateStats();render();}
+function toggleLimChip(){limFilter=!limFilter;updateStats();render();}
+function updateStats(){
+  // 限时上架中 = 获取状态「限时」（窗口内在售），与卡片右上角 🔥活动中/🔄返场中 角标同口径
+  const limN=DB.items.filter(it=>itemStatus(it)==='on').length;
+  const missN=DB.items.filter(it=>missingFlags(it).length).length;
+  const chips=[];
+  chips.push(`<span class="stat-chip${limFilter?' on':''}" onclick="toggleLimChip()" title="点击筛选限时上架中（含活动中/折扣中/返场中），再次点击恢复全部">⏳ 限时上架中 <b>${limN}</b> 件</span>`);
+  if(OWNER&&missN)chips.push(`<span class="stat-chip stat-warn${missFilter?' on':''}" onclick="toggleMiss()" title="点击筛选缺失数据条目，再次点击恢复全部">⚠ 待补 <b>${missN}</b> 件</span>`);
+  document.getElementById('stats').innerHTML=chips.join('');
+}
+// 衣柜视图统计条（仅套装口径）：分层计数 + 衣柜活跃度（广度）+ 付费穿搭深度（件均入镜）
+// 衣柜活跃度 = 入镜套装数 ÷ 已购套装总数（0-100%）
+// 付费穿搭深度 = 付费套装入镜穿搭总数 ÷ 付费套装数（套/件，同穿搭内多处引用只算一次穿着）
+function wardrobeMetrics(){
+  const ownedSuits=DB.items.filter(it=>ownStatus(it)==='owned'&&it.type==='套装');
+  const um=usageMap();
+  const sOf=id=>{const u=um.get(id);return u?u.score:0;};
+  const tm=tierMap();
+  const cnt={百搭棒:0,可食:0,压箱底:0};
+  for(const it of ownedSuits)cnt[tm.get(it.id)||'压箱底']++;
+  const paid=ownedSuits.filter(it=>payMode(it)==='paid');
+  const free=ownedSuits.filter(it=>payMode(it)!=='paid');
+  const usedN=a=>a.filter(x=>sOf(x.id)>0).length;
+  // 件均入镜穿搭数（去重：同穿搭内多处引用算一次穿着）
+  const wearCnt=new Map();
+  for(const o of ((window.YYSLS_STYLE||{}).outfits||[])){
+    const ids=new Set((o.wearing||[]).map(w=>w.itemId).filter(Boolean));
+    for(const id of ids)wearCnt.set(id,(wearCnt.get(id)||0)+1);
+  }
+  const avgWear=a=>a.length?a.reduce((s,x)=>s+(wearCnt.get(x.id)||0),0)/a.length:0;
+  const paidWear=avgWear(paid), freeWear=avgWear(free), allWear=avgWear(ownedSuits);
+  const ownedAll=DB.items.filter(it=>ownStatus(it)==='owned').length;
+  const weaponOwned=ownedAll-ownedSuits.length;
+  return {
+    ownedN:ownedSuits.length, ownedAll, weaponOwned, cnt,
+    act:{
+      n:usedN(ownedSuits), total:ownedSuits.length,
+      pct:ownedSuits.length?Math.round(usedN(ownedSuits)/ownedSuits.length*100):0,
+      paidN:usedN(paid), paidTotal:paid.length,
+      paidPct:paid.length?Math.round(usedN(paid)/paid.length*100):0,
+      freeN:usedN(free), freeTotal:free.length,
+      freePct:free.length?Math.round(usedN(free)/free.length*100):0
+    },
+    depth:{
+      paidWear, freeWear, allWear,
+      paidWears:Math.round(paidWear*paid.length), paidN:paid.length
+    }
+  };
+}
+function wardrobeStatsHtml(){
+  const m=wardrobeMetrics();
+  return `
+    <span class="wstat" title="已拥有套装 ${m.ownedN} 件（另有武器外观 ${m.weaponOwned} 件，全部已拥有 ${m.ownedAll} 件——与图鉴「✓已有」一致）"><b>${m.ownedN}</b><span class="wl">🧺 已拥有套装</span></span>
+    <span class="wstat" title="百搭棒：有分条目 Top 15%"><b>${m.cnt['百搭棒']}</b><span class="wl">💪 百搭棒</span></span>
+    <span class="wstat" title="可食：有分但未进 Top 15%"><b>${m.cnt['可食']}</b><span class="wl">👌 可食</span></span>
+    <span class="wstat" title="压箱底：Bottom 30% 低分档（同分同档，当前含 score ≤ 2——从未入镜或仅象征性入镜）"><b>${m.cnt['压箱底']}</b><span class="wl">🧳 压箱底</span></span>
+    <span class="w-vsep"></span>
+    <span class="wstat metric" title="点击查看计算公式" onclick="openMetricInfo('act')"><b>${m.act.pct}%</b><span class="wl">👕 衣柜活跃度</span></span>
+    <span class="wstat metric" title="点击查看计算公式" onclick="openMetricInfo('depth')"><b>${m.depth.paidWear.toFixed(1)} 套</b><span class="wl">👗 付费穿搭深度</span></span>`;
+}
+// 点击金色徽章：弹窗展示公式代入与解读
+function openMetricInfo(which){
+  const m=wardrobeMetrics();
+  let title='', body='';
+  if(which==='act'){
+    title='👕 衣柜活跃度（广度）';
+    body=`
+      <div class="metric-formula">衣柜活跃度 = 入镜套装数 ÷ 已购套装总数 × 100%</div>
+      <div class="metric-calc">${m.act.n} ÷ ${m.act.total} = <b>${m.act.pct}%</b></div>
+      <div class="row"><span class="k">结构分解</span><span>付费 ${m.act.paidN} ÷ ${m.act.paidTotal} = ${m.act.paidPct}% · 免费 ${m.act.freeN} ÷ ${m.act.freeTotal} = ${m.act.freePct}%</span></div>
+      <div class="free-hint">💡 已购套装中 ${m.act.pct}% 至少出现在一套穿搭里。付费的几乎全部穿过（${m.act.paidPct}%），免费的三分之一闲置——这个差距就是「花钱与白嫖」的使用差异。</div>`;
+  }else{
+    title='👗 付费穿搭深度（深度）';
+    body=`
+      <div class="metric-formula">付费穿搭深度 = 付费套装入镜穿搭总数 ÷ 付费套装数</div>
+      <div class="metric-calc">${m.depth.paidWears} ÷ ${m.depth.paidN} = <b>${m.depth.paidWear.toFixed(1)}</b> 套/件</div>
+      <div class="row"><span class="k">对照</span><span>免费 ${m.depth.freeWear.toFixed(1)} 套/件 · 全体 ${m.depth.allWear.toFixed(1)} 套/件</span></div>
+      <div class="row"><span class="k">口径</span><span>同一套穿搭里多处引用只算一次穿着（上下拆分各穿一次不重复计数）</span></div>
+      <div class="free-hint">💡 每件付费套装平均出现在 ${m.depth.paidWear.toFixed(1)} 套穿搭里，是免费（${m.depth.freeWear.toFixed(1)}）的两倍多——花钱买的不仅穿了，还穿进了更多搭配。</div>`;
+  }
+  document.getElementById('modal').innerHTML=`
+    <button class="m-close" onclick="closeModal()">✕</button>
+    <div class="m-body">
+      <div class="m-right" style="max-width:none">
+        <div class="m-name">${title}</div>
+        <div class="m-info">${body}</div>
+      </div>
+    </div>`;
+  document.getElementById('modal-bg').classList.add('show');
+}
+function cardHtml(it,i){
+  const eff=effPrice(it);
+  const st=itemStatus(it);
+  const o=originOf(it);
+  const rec=mine.records[it.id];
+  const img0=it.images&&it.images[0];
+  const meta=img0?(DB.imageMeta&&DB.imageMeta[img0]):null;
+  const orient=meta?(meta.w>meta.h?'wide':'tall'):'tall';
+  const img=img0?`<img src="${img0}" loading="lazy" onload="fixOrient(this)" onerror="this.style.display='none'">`:'';
+  const freeLabel=(o==='聆音'||o==='转盘')?'抽卡获得':(o==='和鸣玉池'?'玉池免费抽':(o==='其它'?'免费获得':'免费'));
+  const price=eff?`${eff.amount}${curName(eff.currency)}`:(payMode(it)==='free'?freeLabel:'非直售');
+  const disc=discountActive(it)?`<s>${it.regularPrice?it.regularPrice.amount+'珠':''}</s><span class="badge b-disc">${it.discount.kind}</span>`:(it.discount&&it.regularPrice?`<s>${it.regularPrice.amount}珠</s>`:'');
+  const cd=discCountdown(it);
+  const stBadge=st==='off'?'<span class="badge b-off">已下架</span>':st==='soon'?'<span class="badge b-soon">即将上架</span>':'';
+  const cdBadge=cd?`<span class="badge b-disc-end">⏳${cd}</span>`:'';
+  const conf=it.confidence==='L1'?'<span class="badge b-l1">待核</span>':'';
+  const rerunOn=it.listings&&it.listings.length?`<span class="badge b-event">🔄 返场×${it.listings.length}</span>`:'';
+  // 限时在售角标：窗口内首发=活动中（红），有返场史=返场中（紫）——卡片右上角不再显示拥有状态（✓已有/免费/＋已有）
+  const actLabel=st==='on'?((it.listings&&it.listings.length)?'返场中':'活动中'):'';
+  const actCorner=actLabel?`<span class="corner ${actLabel==='返场中'?'c-rerun':'c-act'}">${actLabel==='返场中'?'🔄':'🔥'}${actLabel}</span>`:'';
+  const miss=missingFlags(it);
+  const missBadge=miss.length?`<span class="corner c-miss" title="数据缺失：${esc(miss.join('、'))}">⚠</span>`:'';
+  // OWNER 模式：点卡片=直接编辑；hover 👁 看详情
+  const editBtn=OWNER?`<button class="card-edit" title="查看详情" onclick="event.stopPropagation();openModal('${it.id}')">👁</button>`:'';
+  const tags=`<div class="c-tags"><span class="ctag">${o}</span>${it.weapon?`<span class="ctag">${esc(it.weapon)}</span>`:''}${it.themeSeries?`<span class="ctag">${esc(it.themeSeries)}</span>`:''}</div>`;
+  return `<div class="card ${orient}" style="animation-delay:${Math.min(i*14,560)}ms" onclick="${OWNER?`openEdit('${it.id}')`:`openModal('${it.id}')`}">
+    <div class="thumb">${editBtn}${img}${actCorner}${missBadge}</div>
+    <div class="cinfo">
+      <div class="cname">${it.name}<span class="ctype">${it.type}</span>${conf}</div>
+      <div class="cprice">${price}${disc}${cdBadge}${stBadge}${rerunOn}</div>
+      ${tags}
+    </div>
+  </div>`;
+}
+// 运行时兜底：图片实际尺寸与 imageMeta 不符时，加载完成后校正卡片方向
+// 自愈逻辑：先用真实尺寸覆盖内存 imageMeta，再重建。
+// 否则（只翻卡片不修 meta）下一次 render 又按旧 meta 生成错误方向 →
+// 图片重新加载 → 再翻 → 无限 render 循环（页面闪烁）。
+function fixOrient(img){
+  const card=img.closest('.card');
+  if(!card||!img.naturalWidth||!img.naturalHeight)return;
+  const tall=img.naturalHeight>img.naturalWidth;
+  const src=img.getAttribute('src');
+  const m=DB.imageMeta&&DB.imageMeta[src];
+  if(DB.imageMeta&&(!m||m.w!==img.naturalWidth||m.h!==img.naturalHeight)){
+    DB.imageMeta[src]={w:img.naturalWidth,h:img.naturalHeight};
+  }
+  const was=card.classList.contains('tall')?'tall':'wide';
+  card.classList.toggle('wide',!tall);
+  card.classList.toggle('tall',tall);
+  if(was!==(tall?'tall':'wide'))scheduleRender();   // 方向变了 → 重新打包排列（防抖，只跑一次）
+}
+let _orT=null;
+function scheduleRender(){clearTimeout(_orT);_orT=setTimeout(render,120);}
+// 注册 --u 为 <length> 类型，让 getComputedStyle 把 clamp() 解析成像素值
+try{CSS.registerProperty({name:'--u',syntax:'<length>',inherits:true,initialValue:'172px'});}catch(e){}
+// 瀑布流打包：像素级模拟 flex 换行 + 前瞻（行尾放不下时，从后续 3 位内提前拉一张塞得下的卡）
+// 打包断行与 flex 实际断行逐像素一致；除末行外行尾最多差一张竖卡的宽度
+function packMasonry(list){
+  const grid=document.getElementById('grid');
+  const gap=10;   // 与 CSS .grid gap 保持一致
+  const cw=grid.clientWidth;
+  const u=parseFloat(getComputedStyle(grid).getPropertyValue('--u'))||Math.min(172,Math.max(110,window.innerWidth*0.15));
+  const wOf=it=>{
+    const img=it.images&&it.images[0];
+    const m=img?(DB.imageMeta&&DB.imageMeta[img]):null;
+    return ((m&&m.w>m.h)?2:1)*u;
+  };
+  const items=list.slice();
+  const out=[];
+  let i=0;
+  while(i<items.length){
+    let used=0,n=0;
+    const line=[];
+    while(i<items.length){
+      const w=wOf(items[i]);
+      if(used+w+(n?gap:0)>cw)break;
+      used+=w+(n?gap:0);n++;line.push(items[i]);i++;
+    }
+    if(i<items.length){
+      // 前瞻：后续 3 位内找一张能塞下的卡提前拉上来
+      const end=Math.min(items.length,i+4);
+      let j=-1;
+      for(let k=i+1;k<end;k++){
+        if(used+wOf(items[k])+(n?gap:0)<=cw){j=k;break;}
+      }
+      if(j>=0){
+        const moved=items.splice(j,1)[0];
+        used+=wOf(moved)+(n?gap:0);n++;line.push(moved);
+        while(i<items.length){
+          const w=wOf(items[i]);
+          if(used+w+gap>cw)break;
+          used+=w+gap;line.push(items[i]);i++;
+        }
+      }
+    }
+    if(!line.length&&i<items.length){line.push(items[i]);i++;}   // 防御：单卡比容器还宽时强制放入，保证循环推进（防死循环）
+    out.push(...line);
+  }
+  return out;
+}
+function render(){
+  if(tab==='🧺 衣柜'){renderWardrobe();return;}
+  fillTabs();
+  fillOrigin();
+  fillSeriesSel();
+  fillThemeSel();
+  fillYearSel();
+  fillTier();
+  const list=filteredItems();
+  if(list.length){
+    document.getElementById('grid').innerHTML=packMasonry(list).map(cardHtml).join('');
+  }else{
+    // 当前标签无结果：检查「全部」标签下是否命中（搜索/筛选被标签挡住时的引导）
+    let hint='';
+    if(tab!=='全部'){
+      const saved=tab;
+      tab='全部';
+      const allList=filteredItems();
+      tab=saved;
+      if(allList.length){
+        hint=`<br><span style="font-size:12px;color:#C4883C">「${saved}」标签下无结果，但「全部」中有 <b>${allList.length}</b> 条符合当前条件 · <a href="javascript:void(0)" onclick="setTab('全部')">切到全部查看</a></span>`;
+      }
+    }
+    document.getElementById('grid').innerHTML=`<div class="empty"><span class="big">🏮</span>没有符合条件的外观${hint}<br><span style="font-size:12px">${OWNER?'去 <a href="capture/index.html">采集工具</a> 录入，或换筛选条件':'换换筛选条件试试'}</span></div>`;
+  }
+  updateStats();
+  scheduleTimeRefresh();
+}
+// ============ 我的衣柜（🧺 利用率榜单 · 仅套装 · 紧凑网格 / 性价比榜） ============
+let wardrobeView='tiers';   // 'tiers'=三档分层网格 | 'value'=性价比榜
+function setWardrobeView(v){wardrobeView=v;render();}
+// 性价比榜：加权利用率 score × 100 ÷ 折珠成本（1 元 = 10 珠，见 yysls-usage.js RMB_TO_ZHU）
+function valueRows(){
+  const um=usageMap();
+  const sOf=id=>{const u=um.get(id);return u?u.score:0;};
+  const toZhu=p=>p.currency==='rmb'?p.amount*(window.YYSLS_USAGE.RMB_TO_ZHU||10):(p.currency==='changming_zhu'?p.amount:null);
+  const wearCnt=new Map();
+  for(const o of ((window.YYSLS_STYLE||{}).outfits||[])){
+    const ids=new Set((o.wearing||[]).map(w=>w.itemId).filter(Boolean));
+    for(const id of ids)wearCnt.set(id,(wearCnt.get(id)||0)+1);
+  }
+  return DB.items
+    .filter(it=>ownStatus(it)==='owned'&&it.type==='套装'&&payMode(it)==='paid'&&it.price)
+    .map(it=>{
+      const zhu=toZhu(it.price);
+      if(zhu==null)return null;
+      const s=sOf(it.id);
+      return {it, zhu, s, w:wearCnt.get(it.id)||0, idx:s*100/zhu};
+    })
+    .filter(Boolean)
+    .sort((a,b)=>b.idx-a.idx);
+}
+function renderValueView(){
+  const rows=valueRows();
+  if(!rows.length)return `<div class="empty"><span class="big">💰</span>暂无付费套装记录</div>`;
+  const rmbLabel=window.YYSLS_USAGE.RMB_TO_ZHU||10;
+  return `<div class="w-viewbar">
+      <button class="vchip" onclick="setWardrobeView('tiers')">📊 三档分层</button>
+      <button class="vchip on">💰 性价比榜</button>
+    </div>
+    <div class="w-group-title">💰 性价比 · 每 100 珠买到的加权利用分（1 元 = ${rmbLabel} 珠）· ${rows.length} 件</div>
+    ${rows.map((r,i)=>{
+      const img=(r.it.images&&r.it.images[0])||'';
+      const costTxt=r.it.price.currency==='rmb'?`${r.it.price.amount}元（折${r.zhu}珠）`:`${r.zhu}珠`;
+      return `<div class="v-row" onclick="openModal('${r.it.id}')">
+        <span class="v-rank ${i<3?'r'+(i+1):''}">${i+1}</span>
+        ${img?`<img src="${img}" loading="lazy" onerror="this.style.display='none'">`:''}
+        <div class="v-info">
+          <div class="v-name" title="${esc(r.it.name)}">${r.it.name}</div>
+          <div class="v-sub">${costTxt} · 利用率 ${r.s} 分 · 入镜 ${r.w} 次</div>
+        </div>
+        <div class="v-idx"><b>${r.idx.toFixed(2)}</b><span class="vl">每百珠利用分</span></div>
+      </div>`;
+    }).join('')}`;
+}
+function renderWardrobe(){
+  fillTabs();   // 同步 Tab 按钮状态（衣柜分支不走 render 主流程）
+  const ownedItems=DB.items.filter(it=>ownStatus(it)==='owned'&&it.type==='套装');
+  const um=usageMap();
+  const tm=tierMap();
+  const sOf=id=>{const u=um.get(id);return u?u.score:0;};
+  const groups={'百搭棒':[],'可食':[],'压箱底':[]};
+  for(const it of ownedItems)groups[tm.get(it.id)||'压箱底'].push(it);
+  groups['百搭棒'].sort((a,b)=>sOf(b.id)-sOf(a.id));
+  groups['可食'].sort((a,b)=>sOf(b.id)-sOf(a.id));
+  groups['压箱底'].sort((a,b)=>costRank(b)-costRank(a));   // 压箱底按获取成本降序：付费零使用置顶
+  const cardHtml=it=>{
+    const img=(it.images&&it.images[0])||'';
+    const eff=effPrice(it);
+    const cost=eff?`<b>${eff.amount}</b>${curName(eff.currency)}`:(payMode(it)==='free'?'免费':'非直售');
+    return `<div class="w-card" onclick="openModal('${it.id}')">
+      <div class="w-thumb">
+        ${img?`<img src="${img}" loading="lazy" onerror="this.style.display='none'">`:''}
+        <span class="w-cost-badge">${cost}</span>
+      </div>
+      <div class="w-cinfo">
+        <div class="w-cname" title="${esc(it.name)}">${it.name}</div>
+      </div>
+    </div>`;
+  };
+  const section=(title,icon,list)=>list.length
+    ?`<div class="w-group-title">${icon} ${title} · ${list.length}</div><div class="w-grid">${list.map(cardHtml).join('')}</div>`
+    :'';
+  document.getElementById('wardrobe-stats-bar').innerHTML=wardrobeStatsHtml();
+  if(wardrobeView==='value'){
+    document.getElementById('grid').innerHTML=renderValueView();
+    updateStats();
+    return;
+  }
+  const viewbar=`<div class="w-viewbar">
+      <button class="vchip on">📊 三档分层</button>
+      <button class="vchip" onclick="setWardrobeView('value')">💰 性价比榜</button>
+    </div>`;
+  document.getElementById('grid').innerHTML=ownedItems.length
+    ?viewbar
+      +section('百搭棒','💪',groups['百搭棒'])
+      +section('可食','👌',groups['可食'])
+      +section('压箱底','🧳',groups['压箱底'])
+    :`<div class="empty"><span class="big">🧺</span>暂无已拥有套装记录<br><span style="font-size:12px">在图鉴详情/卡片标记「已有」后，这里会生成利用率榜单</span></div>`;
+  updateStats();
+}
+let _timeT=null;
+function scheduleTimeRefresh(){
+  // 时间边界自动刷新：到达上架/下架/折扣截止时刻，状态自动翻转（即将上架→在售→已下架、折扣恢复原价），无需重新录入
+  clearTimeout(_timeT);
+  const now=Date.now();
+  let next=Infinity;
+  const consider=t=>{
+    if(!t)return;
+    const ts=new Date(t).getTime();
+    if(ts>now&&ts<next)next=ts;
+  };
+  for(const it of DB.items){
+    consider(it.window&&it.window.start);
+    consider(it.window&&it.window.end);
+    consider(it.discountEndsAt);
+  }
+  if(!isFinite(next))return;
+  _timeT=setTimeout(()=>{render();},Math.min(next-now+1500,86400000));
+}
+
+// ============ 详情 ============
+function openModal(id){
+  curId=id;
+  const it=DB.items.find(x=>x.id===id);
+  if(!it)return;
+  const eff=effPrice(it);
+  const rec=mine.records[id]||{};
+  const imgs=it.images||[];
+  const main=imgs[0]||'';
+  const m0=main?(DB.imageMeta&&DB.imageMeta[main]):null;
+  const ar=m0&&m0.w&&m0.h?+(m0.w/m0.h).toFixed(4):0.5625;
+  const strip=imgs.length>1?`<div class="m-strip">${imgs.map((u,i)=>`<img src="${u}" class="${i===0?'sel':''}" onclick="document.getElementById('m-main').src='${u}';this.parentElement.querySelectorAll('img').forEach(x=>x.classList.remove('sel'));this.classList.add('sel')">`).join('')}</div>`:'';
+  const src=srcLink(it);
+  const o=originOf(it);
+  const freeLabel=(o==='聆音'||o==='转盘')?'抽卡获得':(o==='和鸣玉池'?'玉池免费抽':(o==='其它'?'免费获得':'免费'));
+  const priceLine=eff?`${eff.amount}${curName(eff.currency)}`:(payMode(it)==='free'?freeLabel:'非直售');
+  const cd=discountActive(it)&&it.discountEndsAt?` <span class="badge b-disc-end">⏳截止 ${it.discountEndsAt.slice(0,16)}${discCountdown(it)?'（'+discCountdown(it)+'）':''}</span>`:'';
+  // 仅当原价与现价不同才显示（原价 X）；折扣中显示划线原价 + 折扣标记
+  const priceExtra=discountActive(it)?` <s>${it.regularPrice?it.regularPrice.amount+'珠':''}</s> <span class="badge b-disc">${it.discount.kind}</span>${cd}`:(it.regularPrice&&(!eff||it.regularPrice.amount!==eff.amount)?`（原价 ${it.regularPrice.amount}${curName(it.regularPrice.currency)}）`:'');
+  const comment=rec.comment||(it.comment||'');
+  let recHtml='';
+  if(NO_MINE){
+    // 公开部署：无拥有状态数据，只显示公开评价
+    recHtml=comment?`<div class="m-rec"><div class="m-rec-head"><h3>📝 评价</h3></div><div class="rec-comment">${esc(comment)}</div></div>`:'';
+  }else{
+    const recPill=rec.status==='owned'?'<span class="rec-pill on">✓ 已有</span>':rec.status==='free'?'<span class="rec-pill free">🆓 免费获得</span>':'<span class="rec-pill">未拥有</span>';
+    recHtml=`<div class="m-rec">
+      <div class="m-rec-head">
+        <h3>📝 我的记录</h3>
+        ${recPill}
+        ${OWNER?`<button class="ghost m-rec-edit" title="编辑资料 / 记录" onclick="openEdit('${it.id}')">✏️ 编辑</button>`:''}
+      </div>
+      ${comment?`<div class="rec-comment">${esc(comment)}</div>`:''}
+    </div>`;
+  }
+  // 穿搭利用率：仅已拥有条目展示（未拥有不挂档位徽标）
+  const usageHtml=ownStatus(it)==='owned'
+    ?`<div class="m-usage">
+        <div class="m-usage-head"><h3>👗 穿搭利用率</h3>${usageTierHtml(it.id)}</div>
+        <div class="m-usage-decomp">${esc(window.YYSLS_USAGE.decompHtml(usageMap().get(it.id)))}</div>
+      </div>`
+    :'';
+  const stTxt=itemStatus(it);
+  // 常驻/限时纯按商品窗口判定：有下架时间 = 限时，否则 = 常驻（渠道 kind 只是渠道默认属性，与实际不符，已弃用于商品标签）
+  const kindTxt=it.window&&it.window.end?'限时':'常驻';
+  const kindBadge=kindTxt?`<span class="badge ${kindTxt==='常驻'?'b-perm':kindTxt==='限时'?'b-event':'b-bp'}">${kindTxt}</span>`:'';
+  const tm=it.themeSeries&&DB.meta.options&&DB.meta.options.themeMeta?DB.meta.options.themeMeta[it.themeSeries]:null;
+  const themeTxt=it.themeSeries?`${esc(it.themeSeries)}${tm?` <span style="color:var(--mute);font-size:11px">（该系列：${tm.type||''}${tm.price?(' · '+tm.price+(tm.currency||'')):''}）</span>`:''}`:'—';
+  const histHtml=(it.listings&&it.listings.length)?`<div class="row" style="align-items:flex-start"><span class="k">返场史</span><span style="display:flex;flex-direction:column;gap:2px">${it.listings.slice().sort((a,b)=>(a.window&&a.window.start||'').localeCompare(b.window&&b.window.start||'')).map((l)=>`<span style="font-size:11.5px;color:var(--mute)">${l.window&&(l.window.start||l.window.end)?`${l.window.start?l.window.start.slice(0,10):'?'} ~ ${l.window.end?l.window.end.slice(0,10):'常驻'}`:'窗口未知'}${l.price?` · ${l.price.amount}${curName(l.price.currency)}`:''}${l.discount&&l.discount.kind?` · ${l.discount.kind}`:''}${l.channel?` · ${(DB.channels[l.channel]||{}).name||l.channel}`:''}${l.note?` · ${esc(l.note)}`:''}</span>`).join('')}</span></div>`:'';
+  const freeHint=!eff?((o==='聆音'||o==='转盘')?'🎰 抽卡兑换，运气不同消费不同，不录入价格':(o==='充值回馈'?'💰 充值/累充达标赠送，不单独计价':(o==='和鸣玉池'?'🎁 和鸣玉池免费抽取获得':(o==='其它'?'🎁 免费获得':'')))):'';
+  const infoHtml=`<div class="m-info">
+    <div class="row"><span class="k">价格</span><span>${priceLine}${priceExtra}</span></div>
+    ${freeHint?`<div class="free-hint">${freeHint}</div>`:''}
+    <div class="row"><span class="k">上架</span><span>${it.window.start?it.window.start.slice(0,10):'—'}${stTxt==='soon'?' <span class="badge b-soon">即将上架</span>':stTxt==='off'?' <span class="badge b-off">已下架</span>':''}${it.listings&&it.listings.length?` <span class="badge b-event">🔄 返场×${it.listings.length}</span>`:''}</span></div>
+    <div class="row"><span class="k">下架</span><span>${it.window.end?it.window.end.slice(0,10):(stTxt==='ever'?'常驻':'—')}</span></div>
+    <div class="row"><span class="k">系列</span><span>${it.series||'—'}</span></div>
+    <div class="row"><span class="k">主题</span><span>${themeTxt}</span></div>
+    ${(it.alias&&it.alias.length)?`<div class="row"><span class="k">别名</span><span>${it.alias.map(esc).join('、')}</span></div>`:''}
+    <div class="row"><span class="k">来源</span><span>${o}${kindBadge?' '+kindBadge:''}</span></div>
+    ${histHtml}
+    ${(it.features&&it.features.length)?`<div class="row"><span class="k">特性</span><span>${it.features.map(f=>`<span class="badge" style="background:#E8F5F0;color:#3B9B8F;font-size:11px">${f}</span>`).join(' ')}</span></div>`:''}
+    ${it.note?`<div class="row"><span class="k">备注</span><span>${it.note}</span></div>`:''}
+    ${src?`<div class="row"><span class="k">原文</span><span><a href="${src}" target="_blank">查看原文 ↗</a></span></div>`:''}
+  </div>`;
+  const nameHtml=`<div class="m-name">${it.name}<span class="ctype" style="font-size:11px">${it.type}</span>${it.confidence==='L1'?'<span class="badge b-l1">待核</span>':''}</div>`;
+  const poemHtml=it.poem?`<div class="m-poem">「${it.poem}」</div>`:'';
+  const leftHtml=`<div class="m-left">
+    ${main?`<div class="m-imgwrap" style="--m-ar:${ar}"><img id="m-main" src="${main}" onerror="this.parentElement.style.display='none'"></div>`:''}
+    ${strip}
+  </div>`;
+  const wide=!!(m0&&m0.w>m0.h);   // 横图（16:9 等）改上下构图
+  const rightHtml=wide
+    ?`<div class="m-right">${nameHtml}${poemHtml}<div class="m-wide-grid">${recHtml}${usageHtml}${infoHtml}</div></div>`
+    :`<div class="m-right">${nameHtml}${poemHtml}${recHtml}${usageHtml}${infoHtml}</div>`;
+  document.getElementById('modal').innerHTML=`
+    <button class="m-close" onclick="closeModal()">✕</button>
+    <div class="m-body${wide?' col':''}">
+      ${leftHtml}
+      ${rightHtml}
+    </div>`;
+  document.getElementById('modal-bg').classList.add('show');
+}
+function closeModal(){document.getElementById('modal-bg').classList.remove('show');}
+function esc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ============ 编辑（owner 模式，所见即所得） ============
+const EDIT_TYPES=['套装','武器外观'];   // 发型已移除（与采集工具一致）
+const EDIT_CURS=[['changming_zhu','长鸣珠'],['rmb','元'],['bayinqiao','八音窍'],['yinyu','音玉']];
+let editListings=null, editRerunSnap=null;   // 编辑弹窗：返场史副本（增删在保存时写回）+ 旧窗口快照（勾选返场时入史）
+let pWriteChain=Promise.resolve();   // FSA 写入串行化（同采集工具）
+async function removePediaFile(parts){
+  // FSA 删除文件（串行化，避免与其他写入冲突）
+  pWriteChain=pWriteChain.then(async()=>{
+    let h=rootHandle;
+    for(const p of parts.slice(0,-1)){
+      try{h=await h.getDirectoryHandle(p);}catch(e){return;}
+    }
+    try{await h.removeEntry(parts[parts.length-1]);}catch(e){/* 文件不存在则忽略 */}
+  });
+  return pWriteChain;
+}
+async function deleteEdit(){
+  if(!OWNER)return;
+  if(!rootHandle||!db||!editCurId)return;
+  const it=db.items.find(x=>x.id===editCurId);
+  if(!it)return;
+  if(!confirm('确认删除「'+it.name+'」？删除前会自动备份，该条目的专属图片将一并清理。'))return;
+  try{
+    // 自动备份到 _archive（可反悔）
+    const bak='yysls-db.backup.'+new Date().toISOString().slice(0,10)+'.json';
+    await writePediaText(['_archive',bak],JSON.stringify(db,null,2));
+    // 独占图片判定（被其他条目引用的不动）
+    const used=new Set();
+    for(const x of db.items)if(x.id!==editCurId)for(const p of (x.images||[]))used.add(p);
+    const orphan=(it.images||[]).filter(p=>!used.has(p));
+    db.items=db.items.filter(x=>x.id!==editCurId);
+    delete mine.records[editCurId];
+    for(const p of orphan){
+      delete (db.imageMeta||{})[p];
+      await removePediaFile(p.split('/'));
+    }
+    db.meta.updatedAt=new Date().toISOString().slice(0,16);
+    await writePediaText(['yysls-db','yysls-db.json'],JSON.stringify(db,null,2));
+    await writePediaText(['yysls-db','yysls-data.js'],'// 自动生成，勿手改。来源: yysls-db.json（'+db.meta.updatedAt+'）\nwindow.YYSLS_DB = '+JSON.stringify(db)+';\n');
+    await writePediaText(['yysls-db','yysls-mine.json'],JSON.stringify(mine,null,2));
+    await writePediaText(['yysls-db','yysls-mine.js'],'// 自动生成，勿手改。来源: yysls-mine.json\nwindow.YYSLS_MINE = '+JSON.stringify(mine)+';\n');
+    DB=db;window.YYSLS_DB=db;
+    closeEdit();
+    fillTabs();updateStats();render();
+    toast('已删除：'+it.name+'（备份在 _archive/'+bak+'）');
+  }catch(e){toast('删除失败: '+e.message,1);}
+}
+function writePediaText(parts,text){
+  pWriteChain=pWriteChain.then(async()=>{
+    let h=rootHandle;
+    for(const p of parts.slice(0,-1))h=await h.getDirectoryHandle(p,{create:true});
+    const fh=await h.getFileHandle(parts[parts.length-1],{create:true});
+    const w=await fh.createWritable();
+    try{await w.write(text);}finally{await w.close();}
+  });
+  return pWriteChain;
+}
+async function writePediaFile(parts,buf){
+  pWriteChain=pWriteChain.then(async()=>{
+    let h=rootHandle;
+    for(const p of parts.slice(0,-1))h=await h.getDirectoryHandle(p,{create:true});
+    const fh=await h.getFileHandle(parts[parts.length-1],{create:true});
+    const w=await fh.createWritable();
+    try{await w.write(buf);}finally{await w.close();}
+  });
+  return pWriteChain;
+}
+async function blobToPng(blob){
+  const MAX_SIDE=2560;   // 转码最长边
+  const bmp=await createImageBitmap(blob);
+  const scale=Math.min(1,MAX_SIDE/Math.max(bmp.width,bmp.height));
+  const w=Math.round(bmp.width*scale),h=Math.round(bmp.height*scale);
+  const c=new OffscreenCanvas(w,h);
+  c.getContext('2d').drawImage(bmp,0,0,w,h);
+  const out=await c.convertToBlob({type:'image/png'});
+  return {buf:new Uint8Array(await out.arrayBuffer()),w,h};
+}
+function imgFileName(it){
+  const date=(it.window.start||'').slice(0,10).replace(/-/g,'')||new Date().toISOString().slice(0,10).replace(/-/g,'');
+  const safe=it.name.replace(/[\\/:*?"<>|·\s]/g,'');
+  return `${date}-${it.type}-${safe}.png`;
+}
+function openEdit(id){
+  if(!OWNER)return;
+  if(!rootHandle||!db)return toast('请先点「连接」',1);
+  const it=db.items.find(x=>x.id===id);
+  if(!it)return;
+  editCurId=id;
+  buildEditModal(it,mine.records[id]||{},false);
+}
+function openCreate(){
+  // 手动新建（与录入工具同规则，但无公告链接读取）
+  if(!OWNER)return;
+  if(!rootHandle||!db)return toast('请先点「连接」',1);
+  editCurId=null;
+  const it={name:'',type:'套装',origin:'商城直售',series:'',themeSeries:'',alias:[],poem:'',note:'',
+    price:null,regularPrice:null,discount:null,discountEndsAt:null,
+    window:{start:null,end:null},features:['染色','上下拆分'],images:[]};
+  buildEditModal(it,mine.records[null]||{},true);
+}
+function buildEditModal(it,rec,isNew){
+  editImgFile=null;
+  // 返场史副本（增删在保存时写回）+ 旧窗口快照（勾选返场且窗口变化时入史，与录入工具同结构）
+  editListings=(it.listings||[]).slice().sort((a,b)=>(a.window&&a.window.start||'').localeCompare(b.window&&b.window.start||'')).map(l=>JSON.parse(JSON.stringify(l)));
+  editRerunSnap=(!isNew&&it.window&&(it.window.start||it.window.end))?JSON.parse(JSON.stringify({window:it.window,price:it.price,regularPrice:it.regularPrice,discount:it.discount,discountEndsAt:it.discountEndsAt,channel:it.channel,source:it.source})):null;
+  const types=[...new Set([...EDIT_TYPES,it.type])];
+  const main=it.images&&it.images[0]||'';
+  const m0=main?(db.imageMeta&&db.imageMeta[main]):null;
+  const ar=m0&&m0.w&&m0.h?+(m0.w/m0.h).toFixed(4):0.5625;
+  const paid=!!it.price;
+  const discOn=!!(it.discount||it.discountEndsAt);
+  const curSel=p=>EDIT_CURS.some(c=>c[0]===(p&&p.currency))?(p.currency):'changming_zhu';
+  // 价格口径与采集工具一致：原价单字段；勾选有限时折扣才出现折扣价+结束时间
+  const baseP=it.regularPrice||it.price;
+  const regAmt=baseP?baseP.amount:'';
+  const discAmt=it.price?it.price.amount:'';
+  // 来源选项随免费/付费联动（与采集工具一致：付费 10 项 / 免费 2 项，当前值不在列表时保留兜底）
+  const originBase=paid?ORIGINS_PAID:ORIGINS_FREE;
+  const originOpts=['',...originBase,...(it.origin&&!originBase.includes(it.origin)?[it.origin]:[])];
+  const recHtml=`<div class="m-rec e-rec">
+    <h3>📝 我的记录</h3>
+    <div class="e-rads">
+      ${(()=>{const ds=(rec.status==='owned'||rec.status==='free')?'owned':'';return [['','未拥有'],['owned','✓ 已拥有']].map(([v,l])=>`<label class="rad ${ds===v?'on':''}"><input type="radio" name="e-status" value="${v}" ${ds===v?'checked':''} onclick="togglePill(this,'e-status')">${l}</label>`).join('');})()}
+    </div>
+    <textarea id="e-comment" placeholder="个人评论：为什么买 / 上身感受 / 后悔了吗…（公开显示）">${esc(it.comment||rec.comment||'')}</textarea>
+  </div>`;
+  document.getElementById('edit-modal').innerHTML=`
+    <button class="m-close" onclick="closeEdit()">✕</button>
+    ${isNew?'<div class="e-title">✚ 新建外观</div>':''}
+    <div class="m-body">
+      <div class="m-left">
+        <div class="m-imgwrap e-imgwrap" id="e-imgwrap" style="--m-ar:${ar}">
+          ${main?`<img id="e-img" src="${main}" onerror="this.style.display='none'">`:'<span class="e-empty" id="e-empty">暂无图片</span><img id="e-img" style="display:none">'}
+        </div>
+        <label class="e-file">📁 替换图片（本地上传）
+          <input type="file" id="e-file" accept="image/*" onchange="onEditImg(this)">
+        </label>
+        <p class="e-hint">替换后覆盖原图（同名文件），保存时自动更新图片尺寸记录</p>
+        <div class="e-actions">
+          ${isNew?'':'<button class="ghost e-del" onclick="deleteEdit()">🗑 删除</button><span style="flex:1"></span>'}
+          <button class="ghost" onclick="closeEdit()">取消</button>
+          <button onclick="saveEdit()">💾 ${isNew?'保存新建':'保存修改'}</button>
+        </div>
+      </div>
+      <div class="m-right">
+        <div class="e-grid">
+          <div class="e-row"><span>名称</span><input id="e-name" value="${esc(it.name)}"></div>
+          <div class="e-row"><span>别名</span><input id="e-alias" value="${esc((it.alias||[]).join('、'))}" placeholder="逗号分隔多个"></div>
+          <div class="e-row full"><span>定场诗</span><input id="e-poem" value="${esc(it.poem||'')}"></div>
+          <div class="e-row"><span>类型</span><select id="e-type" onchange="toggleFeatRow();editApplyOriginRule()">${types.map(t=>`<option ${t===it.type?'selected':''}>${t}</option>`).join('')}</select></div>
+          <div class="e-row" id="e-featrow" style="${it.type==='套装'?'':'display:none'}"><span>特性</span>
+            <span class="e-inline">${['染色','裁造','上下拆分'].map(f=>`<label class="e-check"><input type="checkbox" value="${f}" ${(it.features||[]).includes(f)?'checked':''}>${f}</label>`).join('')}</span>
+          </div>
+          <div class="e-row"><span style="flex-basis:56px">付费/来源</span>
+            <span class="e-inline">
+              <label class="e-pill ${paid?'on':''}"><input type="radio" name="e-paid" value="paid" ${paid?'checked':''} onclick="togglePill(this,'e-paid')" onchange="togglePrice()">付费</label>
+              <label class="e-pill ${!paid?'on':''}"><input type="radio" name="e-paid" value="free" ${!paid?'checked':''} onclick="togglePill(this,'e-paid')" onchange="togglePrice()">免费</label>
+              <select id="e-origin" onchange="editApplyOriginRule()">${originOpts.map(o=>`<option value="${o}" ${o===it.origin?'selected':''}>${o||'自动推导'}</option>`).join('')}</select>
+            </span>
+          </div>
+          <div class="e-row" id="e-seriesrow" style="${it.type==='套装'?'':'display:none'}"><span>系列</span>
+            <select id="e-series">${['',...FIXED_SERIES,...(it.series&&!FIXED_SERIES.includes(it.series)?[it.series]:[])].map(s=>`<option value="${esc(s)}" ${s===it.series?'selected':''}>${s||'（无）'}</option>`).join('')}</select>
+          </div>
+          <div class="e-row" id="e-weaponrow" style="${it.type==='武器外观'?'':'display:none'}"><span>武器类型</span>
+            <select id="e-weapon">${['',...new Set([...WEAPON_TYPES,...(it.weapon&&!WEAPON_TYPES.includes(it.weapon)?[it.weapon]:[])])].map(w=>`<option value="${esc(w)}" ${w===it.weapon?'selected':''}>${w||'（未分类）'}</option>`).join('')}</select>
+          </div>
+          <div class="e-row"><span>主题</span>
+            <input id="e-theme" value="${esc(it.themeSeries||'')}" placeholder="如 玄瑛" list="e-dl-theme" onchange="editApplyTheme()">
+            <datalist id="e-dl-theme">${[...new Set(DB.items.filter(i=>i.type===it.type).map(i=>i.themeSeries).filter(Boolean))].sort().map(s=>`<option value="${esc(s)}">`).join('')}</datalist>
+          </div>
+          <div class="e-row"><span>备注</span><textarea id="e-note" placeholder="备注">${esc(it.note||'')}</textarea></div>
+          <div class="e-row full"><span>时间</span>
+            <div class="e-time-grid">
+              <span class="e-tg"><i>上架（空=开服即有）</i><input type="date" id="e-ws" value="${(it.window.start||'').slice(0,10)}" onchange="editApplyDays()"></span>
+              <span class="e-tg"><i>天数</i><input type="number" id="e-days" min="1" placeholder="限时N天" oninput="editApplyDays()"></span>
+              <span class="e-tg"><i>下架（空=常驻）</i><input type="date" id="e-we" value="${(it.window.end||'').slice(0,10)}"></span>
+            </div>
+          </div>
+          <div class="e-row full" id="e-rerunrow" style="${isNew?'display:none':''}"><span>返场</span>
+            <label class="e-check"><input type="checkbox" id="e-rerun" onclick="if(this.checked)document.getElementById('e-extinct').checked=false"> 🔄 本次为返场（保存且窗口有变化时，旧上架信息自动存入返场史）</label>
+          </div>
+          <div class="e-row full" id="e-extinctrow"><span>绝版</span>
+            <label class="e-check"><input type="checkbox" id="e-extinct" ${it.extinct?'checked':''} onclick="if(this.checked)document.getElementById('e-rerun').checked=false"> ☠ 绝版（官方声明不返场，获取状态归「绝版」）</label>
+          </div>
+          <div class="e-row full" id="e-listingsrow" style="${(editListings&&editListings.length)?'':'display:none'}"><span>返场史</span>
+            <span class="e-inline" id="e-listings">${listingsHtml(editListings)}</span>
+          </div>
+          <div class="e-row full"><span>价格</span>
+            <span class="e-inline">
+              <span id="e-pricewrap" style="${paid?'':'display:none'}">
+                <input type="number" id="e-reg" value="${regAmt}" placeholder="原价" list="e-dl-tiers"><datalist id="e-dl-tiers">${EDIT_TIERS.map(t=>`<option value="${t}">`).join('')}</datalist><datalist id="e-dl-rmb"><option value="68"><option value="98"></datalist>
+                <select id="e-regcur" onchange="editApplyOriginRule()">${EDIT_CURS.map(c=>`<option value="${c[0]}" ${c[0]===curSel(baseP)?'selected':''}>${c[1]}</option>`).join('')}</select>
+                <label class="e-check"><input type="checkbox" id="e-disc" ${discOn?'checked':''} onchange="toggleDisc()"> 有限时折扣</label>
+                <span id="e-discwrap" style="${discOn?'':'display:none'}">
+                  <input type="number" id="e-discamt" value="${discAmt}" placeholder="折扣价">
+                  <input type="date" id="e-discend" value="${(it.discountEndsAt||'').slice(0,10)}" title="折扣结束时间">
+                </span>
+              </span>
+              <span id="e-pricehint" style="display:none;font-size:11.5px;color:#8B6A3C">🎰 聆音/转盘抽卡兑换，不录入价格</span>
+            </span>
+          </div>
+        </div>
+        ${recHtml}
+      </div>
+    </div>`;
+  editApplyOriginRule();   // 初始按当前来源应用货币绑定/固定价规则
+  toggleFeatRow();   // 初始按类型同步 特性/系列/武器类型 行显隐
+  // 胶囊组初始选中态种子：首次点击已选中的胶囊可直接取消
+  _pillLast['e-paid']=paid?'paid':'free';
+  _pillLast['e-status']=((rec.status==='owned'||rec.status==='free')?'owned':'');
+  document.getElementById('edit-bg').classList.add('show');
+}
+function closeEdit(){document.getElementById('edit-bg').classList.remove('show');editImgFile=null;}
+function togglePrice(){
+  const pel=document.querySelector('input[name=e-paid]:checked');
+  const paid=!pel||pel.value==='paid';   // 双取消视为付费（默认态）
+  document.getElementById('e-pricewrap').style.display=paid?'':'none';
+  // 来源选项随免费/付费联动：切换模式时若当前来源不在该模式列表 → 重置为默认（付费=商城直售，免费=和鸣玉池）
+  const sel=document.getElementById('e-origin');
+  const cur=sel.value;
+  const base=paid?ORIGINS_PAID:ORIGINS_FREE;
+  let val=cur;
+  if(cur&&!base.includes(cur)){
+    val=paid?'商城直售':'和鸣玉池';
+    sel.value=val;
+  }
+  const opts=['',...base,...(val&&!base.includes(val)?[val]:[])];
+  sel.innerHTML=opts.map(o=>`<option value="${o}" ${o===val?'selected':''}>${o||'自动推导'}</option>`).join('');
+  // 特性默认值（付费→染色+上下拆分；免费→仅上下拆分，染色始终可手动点选）
+  const frow=document.getElementById('e-featrow');
+  if(frow.style.display!=='none'){
+    frow.querySelectorAll('input[type=checkbox]').forEach(c=>{
+      c.checked=paid?(c.value==='染色'||c.value==='上下拆分'):(c.value==='上下拆分');
+    });
+  }
+  editApplyOriginRule();
+}
+function toggleDisc(){
+  document.getElementById('e-discwrap').style.display=document.getElementById('e-disc').checked?'':'none';
+}
+// 互斥胶囊可取消：再点已选中的 → 取消点选（付费/免费与我的记录共用）
+const _pillLast={};
+function togglePill(input,group){
+  const v=input.value;
+  if(_pillLast[group]===v&&input.checked){
+    input.checked=false;
+    _pillLast[group]=null;
+  }else{
+    _pillLast[group]=v;
+  }
+  // 整组标签高亮随勾选状态同步（静态 .on 会残留在未点选的标签上）
+  document.querySelectorAll('input[name='+group+']').forEach(r=>{
+    const lbl=r.closest&&r.closest('label');
+    if(lbl)lbl.classList.toggle('on',r.checked);
+  });
+}
+// ===== 字段联动（与采集工具同源逻辑） =====
+const EDIT_ORIGIN_CURRENCY={'商城直售':['changming_zhu'],'战令':['rmb'],'和鸣':['bayinqiao','yinyu'],'聆音':[],'转盘':[],'节日限定':['changming_zhu'],'限时联动':['changming_zhu','rmb'],'地图纪念':['changming_zhu'],'周年庆':['changming_zhu'],'充值回馈':[],'和鸣玉池':[],'其它':[]};
+const NO_PRICE_ORIGINS=['聆音','转盘','充值回馈'];   // 付费但不录入价格（抽卡/门槛赠送）
+const FIXED_SERIES=['风雅集','羽衣楼','兵武库','山花子','幽明录','星织东方'];
+const EDIT_TIERS=['60','300','680','1280','2580'];
+const EDIT_ORIGIN_CHANNEL={'商城直售':'shop_direct','战令':'zhanling','和鸣':'heming','聆音':'lingyin_gacha','转盘':'zhuanpan','节日限定':'jieri','限时联动':'liandong','地图纪念':'map_limit','周年庆':'zhounian','充值回馈':'recharge_gift','和鸣玉池':'heming_yuchi','其它':'free_exchange'};
+const EDIT_SEASON_DAYS=84;
+const EDIT_SEASON_ORIGINS=['战令','和鸣玉池'];
+function addDaysStr(s,n){
+  const d=new Date(s+'T00:00:00');
+  d.setDate(d.getDate()+n);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function editApplyOriginRule(){
+  // 来源 → 货币绑定 + 固定价锁定 + 聆音无价 + 赛季/天数推算（与采集工具规则一致）
+  const o=document.getElementById('e-origin').value;
+  fillEditThemeDl();   // 主题候选随来源联动（节日限定 ↔ 节日主题池）
+  if(!o)return;
+  const wrap=document.getElementById('e-pricewrap');
+  const hint=document.getElementById('e-pricehint');
+  if(NO_PRICE_ORIGINS.includes(o)){
+    wrap.style.display='none';hint.style.display='';
+    hint.textContent=o==='充值回馈'?'💰 充值回馈不单独计价（档位细节可写备注）':'🎰 聆音/转盘抽卡兑换，不录入价格';
+    return;
+  }
+  hint.style.display='none';
+  const pel=document.querySelector('input[name=e-paid]:checked');
+  if(!pel||pel.value==='paid')wrap.style.display='';
+  // 货币选项绑定（单选时禁用下拉，与录入工具一致）
+  const curs=EDIT_ORIGIN_CURRENCY[o];
+  const sel=document.getElementById('e-regcur');
+  if(curs){
+    const cur=sel.value;
+    sel.innerHTML=curs.map(id=>{const c=EDIT_CURS.find(x=>x[0]===id);return `<option value="${id}" ${id===cur?'selected':''}>${c?c[1]:id}</option>`;}).join('');
+    if(!curs.includes(cur))sel.value=curs[0];
+    sel.disabled=curs.length<2;
+  }else sel.disabled=false;
+  // 固定价规则（与采集工具一致）
+  const type=document.getElementById('e-type').value;
+  const curId=sel.value;
+  const reg=document.getElementById('e-reg');
+  let fixed=null;
+  if(o==='地图纪念')fixed=2580;
+  else if(o==='和鸣'&&curId==='bayinqiao'&&type==='套装')fixed=2;
+  if(fixed!=null){reg.value=fixed;reg.readOnly=true;reg.removeAttribute('list');}
+  else{
+    reg.readOnly=false;
+    // 挡位候选项：长鸣珠直售类 → 珠档；战令 → 68/98 元（首登/二次返场）
+    if(['商城直售','节日限定','限时联动','地图纪念','周年庆'].includes(o))reg.setAttribute('list','e-dl-tiers');
+    else if(o==='战令')reg.setAttribute('list','e-dl-rmb');
+    else reg.removeAttribute('list');
+  }
+  editApplyDays();
+}
+function editApplyDays(){
+  // 上架 + 天数 → 下架；战令/和鸣玉池 → 赛季84天（与采集工具一致）
+  const ws=document.getElementById('e-ws').value;
+  if(!ws)return;
+  const o=document.getElementById('e-origin').value;
+  const n=EDIT_SEASON_ORIGINS.includes(o)?EDIT_SEASON_DAYS:+(document.getElementById('e-days').value||0);
+  if(n>0)document.getElementById('e-we').value=addDaysStr(ws,n);
+}
+function editApplyTheme(){
+  // 主题系列档案配对：同系列同类型同价格 → 自动带出类型与原价（与采集工具一致）
+  const nm=document.getElementById('e-theme').value.trim();
+  const tm=db&&db.meta&&db.meta.options&&db.meta.options.themeMeta&&db.meta.options.themeMeta[nm];
+  if(!tm)return;
+  if(tm.type&&EDIT_TYPES.includes(tm.type)){
+    document.getElementById('e-type').value=tm.type;
+    toggleFeatRow();
+  }
+  if(tm.price){
+    const reg=document.getElementById('e-reg');
+    const pel=document.querySelector('input[name=e-paid]:checked');
+    if(!reg.readOnly&&(!pel||pel.value==='paid'))reg.value=tm.price;
+  }
+  editApplyOriginRule();
+}
+function toggleFeatRow(){
+  // 套装：显示特性 + 品牌系列，隐藏武器类型；武器外观反之（与采集工具/筛选栏一致）
+  const isSuit=document.getElementById('e-type').value==='套装';
+  const row=document.getElementById('e-featrow');
+  row.style.display=isSuit?'':'none';
+  if(!isSuit)row.querySelectorAll('input[type=checkbox]').forEach(c=>{c.checked=false;});
+  const srow=document.getElementById('e-seriesrow');
+  if(srow)srow.style.display=isSuit?'':'none';
+  const wrow=document.getElementById('e-weaponrow');
+  if(wrow)wrow.style.display=isSuit?'none':'';
+  fillEditThemeDl();   // 主题候选随类型切换实时重建
+}
+function listingsHtml(ls){
+  return (ls||[]).map((l,idx)=>`<span class="e-listing">${l.window&&(l.window.start||l.window.end)?`${l.window.start?l.window.start.slice(0,10):'?'} ~ ${l.window.end?l.window.end.slice(0,10):'常驻'}`:'窗口未知'}${l.price?` · ${l.price.amount}${curName(l.price.currency)}`:''}${l.discount&&l.discount.kind?` · ${l.discount.kind}`:''}${l.note?` · ${esc(l.note)}`:''}<b class="e-listing-del" title="删除这条返场史" onclick="delListing(${idx})">✕</b></span>`).join('');
+}
+function delListing(idx){
+  if(!editListings)return;
+  editListings.splice(idx,1);
+  const box=document.getElementById('e-listings');
+  if(box){
+    box.innerHTML=listingsHtml(editListings);
+    if(!editListings.length)box.closest('.e-row').style.display='none';
+  }
+}
+function fillEditThemeDl(){
+  // 编辑窗口主题候选随来源联动（与筛选栏同规则：同主题同来源）；来源为空（自动推导）→ 该类型全量
+  const dl=document.getElementById('e-dl-theme');
+  if(!dl)return;
+  const type=document.getElementById('e-type').value;
+  const origin=document.getElementById('e-origin').value;
+  const base=DB.items.filter(i=>i.type===type);
+  const src=origin?base.filter(i=>originOf(i)===origin):base;
+  const sels=[...new Set(src.map(i=>i.themeSeries).filter(Boolean))].sort();
+  dl.innerHTML=sels.map(s=>`<option value="${esc(s)}">`).join('');
+}
+function onEditImg(input){
+  const f=input.files&&input.files[0];
+  if(!f)return;
+  editImgFile=f;
+  // 实时预览：无图条目也即时显示（隐藏占位、显示图片）
+  const img=document.getElementById('e-img');
+  if(img){img.src=URL.createObjectURL(f);img.style.display='block';}
+  const empty=document.getElementById('e-empty');
+  if(empty)empty.style.display='none';
+  // 预览后按新图实际比例调整画框
+  const probe=new Image();
+  probe.onload=()=>{const ar=+(probe.naturalWidth/probe.naturalHeight).toFixed(4);document.getElementById('e-imgwrap').style.setProperty('--m-ar',ar);};
+  probe.src=URL.createObjectURL(f);
+}
+async function saveEdit(){
+  if(!rootHandle||!db)return toast('请先点「连接」',1);
+  let it=editCurId?db.items.find(x=>x.id===editCurId):null;
+  if(editCurId&&!it)return;
+  const isNew=!it;
+  if(isNew){
+    // 手动新建：名称必填 + 同名防重
+    const nm=document.getElementById('e-name').value.trim();
+    if(!nm)return toast('名称必填',1);
+    if(db.items.some(x=>x.name===nm))return toast('同名外观已存在，请直接编辑它',1);
+    it={id:'it-'+nm.replace(/\s+/g,''),name:nm,type:'套装',window:{start:null,end:null},images:[],source:{kind:'manual',articleId:null,url:'',publishedAt:null,note:'人工录入'},confidence:'L2',gifts:[],channel:'shop_direct',features:[]};
+  }
+  const pel=document.querySelector('input[name=e-paid]:checked');
+  const paid=!pel||pel.value==='paid';   // 双取消视为付费（默认态）
+  const reg=+document.getElementById('e-reg').value||0;
+  const cur=document.getElementById('e-regcur').value;
+  const discOn=paid&&document.getElementById('e-disc').checked;
+  const discAmt=+document.getElementById('e-discamt').value||0;
+  it.name=document.getElementById('e-name').value.trim()||it.name;
+  it.type=document.getElementById('e-type').value;
+  const originVal=document.getElementById('e-origin').value||null;
+  // 校验（与录入工具一致：付费需原价；折扣需折扣价+结束时间；折扣价低于原价）
+  if(!NO_PRICE_ORIGINS.includes(originVal)&&paid&&reg<=0)return toast('请填写原价',1);
+  const discEnd=document.getElementById('e-discend').value;
+  if(discOn&&(!discAmt||!discEnd))return toast('限时折扣需填写折扣价和折扣结束时间',1);
+  if(discOn&&discAmt>=reg)return toast('折扣价应低于原价',1);
+  // 价格口径与采集工具一致：无折扣时现价=原价；勾选有限时折扣 → 现价=折扣价；聆音/转盘/充值回馈不录价格
+  if(NO_PRICE_ORIGINS.includes(originVal)){
+    it.price=null;it.regularPrice=null;it.discount=null;it.discountEndsAt=null;
+  }else{
+    it.price=paid&&reg>0?{amount:(discOn&&discAmt>0)?discAmt:reg,currency:cur}:null;
+    it.regularPrice=paid&&reg>0?{amount:reg,currency:cur}:null;
+  }
+  if(discOn&&it.price&&it.regularPrice&&it.price.amount!==it.regularPrice.amount){
+    it.discount=it.discount||{kind:'限时折扣价',note:''};
+    it.discountEndsAt=discEnd?discEnd+'T05:00':it.discountEndsAt;
+  }else{
+    it.discount=null;it.discountEndsAt=null;
+  }
+  it.window.start=document.getElementById('e-ws').value||null;
+  it.window.end=document.getElementById('e-we').value||null;
+  // 防护：改上/下架时间却忘勾「本次为返场」→ 旧上架信息会被静默覆盖且不入返场史
+  if(!isNew&&editRerunSnap&&!document.getElementById('e-rerun').checked){
+    const w0=editRerunSnap.window||{};
+    if(it.window.start!==w0.start||it.window.end!==w0.end){
+      if(!confirm('上/下架时间已修改但未勾选「本次为返场」，旧上架信息将被覆盖且不入返场史。继续保存？'))return;
+    }
+  }
+  it.origin=document.getElementById('e-origin').value||null;
+  it.extinct=document.getElementById('e-extinct')?document.getElementById('e-extinct').checked:false;
+  // 渠道随来源映射（与录入工具一致；和鸣+音玉走闻音商店）
+  it.channel=EDIT_ORIGIN_CHANNEL[it.origin]||'shop_direct';
+  if(it.channel==='heming'&&it.price&&it.price.currency==='yinyu')it.channel='heming_wenyin';
+  it.series=it.type==='套装'?(document.getElementById('e-series').value||null):null;
+  it.weapon=it.type==='武器外观'?(document.getElementById('e-weapon').value||null):null;
+  it.themeSeries=document.getElementById('e-theme').value.trim()||null;
+  // 主题系列登记 + 档案学习（与录入工具一致：新主题入候选，最近一次录入更新档案）
+  if(it.themeSeries){
+    const opt=db.meta.options=db.meta.options||{};
+    opt.themeSeries=opt.themeSeries||[];
+    if(!opt.themeSeries.includes(it.themeSeries))opt.themeSeries.push(it.themeSeries);
+    opt.themeMeta=opt.themeMeta||{};
+    const tm=opt.themeMeta[it.themeSeries]=opt.themeMeta[it.themeSeries]||{};
+    if(EDIT_TYPES.includes(it.type))tm.type=it.type;
+    if(it.regularPrice&&it.regularPrice.amount!=null){tm.price=String(it.regularPrice.amount);tm.currency=curName(it.regularPrice.currency);}
+  }
+  // 返场：勾选且窗口有变化 → 旧快照入返场史；删除操作同步写回
+  if(!isNew&&document.getElementById('e-rerun').checked&&editRerunSnap){
+    const w0=editRerunSnap.window||{};
+    if(it.window.start!==w0.start||it.window.end!==w0.end){
+      const wStart=w0.start;
+      if(editListings.some(l=>(l.window&&l.window.start)===wStart))toast('该上架时段已在返场史中，跳过重复记录');
+      else editListings.push({...editRerunSnap,note:'返场前快照（编辑）'});
+    }
+  }
+  it.listings=editListings&&editListings.length?editListings:null;
+  it.features=[...document.querySelectorAll('#edit-modal input[type=checkbox]:not(#e-disc):not(#e-rerun):checked')].map(c=>c.value);
+  it.alias=document.getElementById('e-alias').value.split(/[,，、]/).map(s=>s.trim()).filter(Boolean);
+  it.poem=document.getElementById('e-poem').value.trim()||null;
+  it.note=document.getElementById('e-note').value.trim()||null;
+  // 图片替换：本地图转 png 覆盖原路径（无图条目按命名规则新建）
+  if(editImgFile){
+    try{
+      const png=await blobToPng(editImgFile);
+      const path=it.images&&it.images[0]||('assets/燕云外观/'+imgFileName(it));
+      await writePediaFile(path.split('/'),png.buf);
+      if(it.images&&it.images[0])it.images[0]=path;else it.images=[path];
+      db.imageMeta=db.imageMeta||{};db.imageMeta[path]={w:png.w,h:png.h};
+    }catch(e){toast('图片替换失败: '+e.message,1);}
+  }
+  // 我的记录：状态单选 + 评论文本
+  const selSt=document.querySelector('input[name=e-status]:checked');
+  const st=selSt?selSt.value:'';   // 双取消 = 未拥有
+  const cm=document.getElementById('e-comment').value.trim();
+  // 保存分流（公开部署隔离）：status → 私有 mine；comment → 公开 db
+  const rec=mine.records[it.id]||{};
+  if(st){rec.status=st;mine.records[it.id]=rec;}
+  else delete mine.records[it.id];
+  if(cm){it.comment=cm;}
+  else delete it.comment;
+  // 新建：条目入列
+  if(isNew)db.items.push(it);
+  // 写回：db.json + data.js + mine.json + mine.js
+  db.meta.updatedAt=new Date().toISOString().slice(0,16);
+  await writePediaText(['yysls-db','yysls-db.json'],JSON.stringify(db,null,2));
+  await writePediaText(['yysls-db','yysls-data.js'],'// 自动生成，勿手改。来源: yysls-db.json（'+db.meta.updatedAt+'）\nwindow.YYSLS_DB = '+JSON.stringify(db)+';\n');
+  await writePediaText(['yysls-db','yysls-mine.json'],JSON.stringify(mine,null,2));
+  await writePediaText(['yysls-db','yysls-mine.js'],'// 自动生成，勿手改。来源: yysls-mine.json\nwindow.YYSLS_MINE = '+JSON.stringify(mine)+';\n');
+  DB=db;window.YYSLS_DB=db;
+  closeEdit();
+  fillTabs();updateStats();render();
+  toast(isNew?'已新建：'+it.name:'已保存：'+it.name);
+}
+
+let _rsT=null;
+window.addEventListener('resize',()=>{clearTimeout(_rsT);_rsT=setTimeout(render,150);});
+// 穿搭库联动：capture-style/index-style 跳过来时带入搜索关键词
+try{
+  const _kw=sessionStorage.getItem('yysls-pedia-kw');
+  if(_kw){sessionStorage.removeItem('yysls-pedia-kw');const _s=document.getElementById('f-search');if(_s)_s.value=_kw;}
+}catch(e){}
+updateStats();
+fillTabs();
+render();
+const _dt=(DB&&DB.meta&&DB.meta.updatedAt)||null;
+document.getElementById('data-time').textContent='数据更新：'+(_dt?String(_dt).slice(0,16).replace('T',' '):'—');
+</script>
+</body>
+</html>
